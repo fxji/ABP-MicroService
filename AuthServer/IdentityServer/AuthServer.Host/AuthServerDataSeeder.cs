@@ -60,6 +60,7 @@ namespace AuthServer.Host
             await CreateApiScopeAsync("InternalGateway");
             await CreateApiScopeAsync("WebAppGateway");
             await CreateApiScopeAsync("BusinessService");
+            await CreateApiScopeAsync("AAAService");
         }
 
         private async Task CreateApiResourcesAsync()
@@ -78,6 +79,7 @@ namespace AuthServer.Host
             await CreateApiResourceAsync("InternalGateway", commonApiUserClaims);
             await CreateApiResourceAsync("WebAppGateway", commonApiUserClaims);
             await CreateApiResourceAsync("BusinessService", commonApiUserClaims);
+            await CreateApiResourceAsync("AAAService", commonApiUserClaims);
         }
 
         private async Task<ApiResource> CreateApiResourceAsync(string name, IEnumerable<string> claims)
@@ -160,7 +162,18 @@ namespace AuthServer.Host
                 scopes: new[] { "InternalGateway", "BaseService" },
                 grantTypes: new[] { "client_credentials" },
                 secret: "1q2w3e*".Sha256(),
-                permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default }
+                permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
+                    corsOrigins: new[] { "http://localhost:51186" }
+
+            );
+            await CreateClientAsync(
+                name: "aaa-app",
+                scopes: new[] { "InternalGateway", "BaseService" },
+                grantTypes: new[] { "client_credentials" },
+                secret: "1q2w3e*".Sha256(),
+                permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
+                    corsOrigins: new[] { "http://localhost:44308" }
+
             );
         }
 
