@@ -1,0 +1,27 @@
+﻿using AAA.Models;
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Data;
+using Volo.Abp.EntityFrameworkCore;
+
+namespace AAA.EntityFrameworkCore;
+
+[ConnectionStringName(AAADbProperties.ConnectionStringName)]
+public class AAADbContext : AbpDbContext<AAADbContext>, IAAADbContext
+{
+    /* Add DbSet for each Aggregate Root here. Example:
+     * public DbSet<Question> Questions { get; set; }
+     */
+    public DbSet<A3> A3 { get; set; }
+    public AAADbContext(DbContextOptions<AAADbContext> options)
+        : base(options)
+    {
+
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        builder.ConfigureAAA();
+    }
+}

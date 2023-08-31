@@ -1,0 +1,79 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "AAA.Domain.Shared": {
+      "path": "src/AAA.Domain.Shared/AAA.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "AAA.Domain": {
+      "path": "src/AAA.Domain/AAA.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "AAA.Application.Contracts": {
+      "path": "src/AAA.Application.Contracts/AAA.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "AAA.Application": {
+      "path": "src/AAA.Application/AAA.Application.abppkg.json",
+      "folder": "src"
+    },
+    "AAA.EntityFrameworkCore": {
+      "path": "src/AAA.EntityFrameworkCore/AAA.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "AAA.MongoDB": {
+      "path": "src/AAA.MongoDB/AAA.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "AAA.HttpApi": {
+      "path": "src/AAA.HttpApi/AAA.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "AAA.HttpApi.Client": {
+      "path": "src/AAA.HttpApi.Client/AAA.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "AAA.TestBase": {
+      "path": "test/AAA.TestBase/AAA.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "AAA.EntityFrameworkCore.Tests": {
+      "path": "test/AAA.EntityFrameworkCore.Tests/AAA.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "AAA.MongoDB.Tests": {
+      "path": "test/AAA.MongoDB.Tests/AAA.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "AAA.Domain.Tests": {
+      "path": "test/AAA.Domain.Tests/AAA.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "AAA.Application.Tests": {
+      "path": "test/AAA.Application.Tests/AAA.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "AAA.HttpApi.Host": {
+      "path": "host/AAA.HttpApi.Host/AAA.HttpApi.Host.abppkg.json",
+      "folder": "host"
+    },
+    "AAA.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/AAA.HttpApi.Client.ConsoleTestApp/AAA.HttpApi.Client.ConsoleTestApp.abppkg.json",
+      "folder": "test"
+    },
+    "AAA.AuthServer": {
+      "path": "host/AAA.AuthServer/AAA.AuthServer.abppkg.json",
+      "folder": "host"
+    },
+    "AAA.Host.Shared": {
+      "path": "host/AAA.Host.Shared/AAA.Host.Shared.abppkg.json",
+      "folder": "host"
+    }
+  }
+}
