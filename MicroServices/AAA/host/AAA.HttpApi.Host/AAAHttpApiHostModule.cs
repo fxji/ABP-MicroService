@@ -91,11 +91,11 @@ public class AAAHttpApiHostModule : AbpModule
             configuration["AuthServer:Authority"],
             new Dictionary<string, string>
             {
-                {"AAA", "AAA API"}
+                {"AAAService", "AAAService API"}
             },
             options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "AAA API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "AAAService API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
             });
@@ -134,14 +134,14 @@ public class AAAHttpApiHostModule : AbpModule
 
         Configure<AbpDistributedCacheOptions>(options =>
         {
-            options.KeyPrefix = "AAA:";
+            options.KeyPrefix = "AAAService:";
         });
 
-        var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("AAA");
+        var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("AAAService");
         if (!hostingEnvironment.IsDevelopment())
         {
             var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-            dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "AAA-Protection-Keys");
+            dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "AAAService-Protection-Keys");
         }
 
         context.Services.AddCors(options =>
