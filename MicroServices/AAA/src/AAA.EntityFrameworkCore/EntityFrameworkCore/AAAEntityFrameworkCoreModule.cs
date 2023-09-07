@@ -14,9 +14,15 @@ public class AAAEntityFrameworkCoreModule : AbpModule
     {
         context.Services.AddAbpDbContext<AAADbContext>(options =>
         {
-                /* Add custom repositories here. Example:
-                 * options.AddRepository<Question, EfCoreQuestionRepository>();
-                 */
+            /* Add custom repositories here. Example:
+             * options.AddRepository<Question, EfCoreQuestionRepository>();
+             */
+
+
+            context.Services.AddAbpDbContext<AAADbContext>(options =>
+            {
+                options.AddDefaultRepositories(includeAllEntities: true);
+            });
         });
     }
 }
