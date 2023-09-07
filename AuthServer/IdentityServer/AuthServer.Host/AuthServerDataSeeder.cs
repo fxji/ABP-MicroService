@@ -61,6 +61,7 @@ namespace AuthServer.Host
             await CreateApiScopeAsync("WebAppGateway");
             await CreateApiScopeAsync("BusinessService");
             await CreateApiScopeAsync("AAAService");
+            await CreateApiScopeAsync("PeBusiness");
         }
 
         private async Task CreateApiResourcesAsync()
@@ -80,6 +81,7 @@ namespace AuthServer.Host
             await CreateApiResourceAsync("WebAppGateway", commonApiUserClaims);
             await CreateApiResourceAsync("BusinessService", commonApiUserClaims);
             await CreateApiResourceAsync("AAAService", commonApiUserClaims);
+            await CreateApiResourceAsync("PeBusiness", commonApiUserClaims);
         }
 
         private async Task<ApiResource> CreateApiResourceAsync(string name, IEnumerable<string> claims)
@@ -151,7 +153,7 @@ namespace AuthServer.Host
 
             await CreateClientAsync(
                 name: "basic-web",
-                scopes: commonScopes.Append("BaseService").Append("WebAppGateway").Append("BusinessService").Append("AAAService"),
+                scopes: commonScopes.Append("BaseService").Append("WebAppGateway").Append("BusinessService").Append("AAAService").Append("PeBusiness"),
                 grantTypes: new[] { "password" },
                 secret: null,
                 requireClientSecret: false
@@ -173,6 +175,15 @@ namespace AuthServer.Host
                 secret: "1q2w3e*".Sha256(),
                 permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
                     corsOrigins: new[] { "http://localhost:44308" }
+
+            );
+            await CreateClientAsync(
+                name: "pebusiness-app",
+                scopes: new[] { "InternalGateway", "BaseService" },
+                grantTypes: new[] { "client_credentials" },
+                secret: "1q2w3e*".Sha256(),
+                permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
+                    corsOrigins: new[] { "http://localhost:44351" }
 
             );
         }
