@@ -194,8 +194,15 @@ namespace AuthServer.Host
                 redirectUri: "http://localhost:44351/swagger/oauth2-redirect.html",
                 permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
                 corsOrigins: new[] { "http://localhost:44351" }
-
-
+            );
+            await CreateClientAsync(
+                name: "AAA_Swagger",
+                scopes: commonScopes.Append("BaseService").Append("WebAppGateway").Append("AAAService"),
+                grantTypes: new[] { "authorization_code" },
+                secret: "1q2w3e*".Sha256(),
+                redirectUri: "http://localhost:44308/swagger/oauth2-redirect.html",
+                permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
+                corsOrigins: new[] { "http://localhost:44308" }
             );
         }
 
