@@ -186,6 +186,17 @@ namespace AuthServer.Host
                     corsOrigins: new[] { "http://localhost:44351" }
 
             );
+            await CreateClientAsync(
+                name: "PeBusiness_Swagger",
+                scopes: commonScopes.Append("BaseService").Append("WebAppGateway").Append("PeBusiness"),
+                grantTypes: new[] { "authorization_code" },
+                secret: "1q2w3e*".Sha256(),
+                redirectUri: "http://localhost:44351/swagger/oauth2-redirect.html",
+                permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
+                corsOrigins: new[] { "http://localhost:44351" }
+
+
+            );
         }
 
         private async Task<Client> CreateClientAsync(
