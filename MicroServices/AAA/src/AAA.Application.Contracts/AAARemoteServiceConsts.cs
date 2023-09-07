@@ -4,5 +4,5 @@ public class AAARemoteServiceConsts
 {
     public const string RemoteServiceName = "AAA";
 
-    public const string ModuleName = "aAA";
+    public const string ModuleName = "AAA";
 }
