@@ -18,7 +18,7 @@ public class AAAApplicationModule : AbpModule
         context.Services.AddAutoMapperObjectMapper<AAAApplicationModule>();
         Configure<AbpAutoMapperOptions>(options =>
         {
-            options.AddMaps<AAAApplicationModule>(validate: true);
+            options.AddMaps<AAAApplicationModule>(validate: false);
         });
     }
 }
