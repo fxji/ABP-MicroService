@@ -1,0 +1,79 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "PeBusiness.Domain.Shared": {
+      "path": "src/PeBusiness.Domain.Shared/PeBusiness.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "PeBusiness.Domain": {
+      "path": "src/PeBusiness.Domain/PeBusiness.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "PeBusiness.Application.Contracts": {
+      "path": "src/PeBusiness.Application.Contracts/PeBusiness.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "PeBusiness.Application": {
+      "path": "src/PeBusiness.Application/PeBusiness.Application.abppkg.json",
+      "folder": "src"
+    },
+    "PeBusiness.EntityFrameworkCore": {
+      "path": "src/PeBusiness.EntityFrameworkCore/PeBusiness.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "PeBusiness.MongoDB": {
+      "path": "src/PeBusiness.MongoDB/PeBusiness.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "PeBusiness.HttpApi": {
+      "path": "src/PeBusiness.HttpApi/PeBusiness.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "PeBusiness.HttpApi.Client": {
+      "path": "src/PeBusiness.HttpApi.Client/PeBusiness.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "PeBusiness.TestBase": {
+      "path": "test/PeBusiness.TestBase/PeBusiness.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "PeBusiness.EntityFrameworkCore.Tests": {
+      "path": "test/PeBusiness.EntityFrameworkCore.Tests/PeBusiness.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "PeBusiness.MongoDB.Tests": {
+      "path": "test/PeBusiness.MongoDB.Tests/PeBusiness.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "PeBusiness.Domain.Tests": {
+      "path": "test/PeBusiness.Domain.Tests/PeBusiness.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "PeBusiness.Application.Tests": {
+      "path": "test/PeBusiness.Application.Tests/PeBusiness.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "PeBusiness.HttpApi.Host": {
+      "path": "host/PeBusiness.HttpApi.Host/PeBusiness.HttpApi.Host.abppkg.json",
+      "folder": "host"
+    },
+    "PeBusiness.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/PeBusiness.HttpApi.Client.ConsoleTestApp/PeBusiness.HttpApi.Client.ConsoleTestApp.abppkg.json",
+      "folder": "test"
+    },
+    "PeBusiness.AuthServer": {
+      "path": "host/PeBusiness.AuthServer/PeBusiness.AuthServer.abppkg.json",
+      "folder": "host"
+    },
+    "PeBusiness.Host.Shared": {
+      "path": "host/PeBusiness.Host.Shared/PeBusiness.Host.Shared.abppkg.json",
+      "folder": "host"
+    }
+  }
+}

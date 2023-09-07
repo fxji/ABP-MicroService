@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "PeBusiness": {
+      "path": "PeBusiness.abpmdl.json"
+    }
+  }
+}
