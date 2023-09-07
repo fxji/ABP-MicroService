@@ -95,7 +95,7 @@ public class AAAHttpApiHostModule : AbpModule
             },
             options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo {Title = "AAA API", Version = "v1"});
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "AAA API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
             });
@@ -129,7 +129,7 @@ public class AAAHttpApiHostModule : AbpModule
             {
                 options.Authority = configuration["AuthServer:Authority"];
                 options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                options.Audience = "AAA";
+                options.Audience = "AAAService";
             });
 
         Configure<AbpDistributedCacheOptions>(options =>
@@ -190,7 +190,7 @@ public class AAAHttpApiHostModule : AbpModule
         }
         app.UseAbpRequestLocalization();
         app.UseAuthorization();
-            app.UseAbpClaimsMap();
+        app.UseAbpClaimsMap();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {
@@ -198,10 +198,9 @@ public class AAAHttpApiHostModule : AbpModule
 
             var configuration = context.GetConfiguration();
             options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-            options.OAuthScopes("AAA");
+            options.OAuthScopes("AAAService");
         });
         app.UseAuditing();
-            app.UseUnitOfWork();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
     }
