@@ -1,26 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
+using PeBusiness.Models;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace PeBusiness.EntityFrameworkCore;
-
-[ConnectionStringName(PeBusinessDbProperties.ConnectionStringName)]
-public class PeBusinessDbContext : AbpDbContext<PeBusinessDbContext>, IPeBusinessDbContext
+namespace PeBusiness.EntityFrameworkCore
 {
-    /* Add DbSet for each Aggregate Root here. Example:
-     * public DbSet<Question> Questions { get; set; }
-     */
-
-    public PeBusinessDbContext(DbContextOptions<PeBusinessDbContext> options)
-        : base(options)
+    [ConnectionStringName("PeBusiness")]
+    public class PeBusinessDbContext : AbpDbContext<PeBusinessDbContext>
     {
+        public DbSet<PeTask> PeTask { get; set; }
 
-    }
+        //Code generation...
 
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
+        public PeBusinessDbContext(DbContextOptions<PeBusinessDbContext> options)
+            : base(options)
+        {
 
-        builder.ConfigurePeBusiness();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ConfigurePeBusiness();
+        }
     }
 }

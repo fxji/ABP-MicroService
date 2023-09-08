@@ -18,7 +18,7 @@ public class PeBusinessApplicationModule : AbpModule
         context.Services.AddAutoMapperObjectMapper<PeBusinessApplicationModule>();
         Configure<AbpAutoMapperOptions>(options =>
         {
-            options.AddMaps<PeBusinessApplicationModule>(validate: true);
+            options.AddMaps<PeBusinessApplicationModule>(validate: false);
         });
     }
 }

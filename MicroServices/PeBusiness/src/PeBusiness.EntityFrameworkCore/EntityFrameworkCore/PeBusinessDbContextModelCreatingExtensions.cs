@@ -1,33 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+using PeBusiness.Models;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace PeBusiness.EntityFrameworkCore;
-
-public static class PeBusinessDbContextModelCreatingExtensions
+namespace PeBusiness.EntityFrameworkCore
 {
-    public static void ConfigurePeBusiness(
-        this ModelBuilder builder)
+    public static class PeBusinessDbContextModelCreatingExtensions
     {
-        Check.NotNull(builder, nameof(builder));
-
-        /* Configure all entities here. Example:
-
-        builder.Entity<Question>(b =>
+        public static void ConfigurePeBusiness(this ModelBuilder builder)
         {
-            //Configure table & schema name
-            b.ToTable(PeBusinessDbProperties.DbTablePrefix + "Questions", PeBusinessDbProperties.DbSchema);
+            Check.NotNull(builder, nameof(builder));
 
-            b.ConfigureByConvention();
+            builder.Entity<PeTask>(b =>
+            {
+                b.ToTable("PeTask");
 
-            //Properties
-            b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);
+                b.ConfigureByConvention();
+                
+                b.Property(x => x.Name).IsRequired();
+            });
 
-            //Relations
-            b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.QuestionId);
-
-            //Indexes
-            b.HasIndex(q => q.CreationTime);
-        });
-        */
+            //Code generation...
+        }
     }
 }
