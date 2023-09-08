@@ -14,9 +14,14 @@ public class PeBusinessEntityFrameworkCoreModule : AbpModule
     {
         context.Services.AddAbpDbContext<PeBusinessDbContext>(options =>
         {
-                /* Add custom repositories here. Example:
-                 * options.AddRepository<Question, EfCoreQuestionRepository>();
-                 */
+            /* Add custom repositories here. Example:
+             * options.AddRepository<Question, EfCoreQuestionRepository>();
+             */
+
+            context.Services.AddAbpDbContext<PeBusinessDbContext>(options =>
+            {
+                options.AddDefaultRepositories(includeAllEntities: true);
+            });
         });
     }
 }
