@@ -17,6 +17,11 @@ namespace AAA.Permissions
             A3.AddChild(AAAPermissions.A3.Delete, L("Delete"));
             A3.AddChild(AAAPermissions.A3.Create, L("Create"));
 
+
+            var Issue = AAA.AddPermission(AAAPermissions.Issue.Default, L("Issue"));
+            Issue.AddChild(AAAPermissions.Issue.Update, L("Edit"));
+            Issue.AddChild(AAAPermissions.Issue.Delete, L("Delete"));
+            Issue.AddChild(AAAPermissions.Issue.Create, L("Create"));
             //Code generation...
         }
 

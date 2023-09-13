@@ -14,6 +14,14 @@ public class AAAPermissions
         public const string Create = Default + ".Create";
     }
 
+    public static class Issue
+    {
+        public const string Default = GroupName + ".Issue";
+        public const string Delete = Default + ".Delete";
+        public const string Update = Default + ".Update";
+        public const string Create = Default + ".Create";
+    }
+
     public static string[] GetAll()
     {
         return ReflectionHelper.GetPublicConstantsRecursively(typeof(AAAPermissions));
