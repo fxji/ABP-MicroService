@@ -23,7 +23,7 @@ export default {
     ])
   },
   created() {
-    if (!this.roles.includes('AbpIdentity.Roles')) {
+    if (!this.roles.includes('BaseService.DataDictionary')) {
       this.currentRole = 'editorDashboard'
     }
   }
