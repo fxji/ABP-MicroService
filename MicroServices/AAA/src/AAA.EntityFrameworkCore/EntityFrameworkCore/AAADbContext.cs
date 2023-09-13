@@ -11,7 +11,18 @@ public class AAADbContext : AbpDbContext<AAADbContext>, IAAADbContext
     /* Add DbSet for each Aggregate Root here. Example:
      * public DbSet<Question> Questions { get; set; }
      */
-    public DbSet<A3> A3 { get; set; }
+    public DbSet<A3> A3s { get; set; }
+
+    public DbSet<Issue> Issues { get; set; }
+
+    public DbSet<Product> Products { get; set; }
+
+    public DbSet<Project> Projects { get; set; }
+
+    public DbSet<Part> Parts { get; set; }
+
+    public DbSet<Customer> Customers { get; set; }
+
     public AAADbContext(DbContextOptions<AAADbContext> options)
         : base(options)
     {

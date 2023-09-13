@@ -42,5 +42,43 @@ public static class AAADbContextModelCreatingExtensions
             b.HasIndex(x => x.Name);
 
         });
+
+        builder.Entity<Issue>(b =>
+        {
+            b.ToTable("Issue");
+
+            b.ConfigureByConvention();
+
+            b.Property(x => x.Name).IsRequired();
+            b.HasIndex(x => x.Name);
+
+            b.Property(x => x.Type).IsRequired();
+            b.HasIndex(x => x.Type);
+
+        });
+
+        builder.Entity<Part>(b =>
+        {
+            b.ToTable("Part");
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<Product>(b =>
+        {
+            b.ToTable("Product");
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<Project>(b =>
+        {
+            b.ToTable("Project");
+            b.ConfigureByConvention();
+        });
+
+        builder.Entity<Customer>(b =>
+        {
+            b.ToTable("Customer");
+            b.ConfigureByConvention();
+        });
     }
 }
