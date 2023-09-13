@@ -12,7 +12,7 @@ namespace AAA.Controllers
 {
     [RemoteService]
     [Area("AAA")]
-    [Route("api/app/A3")]
+    [Route("api/AAA/A3")]
     public class A3Controller : AbpController
     {
         private readonly IA3AppService _A3AppService;
