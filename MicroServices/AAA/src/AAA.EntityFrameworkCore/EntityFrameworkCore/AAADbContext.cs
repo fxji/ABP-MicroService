@@ -23,6 +23,14 @@ public class AAADbContext : AbpDbContext<AAADbContext>, IAAADbContext
 
     public DbSet<Customer> Customers { get; set; }
 
+    public DbSet<ContainmentAction> ContainmentActions { get; set; }
+
+    public DbSet<RiskAssessment> RiskAssessments { get; set; }
+
+    public DbSet<Cause> Causes { get; set; }
+
+    public DbSet<CorrectiveAction> CorrectiveActions { get; set; }
+
     public AAADbContext(DbContextOptions<AAADbContext> options)
         : base(options)
     {
