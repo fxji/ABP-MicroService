@@ -12,7 +12,17 @@ namespace AAA.Models
     public class ContainmentAction: AuditedAggregateRoot<Guid>, ISoftDelete, IMultiTenant
     {
         public Guid? TenantId { get; set; }
-        
+
+        /// <summary>
+        /// Raw Material
+        /// Production Line
+        /// Warehouse
+        /// 3rd Party Warehouse
+        /// Customer Stock
+        /// </summary>
+        [Required]
+        public Guid Type { get; set; }
+
         /// <summary>
         /// 单行文本
         /// </summary>
@@ -23,11 +33,16 @@ namespace AAA.Models
         /// </summary>
         [Required]
         public string Activities { get; set; }
-        
+
+        /// <summary>
+        /// A3
+        /// </summary>
+        public Guid A3Id { get; set; }
+
         /// <summary>
         /// 单行文本
         /// </summary>
-        public int Status { get; set; }
+        public Guid Status { get; set; }
         
 		
 		public bool IsDeleted { get; set; }

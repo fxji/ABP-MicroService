@@ -37,7 +37,7 @@ namespace AAA.CauseManagement
 
         public async Task<PagedResultDto<CauseDto>> GetAll(GetCauseInputDto input)
         {
-            var query = (await _repository.GetQueryableAsync()).WhereIf(!string.IsNullOrWhiteSpace(input.Filter), a => a.Title.Contains(input.Filter));
+            var query = (await _repository.GetQueryableAsync()).WhereIf(!string.IsNullOrWhiteSpace(input.Filter), a => a.Name.Contains(input.Filter));
 
             var totalCount = await query.CountAsync();
             var items = await query.OrderBy(input.Sorting ?? "Id")

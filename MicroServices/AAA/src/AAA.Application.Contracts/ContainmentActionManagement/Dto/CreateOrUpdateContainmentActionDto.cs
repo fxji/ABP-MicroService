@@ -7,21 +7,39 @@ namespace AAA.ContainmentActionManagement.Dto
 {
     public class CreateOrUpdateContainmentActionDto: EntityDto<Guid?>
     {
-        
+        /// <summary>
+        /// Raw Material
+        /// Production Line
+        /// Warehouse
+        /// 3rd Party Warehouse
+        /// Customer Stock
+        /// </summary>
+        [Required]
+        public Guid Type { get; set; }
+
         /// <summary>
         /// 单行文本
         /// </summary>
         public string Responsibility { get; set; }
-        
+
         /// <summary>
         /// 单行文本
         /// </summary>
+        [Required]
         public string Activities { get; set; }
-        
+
+        /// <summary>
+        /// A3
+        /// </summary>
+        public Guid A3Id { get; set; }
+
         /// <summary>
         /// 单行文本
         /// </summary>
-        public int Status { get; set; }
+        public Guid Status { get; set; }
+
+
+        
         
     }
 }

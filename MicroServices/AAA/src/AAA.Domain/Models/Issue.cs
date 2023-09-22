@@ -9,38 +9,61 @@ namespace AAA.Models
     /// <summary>
     /// 问题
     /// </summary>
-    public class Issue: AuditedAggregateRoot<Guid>, ISoftDelete, IMultiTenant
+    public class Issue : AuditedAggregateRoot<Guid>, ISoftDelete, IMultiTenant
     {
         public Guid? TenantId { get; set; }
+
 
         [Required]
         public string Name { get; set; }
 
         /// <summary>
-        /// 类型
+        /// A3
+        /// </summary>
+        public Guid A3Id { get; set; }
+
+        /// <summary>
+        /// Problem Type
         /// </summary>
         [Required]
-        public int Type { get; set; }
-        
+        public Guid Type { get; set; }
+
+        /// <summary>
+        /// Customer
+        /// </summary>
+        public int CustomerId { get; set; }
+
+        /// <summary>
+        /// Symptom Description
+        /// </summary>
+        public string SymptomDescription { get; set; }
+
+        /// <summary>
+        /// Goal Statement
+        /// </summary>
+        public string GoalStatement { get; set; }
+
+        /// <summary>
+        /// Failure Qty/Rate
+        /// </summary>
+        public float Rate { get; set; }
+
+        /// <summary>
+        /// Product
+        /// </summary>
+        public int ProductId { get; set; }
+
         /// <summary>
         /// 时间选择
         /// </summary>
         public DateTime OccurrenceDate { get; set; }
-        
+
         /// <summary>
-        /// 描述
+        /// Symptom Description
         /// </summary>
         public string Description { get; set; }
-        
-        /// <summary>
-        /// 百分比
-        /// </summary>
-        public float Rate { get; set; }
 
 
-        public Part ReferencePart { get; set; }
-              
-		
-		public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

@@ -7,22 +7,36 @@ namespace AAA.CauseManagement.Dto
 {
     public class CauseDto : EntityDto<Guid?>
     {
-        
         /// <summary>
         /// 单行文本
         /// </summary>
         [Required]
-        public string Title { get; set; }
-        
+        public string Name { get; set; }
+
+        /// <summary>
+        /// A3
+        /// </summary>
+        public Guid A3Id { get; set; }
+
         /// <summary>
         /// 下拉选择
         /// </summary>
-        public int Status { get; set; }
-        
+        public Guid Status { get; set; }
+
         /// <summary>
-        /// 下拉选择
+        /// 5M 
+        /// Man
+        /// Method
+        /// Machine
+        /// Material
+        /// Measurement
         /// </summary>
-        public int Type { get; set; }
-        
+        public Guid Type { get; set; }
+
+        /// <summary>
+        /// parent why
+        /// </summary>
+        public Guid ParentId { get; set; }
+
     }
 }

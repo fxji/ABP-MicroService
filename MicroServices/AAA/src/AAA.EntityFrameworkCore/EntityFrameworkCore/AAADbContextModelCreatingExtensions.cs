@@ -57,29 +57,8 @@ public static class AAADbContextModelCreatingExtensions
 
         });
 
-        builder.Entity<Part>(b =>
-        {
-            b.ToTable("Part");
-            b.ConfigureByConvention();
-        });
 
-        builder.Entity<Product>(b =>
-        {
-            b.ToTable("Product");
-            b.ConfigureByConvention();
-        });
-
-        builder.Entity<Project>(b =>
-        {
-            b.ToTable("Project");
-            b.ConfigureByConvention();
-        });
-
-        builder.Entity<Customer>(b =>
-        {
-            b.ToTable("Customer");
-            b.ConfigureByConvention();
-        });
+        
 
         builder.Entity<ContainmentAction>(b =>
         {
@@ -89,6 +68,9 @@ public static class AAADbContextModelCreatingExtensions
 
             b.Property(x => x.Activities).IsRequired();
             b.HasIndex(x => x.Activities);
+
+            b.Property(x => x.Type).IsRequired();
+            b.HasIndex(x => x.Type);
 
         });
 
@@ -108,8 +90,8 @@ public static class AAADbContextModelCreatingExtensions
 
             b.ConfigureByConvention();
 
-            b.Property(x => x.Title).IsRequired();
-            b.HasIndex(x => x.Title);
+            b.Property(x => x.Name).IsRequired();
+            b.HasIndex(x => x.Name);
         });
 
         builder.Entity<CorrectiveAction>(b =>
@@ -118,8 +100,8 @@ public static class AAADbContextModelCreatingExtensions
 
             b.ConfigureByConvention();
 
-            b.Property(x => x.Title).IsRequired();
-            b.HasIndex(x => x.Title);
+            b.Property(x => x.Name).IsRequired();
+            b.HasIndex(x => x.Name);
         });
     }
 }

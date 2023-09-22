@@ -14,15 +14,7 @@ public class AAADbContext : AbpDbContext<AAADbContext>, IAAADbContext
     public DbSet<A3> A3s { get; set; }
 
     public DbSet<Issue> Issues { get; set; }
-
-    public DbSet<Product> Products { get; set; }
-
-    public DbSet<Project> Projects { get; set; }
-
-    public DbSet<Part> Parts { get; set; }
-
-    public DbSet<Customer> Customers { get; set; }
-
+    
     public DbSet<ContainmentAction> ContainmentActions { get; set; }
 
     public DbSet<RiskAssessment> RiskAssessments { get; set; }
