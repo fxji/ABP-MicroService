@@ -11,7 +11,7 @@ namespace AAA.A3Management.Dto
         /// <summary>
         /// Location/Plant/Site
         /// </summary>
-        public Guid OrganizationId { get; set; }
+        public Guid? OrganizationId { get; set; }
 
         /// <summary>
         /// Title
@@ -22,7 +22,7 @@ namespace AAA.A3Management.Dto
         /// <summary>
         /// Sponsor / Champion
         /// </summary>
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
 
         /// <summary>
         /// 开关
@@ -32,22 +32,22 @@ namespace AAA.A3Management.Dto
         /// <summary>
         /// 日期选择
         /// </summary>
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         /// <summary>
         /// Process of Production issue
         /// </summary>
-        public Guid ProcessId { get; set; }
+        public Guid? ProcessId { get; set; }
 
         /// <summary>
         /// Reference A3 
         /// </summary>
-        public Guid ParentId { get; set; }
+        public Guid? ParentId { get; set; }
 
         /// <summary>
         /// Source Of Defect
         /// </summary>
-        public Guid SourceId { get; set; }
+        public Guid? SourceId { get; set; }
 
     }
 }
