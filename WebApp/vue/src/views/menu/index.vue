@@ -2,89 +2,30 @@
   <div class="app-container">
     <div class="head-container">
       <!-- 搜索 -->
-      <el-input
-        v-model="listQuery.Filter"
-        clearable
-        size="small"
-        placeholder="搜索..."
-        style="width: 200px"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-      <el-button
-        class="filter-item"
-        size="mini"
-        type="success"
-        icon="el-icon-search"
-        @click="handleFilter"
-        >搜索</el-button
-      >
+      <el-input v-model="listQuery.Filter" clearable size="small" placeholder="搜索..." style="width: 200px"
+        class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="handleFilter">搜索</el-button>
       <div style="padding: 6px 0">
-        <el-button
-          class="filter-item"
-          size="mini"
-          type="primary"
-          icon="el-icon-plus"
-          @click="handleCreate"
-          v-permission="['BaseService.Job.Create']"
-          >新增</el-button
-        >
-        <el-button
-          class="filter-item"
-          size="mini"
-          type="success"
-          icon="el-icon-edit"
-          v-permission="['BaseService.Job.Update']"
-          @click="handleUpdate()"
-          >修改</el-button
-        >
-        <el-button
-          slot="reference"
-          class="filter-item"
-          type="danger"
-          icon="el-icon-delete"
-          size="mini"
-          v-permission="['BaseService.Job.Delete']"
-          @click="handleDelete()"
-          >删除</el-button
-        >
+        <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="handleCreate"
+          v-permission="['BaseService.Job.Create']">新增</el-button>
+        <el-button class="filter-item" size="mini" type="success" icon="el-icon-edit"
+          v-permission="['BaseService.Job.Update']" @click="handleUpdate()">修改</el-button>
+        <el-button slot="reference" class="filter-item" type="danger" icon="el-icon-delete" size="mini"
+          v-permission="['BaseService.Job.Delete']" @click="handleDelete()">删除</el-button>
       </div>
     </div>
-    <el-dialog
-      :visible.sync="dialogFormVisible"
-      :close-on-click-modal="false"
-      :title="formTitle"
-      @close="cancel()"
-      width="600px"
-    >
-      <el-form
-        ref="form"
-        :inline="true"
-        :model="form"
-        :rules="rules"
-        size="small"
-        label-width="80px"
-      >
+    <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" :title="formTitle" @close="cancel()"
+      width="600px">
+      <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="80px">
         <el-form-item label="菜单类型" prop="categoryId">
-          <el-select
-            v-model="form.categoryId"
-            placeholder="请选择"
-            style="width: 184px;" 
-            :disabled="isEdit"
-          >
+          <el-select v-model="form.categoryId" placeholder="请选择" style="width: 184px;" :disabled="isEdit">
             <el-option label="菜单" :value="1"></el-option>
             <el-option label="按钮" :value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="上级菜单" prop="menuType">
-          <treeselect
-                v-model="form.pid"
-                :load-options="loadMenus"
-                :options="menus"
-                :disabled="isEdit"
-                style="width: 184px;"
-                placeholder="根目录"
-              />
+          <treeselect v-model="form.pid" :load-options="loadMenus" :options="menus" :disabled="isEdit"
+            style="width: 184px;" placeholder="根目录" />
         </el-form-item>
         <el-form-item label="菜单名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入菜单名称" style="width: 184px;" />
@@ -93,73 +34,36 @@
           <el-input v-model="form.label" placeholder="请输入显示名称" style="width: 184px;" />
         </el-form-item>
         <el-form-item label="菜单排序" prop="sort">
-          <el-input-number
-            v-model="form.sort"
-            controls-position="right"
-            :min="0"
-            style="width: 184px;" 
-          />
+          <el-input-number v-model="form.sort" controls-position="right" :min="0" style="width: 184px;" />
         </el-form-item>
-         <el-form-item label="菜单图标" prop="icon" v-if="form.categoryId==1">
-          <el-popover
-                placement="bottom-start"
-                width="460"
-                trigger="click"
-                @show="$refs['iconSelect'].reset()"
-              >
-                <IconSelect ref="iconSelect" @selected="selected" />
-                <el-input slot="reference" v-model="form.icon" placeholder="点击选择图标" style="width: 184px;" readonly>
-                  <svg-icon
-                    v-if="form.icon"
-                    slot="prefix"
-                    :icon-class="form.icon"
-                    class="el-input__icon"
-                    style="height: 32px;width: 16px;"
-                  />
-                  <i v-else slot="prefix" class="el-icon-search el-input__icon" />
-                </el-input>
-              </el-popover>
+        <el-form-item label="菜单图标" prop="icon" v-if="form.categoryId == 1">
+          <el-popover placement="bottom-start" width="460" trigger="click" @show="$refs['iconSelect'].reset()">
+            <IconSelect ref="iconSelect" @selected="selected" />
+            <el-input slot="reference" v-model="form.icon" placeholder="点击选择图标" style="width: 184px;" readonly>
+              <svg-icon v-if="form.icon" slot="prefix" :icon-class="form.icon" class="el-input__icon"
+                style="height: 32px;width: 16px;" />
+              <i v-else slot="prefix" class="el-icon-search el-input__icon" />
+            </el-input>
+          </el-popover>
         </el-form-item>
-        <el-form-item label="路由地址" prop="path" v-if="form.categoryId==1">
+        <el-form-item label="路由地址" prop="path" v-if="form.categoryId == 1">
           <el-input v-model="form.path" placeholder="请输入路由地址" style="width: 184px;" />
         </el-form-item>
-        <el-form-item label="组件路径" prop="component" v-if="form.categoryId==1">
+        <el-form-item label="组件路径" prop="component" v-if="form.categoryId == 1">
           <el-input v-model="form.component" placeholder="请输入组件路径" style="width: 184px;" />
         </el-form-item>
         <el-form-item label="权限标识">
-          <el-input
-            v-model="form.permission"
-            placeholder="请输入权限标识"
-            maxlength="50"
-           style="width: 184px;" 
-          />
+          <el-input v-model="form.permission" placeholder="请输入权限标识" maxlength="50" style="width: 184px;" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" type="text" @click="cancel">取消</el-button>
-        <el-button
-          size="small"
-          v-loading="formLoading"
-          type="primary"
-          @click="save"
-          >确认</el-button
-        >
+        <el-button size="small" v-loading="formLoading" type="primary" @click="save">确认</el-button>
       </div>
     </el-dialog>
-    <el-table
-      ref="multipleTable"
-      v-loading="listLoading"
-      :data="list"
-      size="small"
-      style="width: 90%"
-      row-key="id"
-      :tree-props="{children: 'children'}"
-    >
-      <el-table-column
-        label="菜单名"
-        prop="label"
-        sortable="custom"
-      >
+    <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%" row-key="id"
+      :tree-props="{ children: 'children' }">
+      <el-table-column label="菜单名" prop="label" sortable="custom">
         <template slot-scope="{ row }">
           <span class="link-type" @click="handleUpdate(row)">{{
             row.label
@@ -174,35 +78,20 @@
       <el-table-column label="排序" prop="sort" align="center" />
       <el-table-column label="菜单类型" prop="categoryId" align="center">
         <template slot-scope="scope">
-              <span>{{scope.row.categoryId | displayCategory}}</span>
-            </template>
+          <span>{{ scope.row.categoryId | displayCategory }}</span>
+        </template>
       </el-table-column>
       <el-table-column label="组件路径" prop="component" align="center" />
       <el-table-column label="操作" align="center">
         <template slot-scope="{ row }">
-          <el-button
-            type="text"
-            size="mini"
-            @click="handleUpdate(row)"
-            icon="el-icon-edit"
-          >修改</el-button>
-          <el-button
-            type="text"
-            size="mini"
-            @click="handleDelete(row)"
-            icon="el-icon-delete"
-          >删除</el-button>
+          <el-button type="text" size="mini" @click="handleUpdate(row)" icon="el-icon-edit">修改</el-button>
+          <el-button type="text" size="mini" @click="handleDelete(row)" icon="el-icon-delete">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="totalCount > 0"
-      :total="totalCount"
-      :page.sync="page"
-      :limit.sync="listQuery.MaxResultCount"
-      @pagination="getList"
-    />
+    <pagination v-show="totalCount > 0" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
+      @pagination="getList" />
   </div>
 </template>
 
@@ -215,8 +104,8 @@ import IconSelect from "@/components/IconSelect";
 
 const defaultForm = {
   id: null,
-  pid:null,
-  categoryId:1,
+  pid: null,
+  categoryId: 1,
   name: null,
   path: '',
   sort: 999,
@@ -245,7 +134,7 @@ export default {
       },
       form: Object.assign({}, defaultForm),
       list: [],
-      menus:[],
+      menus: [],
       totalCount: 0,
       listLoading: true,
       formLoading: false,
@@ -272,8 +161,8 @@ export default {
     getList() {
       this.listLoading = true;
       this.$axios.gets("/api/base/menu/all", this.listQuery).then((response) => {
-        this.list = response.items.filter(_=>_.pid==null)
-        this.setChildren(this.list,response.items)
+        this.list = response.items.filter(_ => _.pid == null)
+        this.setChildren(this.list, response.items)
         this.listLoading = false;
       });
     },
@@ -281,8 +170,8 @@ export default {
       roots.forEach(element => {
         items.forEach(item => {
           if (item.pid == element.id) {
-            if(!element.children)
-              element.children=[]
+            if (!element.children)
+              element.children = []
             element.children.push(item);
           }
         });
@@ -294,7 +183,7 @@ export default {
     fetchData(id) {
       this.$axios.gets("/api/base/menu/" + id).then((response) => {
         this.form = response;
-        this.menus.push({id:response.pid, label:response.parentLabel})
+        this.menus.push({ id: response.pid, label: response.parentLabel })
       });
     },
     loadMenus({ action, parentNode, callback }) {
@@ -302,7 +191,7 @@ export default {
         this.$axios
           .gets("/api/base/menu/loadMenus", { id: parentNode.id })
           .then(response => {
-            parentNode.children = response.items.map(function(obj) {
+            parentNode.children = response.items.map(function (obj) {
               if (!obj.leaf) {
                 obj.children = null;
               }
@@ -366,7 +255,7 @@ export default {
       this.isEdit = false;
       this.dialogFormVisible = true;
       this.$axios.gets("/api/base/menu/loadMenus").then(response => {
-        this.menus = response.items.map(function(obj) {
+        this.menus = response.items.map(function (obj) {
           if (!obj.leaf) {
             obj.children = null;
           }

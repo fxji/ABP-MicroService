@@ -3,7 +3,7 @@ import request from "@/utils/request";
 var service = {
   fetchOrgNodesList(query) {
     return request({
-      url: "/api/base/orgs/loadNodes",
+      url: `/api/base/orgs/loadNodes`,
       method: "get",
       params: query
     });
@@ -17,9 +17,9 @@ var service = {
     });
   },
 
-  fetchProcessList(query) {
+  fetchOptionsList(query) {
     return request({
-      url: "/api/base/dictDetails/list",
+      url: `/api/base/dictDetails/list`,
       method: "get",
       params: query
     });

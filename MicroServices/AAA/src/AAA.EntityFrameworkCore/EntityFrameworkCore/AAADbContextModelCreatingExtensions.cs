@@ -66,8 +66,8 @@ public static class AAADbContextModelCreatingExtensions
 
             b.ConfigureByConvention();
 
-            b.Property(x => x.Activities).IsRequired();
-            b.HasIndex(x => x.Activities);
+            b.Property(x => x.Name).IsRequired();
+            b.HasIndex(x => x.Name);
 
             b.Property(x => x.Type).IsRequired();
             b.HasIndex(x => x.Type);
@@ -80,8 +80,8 @@ public static class AAADbContextModelCreatingExtensions
 
             b.ConfigureByConvention();
 
-            b.Property(x => x.Factor).IsRequired();
-            b.HasIndex(x => x.Factor);
+            b.Property(x => x.Name).IsRequired();
+            b.HasIndex(x => x.Name);
         });
 
         builder.Entity<Cause>(b =>

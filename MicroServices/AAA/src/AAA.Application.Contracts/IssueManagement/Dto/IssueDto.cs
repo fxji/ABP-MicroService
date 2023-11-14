@@ -19,7 +19,7 @@ namespace AAA.IssueManagement.Dto
         /// Problem Type
         /// </summary>
         [Required]
-        public Guid Type { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         /// Customer

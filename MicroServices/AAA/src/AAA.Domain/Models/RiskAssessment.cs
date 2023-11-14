@@ -17,12 +17,12 @@ namespace AAA.Models
         /// 因素
         /// </summary>
         [Required]
-        public string Factor { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// A3
         /// </summary>
-        public Guid A3Id { get; set; }
+        public Guid? A3Id { get; set; }
 
         /// <summary>
         /// 单行文本
@@ -34,7 +34,7 @@ namespace AAA.Models
         /// Medium
         /// High
         /// </summary>
-        public Guid Probability { get; set; }
+        public string Probability { get; set; }
 
         /// <summary>
         /// 多行文本
@@ -46,7 +46,7 @@ namespace AAA.Models
         /// Medium
         /// High
         /// </summary>
-        public Guid Functionally { get; set; }
+        public string Functionally { get; set; }
 
 
         public bool IsDeleted { get; set; }

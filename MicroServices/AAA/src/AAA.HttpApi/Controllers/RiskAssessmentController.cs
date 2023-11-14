@@ -12,7 +12,7 @@ namespace AAA.Controllers
 {
     [RemoteService]
     [Area("AAA")]
-    [Route("api/app/RiskAssessment")]
+    [Route("api/AAA/RiskAssessment")]
     public class RiskAssessmentController : AbpController
     {
         private readonly IRiskAssessmentAppService _RiskAssessmentAppService;

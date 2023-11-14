@@ -5,6 +5,8 @@ namespace AAA.CorrectiveActionManagement.Dto
 {
     public class GetCorrectiveActionInputDto : PagedAndSortedResultRequestDto
     {
+        public Guid a3Id { get; set; }
+
         public string Filter { get; set; }
     }
 }

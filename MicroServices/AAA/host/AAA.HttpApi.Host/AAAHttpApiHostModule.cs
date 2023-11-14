@@ -42,7 +42,8 @@ namespace AAA;
     typeof(AAAHttpApiModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(AbpAutofacModule),
-    typeof(AbpCachingStackExchangeRedisModule),
+    //disable when redis is not running
+    //typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpEntityFrameworkCoreSqlServerModule),
     typeof(AbpAuditLoggingEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),

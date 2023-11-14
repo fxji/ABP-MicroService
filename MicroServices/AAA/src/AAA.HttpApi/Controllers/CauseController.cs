@@ -12,7 +12,7 @@ namespace AAA.Controllers
 {
     [RemoteService]
     [Area("AAA")]
-    [Route("api/app/Cause")]
+    [Route("api/AAA/Cause")]
     public class CauseController : AbpController
     {
         private readonly ICauseAppService _CauseAppService;

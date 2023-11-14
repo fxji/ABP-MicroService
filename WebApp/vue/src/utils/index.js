@@ -241,6 +241,7 @@ export function getTime(type) {
  * @param {boolean} immediate
  * @return {*}
  */
+//防抖
 export function debounce(func, wait, immediate) {
   let timeout, args, context, timestamp, result
 

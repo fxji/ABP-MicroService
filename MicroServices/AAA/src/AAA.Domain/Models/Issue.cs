@@ -20,18 +20,18 @@ namespace AAA.Models
         /// <summary>
         /// A3
         /// </summary>
-        public Guid A3Id { get; set; }
+        public Guid? A3Id { get; set; }
 
         /// <summary>
         /// Problem Type
         /// </summary>
         [Required]
-        public Guid Type { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         /// Customer
         /// </summary>
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
 
         /// <summary>
         /// Symptom Description
@@ -51,12 +51,12 @@ namespace AAA.Models
         /// <summary>
         /// Product
         /// </summary>
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
 
         /// <summary>
         /// 时间选择
         /// </summary>
-        public DateTime OccurrenceDate { get; set; }
+        public DateTime? OccurrenceDate { get; set; }
 
         /// <summary>
         /// Symptom Description

@@ -12,7 +12,7 @@ namespace AAA.Controllers
 {
     [RemoteService]
     [Area("AAA")]
-    [Route("api/app/CorrectiveAction")]
+    [Route("api/AAA/CorrectiveAction")]
     public class CorrectiveActionController : AbpController
     {
         private readonly ICorrectiveActionAppService _CorrectiveActionAppService;

@@ -23,6 +23,10 @@ import moment from 'moment'
 
 import * as filters from './filters' // global filters
 
+import loadMore from '@/utils/load-more'
+
+//注册自定义指令，以插件的方式
+Vue.use(loadMore)
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

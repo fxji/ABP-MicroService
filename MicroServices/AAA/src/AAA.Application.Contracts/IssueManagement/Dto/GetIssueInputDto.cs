@@ -6,5 +6,8 @@ namespace AAA.IssueManagement.Dto
     public class GetIssueInputDto : PagedAndSortedResultRequestDto
     {
         public string Filter { get; set; }
+
+
+        public Guid a3Id { get; set; }
     }
 }

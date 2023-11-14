@@ -7,10 +7,6 @@ namespace AAA.CorrectiveActionManagement.Dto
 {
     public class CreateOrUpdateCorrectiveActionDto: EntityDto<Guid?>
     {
-        /// <summary>
-        /// 单行文本
-        /// </summary>
-        public string Activites { get; set; }
 
         /// <summary>
         /// 单行文本
@@ -22,12 +18,12 @@ namespace AAA.CorrectiveActionManagement.Dto
         /// <summary>
         /// A3
         /// </summary>
-        public Guid A3Id { get; set; }
+        public Guid? A3Id { get; set; }
 
         /// <summary>
         /// 下拉选择
         /// </summary>
-        public Guid Status { get; set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// 时间选择

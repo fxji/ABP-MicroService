@@ -21,7 +21,7 @@ namespace AAA.Models
         /// Customer Stock
         /// </summary>
         [Required]
-        public Guid Type { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         /// 单行文本
@@ -31,18 +31,18 @@ namespace AAA.Models
         /// <summary>
         /// 单行文本
         /// </summary>
-        [Required]
-        public string Activities { get; set; }
+        //[Required]
+        public string Name { get; set; }
 
         /// <summary>
         /// A3
         /// </summary>
-        public Guid A3Id { get; set; }
+        public Guid? A3Id { get; set; }
 
         /// <summary>
         /// 单行文本
         /// </summary>
-        public Guid Status { get; set; }
+        public string Status { get; set; }
         
 		
 		public bool IsDeleted { get; set; }

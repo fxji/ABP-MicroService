@@ -22,12 +22,12 @@ namespace AAA.Models
         /// <summary>
         /// A3
         /// </summary>
-        public Guid A3Id { get; set; }
+        public Guid? A3Id { get; set; }
 
         /// <summary>
         /// 下拉选择
         /// </summary>
-        public Guid Status { get; set; }
+        public string Status { get; set; }
         
         /// <summary>
         /// 5M 
@@ -37,12 +37,12 @@ namespace AAA.Models
         /// Material
         /// Measurement
         /// </summary>
-        public Guid Type { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         /// parent why
         /// </summary>
-        public Guid ParentId { get; set; }
+        public Guid? ParentId { get; set; }
         
 		
 		public bool IsDeleted { get; set; }

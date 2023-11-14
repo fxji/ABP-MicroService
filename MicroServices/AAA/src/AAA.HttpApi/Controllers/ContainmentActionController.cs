@@ -12,7 +12,7 @@ namespace AAA.Controllers
 {
     [RemoteService]
     [Area("AAA")]
-    [Route("api/app/ContainmentAction")]
+    [Route("api/AAA/ContainmentAction")]
     public class ContainmentActionController : AbpController
     {
         private readonly IContainmentActionAppService _ContainmentActionAppService;

@@ -72,14 +72,14 @@ namespace AAA.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ProcessId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Process")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("ReOccurrence")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("SourceId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Source")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
@@ -104,7 +104,7 @@ namespace AAA.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("A3Id")
+                    b.Property<Guid?>("A3Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -143,18 +143,18 @@ namespace AAA.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("ParentId")
+                    b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Status")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("TenantId");
 
-                    b.Property<Guid>("Type")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -169,12 +169,8 @@ namespace AAA.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("A3Id")
+                    b.Property<Guid?>("A3Id")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Activities")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -208,22 +204,27 @@ namespace AAA.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Responsibility")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("Status")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("TenantId");
 
-                    b.Property<Guid>("Type")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Activities");
+                    b.HasIndex("Name");
 
                     b.HasIndex("Type");
 
@@ -236,11 +237,8 @@ namespace AAA.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("A3Id")
+                    b.Property<Guid?>("A3Id")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Activites")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -284,8 +282,8 @@ namespace AAA.Migrations
                     b.Property<string>("Responsibility")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("Status")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uniqueidentifier")
@@ -304,7 +302,7 @@ namespace AAA.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("A3Id")
+                    b.Property<Guid?>("A3Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -321,7 +319,7 @@ namespace AAA.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("CreatorId");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -352,10 +350,10 @@ namespace AAA.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("OccurrenceDate")
+                    b.Property<DateTime?>("OccurrenceDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<float>("Rate")
@@ -368,8 +366,9 @@ namespace AAA.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("TenantId");
 
-                    b.Property<Guid>("Type")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -386,7 +385,7 @@ namespace AAA.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("A3Id")
+                    b.Property<Guid?>("A3Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -410,12 +409,8 @@ namespace AAA.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
-                    b.Property<string>("Factor")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid>("Functionally")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Functionally")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -431,8 +426,12 @@ namespace AAA.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<Guid>("Probability")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Probability")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("SafetyRelevant")
                         .HasColumnType("bit");
@@ -443,7 +442,7 @@ namespace AAA.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Factor");
+                    b.HasIndex("Name");
 
                     b.ToTable("RiskAssessment", (string)null);
                 });

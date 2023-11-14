@@ -42,7 +42,7 @@ namespace AAA.Models
         /// <summary>
         /// Process of Production issue
         /// </summary>
-        public Guid? ProcessId { get; set; }
+        public string Process { get; set; }
 
         /// <summary>
         /// Reference A3 
@@ -52,7 +52,7 @@ namespace AAA.Models
         /// <summary>
         /// Source Of Defect
         /// </summary>
-        public Guid? SourceId { get; set; }
+        public string Source { get; set; }
 
 
         public bool IsDeleted { get; set; }
