@@ -91,10 +91,13 @@ namespace FileStorage.FileManagement
 
         public async Task UploadPrivate([Required] string name, [Required] IFormFile file)
         {
-            if (file == null || file.Length == 0) throw new BusinessException("无法上传空文件");
-            if (file.Length > 104857600) throw new BusinessException("上传文件过大");
+            if (file == null || file.Length == 0) 
+                throw new BusinessException("无法上传空文件");
+            if (file.Length > 104857600) 
+                throw new BusinessException("上传文件过大");
             var fileExtension = Path.GetExtension(file.FileName);
-            if (!pictureFormatArray.Contains(fileExtension)) throw new BusinessException("上传文件格式错误");
+            if (!pictureFormatArray.Contains(fileExtension)) 
+                throw new BusinessException("上传文件格式错误");
 
             var size = "";
             if (file.Length < 1024)

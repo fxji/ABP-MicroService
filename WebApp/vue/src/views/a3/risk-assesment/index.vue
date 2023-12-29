@@ -15,8 +15,8 @@
     </div>
     <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()" :title="formTitle">
       <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="100px">
-        <el-form-item label="因素" prop="name">
-          <el-input v-model="form.name" placeholder="请输入因素" clearable :style="{ width: '100%' }"></el-input>
+        <el-form-item label="Factor" prop="name">
+          <el-input v-model="form.name" placeholder="请输入Factor" clearable :style="{ width: '100%' }"></el-input>
         </el-form-item>
         <el-form-item label="safetyRelevant" prop="safetyRelevant">
           <el-switch v-model="form.safetyRelevant" active-text="safe" inactive-text="unsafe"></el-switch>
@@ -44,7 +44,7 @@
     <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
       @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
       <el-table-column type="selection" width="44px"></el-table-column>
-      <el-table-column label="因素" prop="name" align="center" />
+      <el-table-column label="factor" prop="name" align="center" />
       <el-table-column label="safetyRelevant" prop="safetyRelevant" align="center" />
       <el-table-column label="description" prop="description" align="center" />
       <el-table-column label="functionally" :formatter="levelFormate" prop="functionally" align="center" />

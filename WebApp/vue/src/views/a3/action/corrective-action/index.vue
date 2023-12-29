@@ -16,13 +16,14 @@
     <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()"
       :title="formTitle">
       <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="100px">
-        <el-form-item label="activites" prop="name">
+        <el-form-item label="Action" prop="name">
           <el-input v-model="form.name" placeholder="请输入activites" clearable :style="{width: '100%'}">
           </el-input>
         </el-form-item>
         <el-form-item label="responsibility" prop="responsibility">
-          <el-input v-model="form.responsibility" placeholder="请输入responsibility" clearable
-            :style="{width: '100%'}"></el-input>
+          <user-select v-model="form.responsibility"></user-select>
+          <!-- <el-input v-model="form.responsibility" placeholder="请输入responsibility" clearable
+            :style="{width: '100%'}"></el-input> -->
         </el-form-item>
         <el-form-item label="status" prop="status">
           <el-select v-model="form.status" placeholder="请选择status" clearable :style="{width: '100%'}">
@@ -30,8 +31,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="时间选择" prop="dueDate">
-          <el-time-picker v-model="form.dueDate" :style="{width: '100%'}" placeholder="请选择时间选择" clearable>
-          </el-time-picker>
+          <el-date-picker v-model="form.dueDate" :style="{width: '100%'}" placeholder="请选择时间选择" clearable>
+          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -42,7 +43,7 @@
     <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
       @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
       <el-table-column type="selection" width="44px"></el-table-column>
-      <el-table-column label="activites" prop="name" align="center" />
+      <el-table-column label="Action" prop="name" align="center" />
       <el-table-column label="responsibility" prop="responsibility" align="center" />
       <el-table-column label="status" prop="status" align="center" :formatter="statusFormate"/>
       <el-table-column label="时间选择" prop="dueDate" align="center" />
@@ -58,6 +59,7 @@
   </div>
 </template>
 <script>
+import UserSelect from '@/views/components/UserSelect'
 import Pagination from "@/components/Pagination";
 import permission from "@/directive/permission/index.js";
 import baseService from '@/api/base'
@@ -72,7 +74,8 @@ const defaultForm = {
 export default {
   name: 'CorrectiveAction',
   components: {
-    Pagination
+    Pagination,
+    UserSelect
   },
   directives: {
     permission

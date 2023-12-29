@@ -42,6 +42,16 @@ namespace AAA.Permissions
             CorrectiveAction.AddChild(AAAPermissions.CorrectiveAction.Update, L("Edit"));
             CorrectiveAction.AddChild(AAAPermissions.CorrectiveAction.Delete, L("Delete"));
             CorrectiveAction.AddChild(AAAPermissions.CorrectiveAction.Create, L("Create"));
+
+            var A3Attachment = AAA.AddPermission(AAAPermissions.A3Attachment.Default, L("A3Attachment"));
+            A3Attachment.AddChild(AAAPermissions.A3Attachment.Update, L("Edit"));
+            A3Attachment.AddChild(AAAPermissions.A3Attachment.Delete, L("Delete"));
+            A3Attachment.AddChild(AAAPermissions.A3Attachment.Create, L("Create"));
+
+            var A3Member = AAA.AddPermission(AAAPermissions.A3Member.Default, L("A3Member"));
+            A3Attachment.AddChild(AAAPermissions.A3Member.Update, L("Edit"));
+            A3Attachment.AddChild(AAAPermissions.A3Member.Delete, L("Delete"));
+            A3Attachment.AddChild(AAAPermissions.A3Member.Create, L("Create"));
             //Code generation...
         }
 

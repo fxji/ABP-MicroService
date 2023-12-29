@@ -22,15 +22,19 @@
               <el-input v-model="form.name" placeholder="请输入Title" clearable :style="{ width: '100%' }"></el-input>
             </el-tooltip>
           </el-form-item>
-          <el-form-item label="Plant" prop="organizationId">
+          <el-form-item label="Department" prop="organizationId">
             <tree-select :multiple="false" v-model="form.organizationId" :load-options="loadOrgs" :options="orgs"
               placeholder="请选择Location/Plant/Site" />
           </el-form-item>
           <el-form-item label="Sponsor / Champion" prop="userId">
-            <el-select v-model="form.userId" placeholder="请选择Sponsor / Champion" clearable
-              :style="{ width: '100%' }"></el-select>
+            <user-select v-model="form.userId"></user-select>
+            <!-- <el-select v-model="form.userId" placeholder="请选择Sponsor" filterable clearable remote
+              :remote-method="userListRemoteMethod" v-loadMore="getUserList" @visible-change="handleUserVisibleChange"
+              :style="{ width: '100%' }">
+              <el-option v-for="item in users" :key="item.id" :value="item.id" :label="item.email"></el-option>
+            </el-select> -->
           </el-form-item>
-          <el-form-item label="reOccurrence" prop="reOccurrence">
+          <el-form-item label="Re-Occurrence" prop="reOccurrence">
             <el-switch v-model="form.reOccurrence" :active-value="undefined" :inactive-value="undefined">
             </el-switch>
           </el-form-item>
@@ -65,10 +69,9 @@
         @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
         <el-table-column type="selection" width="44px"></el-table-column>
         <el-table-column label="Title" prop="name" align="center" />
-        <el-table-column label="Location/Plant/Site" prop="organizationId" align="center"
-          :formatter="locationFormatter" />
+        <el-table-column label="Department" prop="organizationId" align="center" :formatter="locationFormatter" />
         <el-table-column label="Sponsor / Champion" prop="userId" align="center" />
-        <el-table-column label="开关" prop="reOccurrence" align="center" />
+        <el-table-column label="Re-Occurrence" prop="reOccurrence" align="center" />
         <el-table-column label="Process of Production issue" prop="process" align="center" :formatter="processFormatter">
           <!-- <template slot-scope="scope">
             <span>{{ scope.row.process | processFilter }}</span>
@@ -88,14 +91,48 @@
         @pagination="getList" />
       <el-card>
         <el-tabs>
+          <el-tab-pane label="A3Members" :lazy="false">
+            <A3Member ref="A3MembersDetails"></A3Member>
+          </el-tab-pane>
           <el-tab-pane label="Issues" :lazy="false">
-            <Issue ref="IssueDetails"></Issue>
+            <el-col :xs="15" :sm="18" :md="19" :lg="20" :xl="20">
+              <Issue ref="IssueDetails"></Issue>
+            </el-col>
+            <el-col :xs="9" :sm="6" :md="5" :lg="4" :xl="4">
+              <el-upload ref="IssueUpload" :file-list="attachments.Issue"
+                :action="storageApi + '/api/storage/image/upload-img?name=' + form.name + Date.now()"
+                :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.Issue, response, file, fileList) }"
+                list-type="picture-card">
+                <i class="el-icon-plus"></i>
+              </el-upload>
+            </el-col>
           </el-tab-pane>
           <el-tab-pane label="ContainmentAction" :lazy="false">
-            <ContainmentAction ref="ContainmentActionDetails"></ContainmentAction>
+
+            <el-col :xs="15" :sm="18" :md="19" :lg="20" :xl="20">
+              <ContainmentAction ref="ContainmentActionDetails"></ContainmentAction>
+            </el-col>
+            <el-col :xs="9" :sm="6" :md="5" :lg="4" :xl="4">
+              <el-upload ref="ContainmentActionUpload" :file-list="attachments.ContainmentAction"
+                :action="storageApi + '/api/storage/image/upload-img?name=' + form.name + Date.now()"
+                :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.ContainmentAction, response, file, fileList) }" list-type="picture-card">
+                <i class="el-icon-plus"></i>
+              </el-upload>
+            </el-col>
+
           </el-tab-pane>
-          <el-tab-pane label="RiskAssesment" :a3Id="a3Id" :lazy="false">
-            <RiskAssesment ref="RiskAssesmentDetails"></RiskAssesment>
+          <el-tab-pane label="RiskAssesment" :lazy="false">
+            <el-col :xs="15" :sm="18" :md="19" :lg="20" :xl="20">
+
+              <RiskAssesment ref="RiskAssesmentDetails"></RiskAssesment>
+            </el-col>
+            <el-col :xs="9" :sm="6" :md="5" :lg="4" :xl="4">
+              <el-upload ref="RiskAssesmentUpload" :file-list="attachments.RiskAssesment"
+                :action="storageApi + '/api/storage/image/upload-img?name=' + form.name + Date.now()"
+                :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.RiskAssesment, response, file, fileList) }" list-type="picture-card">
+                <i class="el-icon-plus"></i>
+              </el-upload>
+            </el-col>
           </el-tab-pane>
           <el-tab-pane label="Cause" :lazy="false">
             <Cause ref="CauseDetails"></Cause>
@@ -115,6 +152,8 @@ import ContainmentAction from '@/views/a3/action/containment-action'
 import RiskAssesment from '@/views/a3/risk-assesment'
 import Cause from '@/views/a3/cause'
 import CorrectiveAction from '@/views/a3/action/corrective-action'
+import UserSelect from '@/views/components/UserSelect'
+import A3Member from '@/views/a3/a3-member'
 
 import Pagination from "@/components/Pagination";
 import TreeSelect from "@riophae/vue-treeselect";
@@ -125,10 +164,11 @@ import permission from "@/directive/permission/index.js";
 
 import baseService from "@/api/base";
 import a3Service from "@/api/aaa";
+import config from "../../../static/config";
 
 const defaultForm = {
   id: null,
-  a3Id:null,
+  a3Id: null,
   name: null,
   organizationId: null,
   userId: null,
@@ -138,6 +178,13 @@ const defaultForm = {
   source: null,
   StartDate: null
 };
+
+const Types = {
+  ContainmentAction: 'ContainmentAction',
+  RiskAssesment: 'RiskAssesment',
+  Issue: 'Issue',
+};
+
 export default {
   name: "A3",
   components: {
@@ -147,13 +194,15 @@ export default {
     ContainmentAction,
     RiskAssesment,
     Cause,
-    CorrectiveAction
+    CorrectiveAction,
+    UserSelect,
+    A3Member
   },
   directives: {
     permission
   },
   filters: {
-    
+
   },
   props: [],
   data() {
@@ -189,10 +238,26 @@ export default {
         MaxResultCount: 10
       },
       page: 1,
+      users: [],
+      userLoadMoreConfig: {
+        offset: 0,
+        limit: 10,
+        filter: '',
+        page: 1,
+        total: 0,
+      },
       dialogFormVisible: false,
       multipleSelection: [],
       formTitle: "",
-      isEdit: false
+      isEdit: false,
+      storageApi: config.storage.ip,
+      selectA3Id: "",
+      attachments: {
+        ContainmentAction: [],
+        RiskAssesment: [],
+        Issue: []
+      },
+      attachmentTypes: Types,
     };
   },
   computed: {},
@@ -238,7 +303,43 @@ export default {
         }
       )
     },
+    // getUserList() {
+    //   if (this.userLoadMoreConfig.page == 1 || this.userLoadMoreConfig.total - (this.userLoadMoreConfig.page - 1) * this.userLoadMoreConfig.limit > 0) {
+    //     this.userLoadMoreConfig.offset = (this.userLoadMoreConfig.page - 1) * this.userLoadMoreConfig.limit;
+    //     baseService.fetchUserList(this.userLoadMoreConfig).then(
+    //       res => {
+    //         let temp = res.data.items;
+    //         this.userLoadMoreConfig.total = res.data.totalCount;
 
+    //         this.users = this.userLoadMoreConfig.page == 1 ? temp : [...this.users, ...temp];
+    //         this.userLoadMoreConfig.page++;
+    //       }
+    //     )
+    //   }
+    // },
+    // userListRemoteMethod(inputValue) {
+    //   if (inputValue && inputValue.length > 0) {
+    //     this.userLoadMoreConfig.page = 1;
+    //     this.users = [];
+    //     this.userLoadMoreConfig.filter = inputValue;
+    //     this.getUserList();
+    //   } else {
+    //     this.userLoadMoreConfig.filter = '';
+    //     this.users = [];
+    //   }
+    // },
+    // handleUserVisibleChange(val) {
+    //   if (!val) {
+    //     this.userLoadMoreConfig.filter = '';
+    //     this.userLoadMoreConfig.page = 1;
+    //     this.users = [];
+
+    //   }
+    //   else {
+    //     this.getUserList();
+    //   }
+
+    // },
     processFormatter(row, column, val, index) {
       // this.getProcessList();
       let temp = this.processList.find(item => item.value === val);
@@ -460,14 +561,22 @@ export default {
       this.$refs.multipleTable.clearSelection();
       this.$refs.multipleTable.toggleRowSelection(row);
 
-      this.a3Id=row.id;
+      // this.a3Id = row.id;
       //TODO: Maybe property is better, then set tabpanel to lazy mode
+      this.selectA3Id = row.id;
+
+      this.$refs.A3MembersDetails.listQuery.a3Id = row.id;
+      this.$refs.A3MembersDetails.getList();
+
+      this.getAttachment(this.attachmentTypes.Issue);
       this.$refs.IssueDetails.listQuery.a3Id = row.id;
       this.$refs.IssueDetails.getList();
 
+      this.getAttachment(this.attachmentTypes.ContainmentAction);
       this.$refs.ContainmentActionDetails.listQuery.a3Id = row.id;
       this.$refs.ContainmentActionDetails.getList();
 
+      this.getAttachment(this.attachmentTypes.RiskAssesment);
       this.$refs.RiskAssesmentDetails.listQuery.a3Id = row.id;
       this.$refs.RiskAssesmentDetails.getList();
 
@@ -484,7 +593,40 @@ export default {
       // this.defectSources = [];
       this.dialogFormVisible = false;
       this.$refs.form.clearValidate();
+    },
+    handleSuccessRiskAssesment() { },
+    handleSuccess(attachmentType, response, file, fileList) {
+      if (!this.selectA3Id)
+        return;
+      let item = {
+        A3Id: this.selectA3Id,
+        Type: attachmentType,
+        Name: response.realName,
+        Url: this.storageApi + response.url
+      }
+      this.$axios.posts('api/AAA/A3Attachment/data-post', item).then(response => {
+        this.$notify({
+          title: '成功',
+          message: '新增成功',
+          type: 'success',
+          duration: 2000
+        });
+        this.getAttachment(attachmentType);
+      }).catch(() => {
+      });
+    },
+
+    getAttachment(type) {
+      let query = {
+        a3Id: this.selectA3Id,
+        Type: type,
+
+      }
+      this.$axios.gets('api/AAA/A3Attachment', query).then(response => {
+        this.attachments[type] = response.items;
+      });
     }
+
   }
 };
 </script>

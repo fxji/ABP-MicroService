@@ -20,7 +20,7 @@
         </el-form-item>
         <el-form-item label="status" prop="status">
           <el-select v-model="form.status" placeholder="请选择status" clearable :style="{ width: '100%' }">
-            <el-option v-for="item in status" :key="item.id" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in causeStatus" :key="item.id" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="type" prop="type">
@@ -41,9 +41,9 @@
     <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
       @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
       <el-table-column type="selection" width="44px"></el-table-column>
+      <el-table-column label="type" prop="type" align="center" :formatter="typeFormate"/>
       <el-table-column label="Title" prop="name" align="center" />
       <el-table-column label="status" prop="status" align="center" :formatter="statusFormate"/>
-      <el-table-column label="type" prop="type" align="center" :formatter="typeFormate"/>
       <el-table-column label="parent" prop="parentId" align="center" />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row}">
@@ -108,6 +108,7 @@ export default {
       formTitle: '',
       isEdit: false,
       status: [],
+  causeStatus: [],
       causeTypes: [],
     }
   },
@@ -117,6 +118,7 @@ export default {
     // this.getList()
     this.getStatusOptions();
     this.getCauseTypes();
+    this.getCauseStatus();
   },
   mounted() { },
   methods: {
@@ -151,6 +153,18 @@ export default {
       )
 
     },
+    getCauseStatus() {
+      if (this.causeStatus.length > 0) {
+        return;
+      }
+      baseService.fetchOptionsList({ name: 'causeStatus' }).then(
+        res => {
+          this.causeStatus = res.data.items;
+        }
+      )
+
+    },
+    
     getList() {
       this.listLoading = true;
       this.listQuery.SkipCount = (this.page - 1) * this.listQuery.MaxResultCount;

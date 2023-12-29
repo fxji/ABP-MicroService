@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Application.Dtos;
 
@@ -56,9 +57,6 @@ namespace AAA.IssueManagement.Dto
         /// Symptom Description
         /// </summary>
         public string Description { get; set; }
-
-
-        
 
 
     }

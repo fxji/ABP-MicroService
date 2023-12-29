@@ -103,5 +103,21 @@ public static class AAADbContextModelCreatingExtensions
             b.Property(x => x.Name).IsRequired();
             b.HasIndex(x => x.Name);
         });
+
+        builder.Entity<A3Attachment>(b =>
+        {
+            b.ToTable("A3Attachment");
+
+            b.ConfigureByConvention();
+
+        });
+
+        builder.Entity<A3Member>(b =>
+        {
+            b.ToTable("A3Member");
+
+            b.ConfigureByConvention();
+
+        });
     }
 }

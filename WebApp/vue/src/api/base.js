@@ -24,6 +24,13 @@ var service = {
       params: query
     });
   },
+  fetchUserList(query) {
+    return request({
+      url: `/api/base/user`,
+      method: "get",
+      params: query
+    });
+  },
   
 };
 

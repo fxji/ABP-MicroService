@@ -19,8 +19,9 @@
           <el-input v-model="form.name" placeholder="请输入name" clearable :style="{ width: '100%' }"></el-input>
         </el-form-item>
         <el-form-item label="responsibility" prop="responsibility">
-          <el-input v-model="form.responsibility" placeholder="请输入responsibility" clearable
-            :style="{ width: '100%' }"></el-input>
+          <user-select v-model="form.responsibility"></user-select>
+          <!-- <el-input v-model="form.responsibility" placeholder="请输入responsibility" clearable
+            :style="{ width: '100%' }"></el-input> -->
         </el-form-item>
 
         <el-form-item label="type" prop="type">
@@ -61,6 +62,8 @@
 import Pagination from "@/components/Pagination";
 import permission from "@/directive/permission/index.js";
 
+import UserSelect from '@/views/components/UserSelect'
+
 import baseService from '@/api/base'
 
 const defaultForm = {
@@ -74,7 +77,8 @@ const defaultForm = {
 export default {
   name: 'ContainmentAction',
   components: {
-    Pagination
+    Pagination,
+    UserSelect
   },
   directives: {
     permission

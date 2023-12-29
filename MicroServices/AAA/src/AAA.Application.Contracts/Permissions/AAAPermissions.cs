@@ -54,6 +54,30 @@ public class AAAPermissions
         public const string Create = Default + ".Create";
     }
 
+    public static class IssueAttachment
+    {
+        public const string Default = GroupName + ".IssueAttachment";
+        public const string Delete = Default + ".Delete";
+        public const string Update = Default + ".Update";
+        public const string Create = Default + ".Create";
+    }
+
+    public static class A3Attachment
+    {
+        public const string Default = GroupName + ".A3Attachment";
+        public const string Delete = Default + ".Delete";
+        public const string Update = Default + ".Update";
+        public const string Create = Default + ".Create";
+    }
+
+    public static class A3Member
+    {
+        public const string Default = GroupName + ".A3Member";
+        public const string Delete = Default + ".Delete";
+        public const string Update = Default + ".Update";
+        public const string Create = Default + ".Create";
+    }
+
     public static string[] GetAll()
     {
         return ReflectionHelper.GetPublicConstantsRecursively(typeof(AAAPermissions));

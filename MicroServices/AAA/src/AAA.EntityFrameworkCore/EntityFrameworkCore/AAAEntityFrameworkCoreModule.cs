@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AAA.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
@@ -18,6 +20,7 @@ public class AAAEntityFrameworkCoreModule : AbpModule
              * options.AddRepository<Question, EfCoreQuestionRepository>();
              */
 
+            //options.Entity<Issue>(issueOptions => issueOptions.DefaultWithDetailsFunc = query => query.Include(x => x.Images));
 
             context.Services.AddAbpDbContext<AAADbContext>(options =>
             {

@@ -23,6 +23,10 @@ public class AAADbContext : AbpDbContext<AAADbContext>, IAAADbContext
 
     public DbSet<CorrectiveAction> CorrectiveActions { get; set; }
 
+    public DbSet<A3Attachment> A3Attachments { get; set; }
+
+    public DbSet<A3Member> A3Members { get; set; }
+
     public AAADbContext(DbContextOptions<AAADbContext> options)
         : base(options)
     {
