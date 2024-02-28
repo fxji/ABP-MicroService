@@ -29,6 +29,14 @@ namespace AAA.Models
         /// </summary>
         public Guid? UserId { get; set; }
 
+
+        /// <summary>
+        /// TODO: Get info use userId in backend
+        /// </summary>
+        public string UserEmail { get; set; }
+
+        
+
         /// <summary>
         /// 开关
         /// </summary>

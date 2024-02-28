@@ -24,6 +24,8 @@ namespace AAA.A3Management.Dto
         /// </summary>
         public Guid? UserId { get; set; }
 
+        public string UserEmail { get; set; }
+
         /// <summary>
         /// 开关
         /// </summary>

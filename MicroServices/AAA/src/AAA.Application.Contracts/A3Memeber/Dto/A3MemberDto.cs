@@ -7,7 +7,9 @@ namespace AAA.A3MemberManagement.Dto
 {
     public class A3MemberDto : EntityDto<Guid?>
     {
-        
+     
+        public Guid? A3Id { get; set; }
+
         /// <summary>
         /// Member
         /// </summary>

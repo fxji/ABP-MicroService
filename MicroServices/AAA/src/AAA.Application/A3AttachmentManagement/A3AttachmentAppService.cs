@@ -40,8 +40,8 @@ namespace AAA.A3AttachmentManagement
             var query = (
                 await _repository.GetQueryableAsync())
                 .WhereIf(input.A3Id!=Guid.Empty, a => a.a3Id == input.A3Id)
-                .WhereIf(!string.IsNullOrWhiteSpace(input.Type), a => a.Type.Contains(input.Type))
-                .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), a => a.Name.Contains(input.Filter)
+                .WhereIf(!string.IsNullOrWhiteSpace(input.Type), a => a.Type.Equals(input.Type))
+                .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), a => a.Name.Equals(input.Filter)
                 );
 
             var totalCount = await query.CountAsync();

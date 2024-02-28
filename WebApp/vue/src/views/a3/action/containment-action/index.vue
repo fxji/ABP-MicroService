@@ -14,25 +14,33 @@
         @click="handleDelete()">删除</el-button>
     </div>
     <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()" :title="formTitle">
-      <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="100px">
-        <el-form-item label="activities" prop="name">
-          <el-input v-model="form.name" placeholder="请输入name" clearable :style="{ width: '100%' }"></el-input>
+      <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="120px">
+        <el-form-item label="Activities" prop="name">
+          <el-input v-model="form.name" placeholder="请输入action" clearable :style="{ width: '100%' }"></el-input>
         </el-form-item>
-        <el-form-item label="responsibility" prop="responsibility">
+        <el-form-item label="Responsibility" prop="responsibility">
           <user-select v-model="form.responsibility"></user-select>
           <!-- <el-input v-model="form.responsibility" placeholder="请输入responsibility" clearable
             :style="{ width: '100%' }"></el-input> -->
         </el-form-item>
 
-        <el-form-item label="type" prop="type">
+        <el-form-item label="Type" prop="type">
           <el-select v-model="form.type" placeholder="请选择type" clearable :style="{ width: '100%' }">
             <el-option v-for="item in actionTypes" :key="item.id" :value="item.value" :label="item.label"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="status" prop="status">
+        <el-form-item label="Status" prop="status">
           <el-select v-model="form.status" placeholder="请选择status" clearable :style="{ width: '100%' }">
             <el-option v-for="item in status" :key="item.id" :value="item.value" :label="item.label"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="Start Date" prop="startDate">
+          <el-date-picker v-model="form.startDate" :style="{width: '100%'}" placeholder="请选择时间选择" clearable>
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="End Date" prop="endDate">
+          <el-date-picker v-model="form.endDate" :style="{width: '100%'}" placeholder="请选择时间选择" clearable>
+          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -62,7 +70,7 @@
 import Pagination from "@/components/Pagination";
 import permission from "@/directive/permission/index.js";
 
-import UserSelect from '@/views/components/UserSelect'
+import UserSelect from '@/views/components/user-select'
 
 import baseService from '@/api/base'
 
@@ -73,6 +81,8 @@ const defaultForm = {
   responsibility: null,
   type: null,
   status: null,
+  startDate:null,
+  endDate:null,
 }
 export default {
   name: 'ContainmentAction',
@@ -96,6 +106,8 @@ export default {
         responsibility: [],
         type: [],
         status: [],
+        startDate:[],
+        endDate:[],
       },
       form: Object.assign({}, defaultForm),
       list: null,

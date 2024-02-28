@@ -148,7 +148,7 @@ namespace AuthServer.Host
                     requireClientSecret: false,
                     redirectUri: $"http://localhost:44307/authentication/login-callback",
                     postLogoutRedirectUri: $"http://localhost:44307/authentication/logout-callback",
-                    corsOrigins: new[] { "http://localhost:44307" }
+                    corsOrigins: new[] { "http://localhost:44307","http://10.221.128.160:44307" }
                 );
 
             await CreateClientAsync(
@@ -165,7 +165,7 @@ namespace AuthServer.Host
                 grantTypes: new[] { "client_credentials" },
                 secret: "1q2w3e*".Sha256(),
                 permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
-                    corsOrigins: new[] { "http://localhost:51186" }
+                    corsOrigins: new[] { "http://localhost:51186", "http://10.221.128.160:51186" }
 
             );
             await CreateClientAsync(
@@ -174,7 +174,7 @@ namespace AuthServer.Host
                 grantTypes: new[] { "client_credentials" },
                 secret: "1q2w3e*".Sha256(),
                 permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
-                    corsOrigins: new[] { "http://localhost:44308" }
+                    corsOrigins: new[] { "http://localhost:44308", "http://10.221.128.160:44308" }
 
             );
             await CreateClientAsync(
@@ -183,7 +183,7 @@ namespace AuthServer.Host
                 grantTypes: new[] { "client_credentials" },
                 secret: "1q2w3e*".Sha256(),
                 permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
-                    corsOrigins: new[] { "http://localhost:44351" }
+                    corsOrigins: new[] { "http://localhost:44351", "http://10.221.128.160:44351" }
 
             );
             await CreateClientAsync(
@@ -193,7 +193,7 @@ namespace AuthServer.Host
                 secret: "1q2w3e*".Sha256(),
                 redirectUri: "http://localhost:44351/swagger/oauth2-redirect.html",
                 permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
-                corsOrigins: new[] { "http://localhost:44351" }
+                corsOrigins: new[] { "http://localhost:44351", "http://10.221.128.160:44351" }
             );
             await CreateClientAsync(
                 name: "AAA_Swagger",
@@ -202,7 +202,7 @@ namespace AuthServer.Host
                 secret: "1q2w3e*".Sha256(),
                 redirectUri: "http://localhost:44308/swagger/oauth2-redirect.html",
                 permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
-                corsOrigins: new[] { "http://localhost:44308" }
+                corsOrigins: new[] { "http://localhost:44308", "http://10.221.128.160:44308" }
             );
         }
 

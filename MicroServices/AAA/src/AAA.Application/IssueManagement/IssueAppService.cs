@@ -14,7 +14,7 @@ using AAA.Permissions;
 
 namespace AAA.IssueManagement
 {
-    [Authorize(AAAPermissions.Issue.Default)]
+    [Authorize(AAAPermissions.A3.Default)]
     public class IssueAppService : ApplicationService, IIssueAppService
     {
         private const string FormName = "Issue";

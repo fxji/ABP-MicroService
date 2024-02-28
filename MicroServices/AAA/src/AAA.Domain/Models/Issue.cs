@@ -35,6 +35,8 @@ namespace AAA.Models
         /// </summary>
         public int? CustomerId { get; set; }
 
+        public string CustomerGroup { get; set; }
+
         /// <summary>
         /// Symptom Description
         /// </summary>
@@ -50,10 +52,14 @@ namespace AAA.Models
         /// </summary>
         public float Rate { get; set; }
 
+
+
         /// <summary>
         /// Product
         /// </summary>
         public int? ProductId { get; set; }
+
+        public string Project { get; set; }
 
         /// <summary>
         /// 时间选择

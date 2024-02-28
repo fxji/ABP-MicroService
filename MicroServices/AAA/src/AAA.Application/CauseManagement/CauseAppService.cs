@@ -14,7 +14,7 @@ using AAA.Permissions;
 
 namespace AAA.CauseManagement
 {
-    [Authorize(AAAPermissions.Cause.Default)]
+    [Authorize(AAAPermissions.A3.Default)]
     public class CauseAppService : ApplicationService,ICauseAppService
     {
         private const string FormName = "Cause";

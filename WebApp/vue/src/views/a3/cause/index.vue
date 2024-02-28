@@ -18,20 +18,28 @@
         <el-form-item label="Title" prop="name">
           <el-input v-model="form.name" placeholder="请输入Title" clearable :style="{ width: '100%' }"></el-input>
         </el-form-item>
-        <el-form-item label="status" prop="status">
+        <el-form-item label="Status" prop="status">
           <el-select v-model="form.status" placeholder="请选择status" clearable :style="{ width: '100%' }">
             <el-option v-for="item in causeStatus" :key="item.id" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="type" prop="type">
+        <el-form-item label="Type" prop="type">
           <el-select v-model="form.type" placeholder="请选择type" clearable :style="{ width: '100%' }">
             <el-option v-for="item in causeTypes" :key="item.id" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="parent" prop="parentId">
-          <el-select v-model="form.parentId" placeholder="请选择parent" clearable :style="{ width: '100%' }">
+        <el-form-item label="Parent" prop="parentId">
+          <el-select v-model="form.parentId" placeholder="请选择parent" filterable clearable remote
+            
+            :style="{ width: '100%' }">
+            <el-option v-for="item in list" :key="item.id" :value="item.id" :label="item.name"></el-option>
           </el-select>
+          
         </el-form-item>
+        <el-form-item label="IsRelevant" prop="isRelevant">
+            <el-switch v-model="form.isRelevant" :active-value="undefined" :inactive-value="undefined">
+            </el-switch>
+          </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button size="small" type="text" @click="cancel">取消</el-button>
@@ -41,10 +49,10 @@
     <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
       @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
       <el-table-column type="selection" width="44px"></el-table-column>
-      <el-table-column label="type" prop="type" align="center" :formatter="typeFormate"/>
+      <el-table-column label="Type" prop="type" align="center" :formatter="typeFormate"/>
       <el-table-column label="Title" prop="name" align="center" />
-      <el-table-column label="status" prop="status" align="center" :formatter="statusFormate"/>
-      <el-table-column label="parent" prop="parentId" align="center" />
+      <el-table-column label="Status" prop="status" align="center" :formatter="statusFormate"/>
+      <!-- <el-table-column label="parent" prop="parentId" align="center" /> -->
       <el-table-column label="操作" align="center">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
@@ -68,6 +76,7 @@ const defaultForm = {
   status: null,
   type: null,
   parentId: null,
+  isRelevant:false
 }
 export default {
   name: 'Cause',
@@ -89,6 +98,7 @@ export default {
         status: [],
         type: [],
         parentId: [],
+        isRelevant:[],
       },
       form: Object.assign({}, defaultForm),
       list: null,

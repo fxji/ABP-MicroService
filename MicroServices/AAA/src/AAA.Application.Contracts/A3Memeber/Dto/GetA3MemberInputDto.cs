@@ -6,5 +6,8 @@ namespace AAA.A3MemberManagement.Dto
     public class GetA3MemberInputDto : PagedAndSortedResultRequestDto
     {
         public string Filter { get; set; }
+
+        public Guid a3Id { get; set; }
+
     }
 }

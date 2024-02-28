@@ -12,3 +12,7 @@ start dotnet run
 
 cd ../../../Gateways/WebAppGateway/WebAppGateway.Host
 start dotnet run
+
+
+cd ../../../MicroServices/AAA/host/AAA.HttpApi.Host
+start dotnet run

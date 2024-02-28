@@ -14,7 +14,7 @@ using AAA.Permissions;
 
 namespace AAA.ContainmentActionManagement
 {
-    [Authorize(AAAPermissions.ContainmentAction.Default)]
+    [Authorize(AAAPermissions.A3.Default)]
     public class ContainmentActionAppService : ApplicationService,IContainmentActionAppService
     {
         private const string FormName = "ContainmentAction";

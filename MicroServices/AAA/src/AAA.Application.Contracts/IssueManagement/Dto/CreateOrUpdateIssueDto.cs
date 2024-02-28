@@ -27,6 +27,7 @@ namespace AAA.IssueManagement.Dto
         /// Customer
         /// </summary>
         public int? CustomerId { get; set; }
+        public string CustomerGroup { get; set; }
 
         /// <summary>
         /// Symptom Description
@@ -47,6 +48,7 @@ namespace AAA.IssueManagement.Dto
         /// Product
         /// </summary>
         public int? ProductId { get; set; }
+        public string Project { get; set; }
 
         /// <summary>
         /// 时间选择

@@ -15,7 +15,7 @@
     </div>
     <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()"
       :title="formTitle">
-      <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="100px">
+      <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="120px">
         <el-form-item label="Member" prop="userId">
           <user-select v-model="form.userId"></user-select>
           <!-- <el-select v-model="form.userId" placeholder="请选择Member" clearable :style="{width: '100%'}">
@@ -35,7 +35,7 @@
       @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
       <el-table-column type="selection" width="44px"></el-table-column>
       <el-table-column label="Member" prop="userId" align="center" />
-      <el-table-column label="Organization" prop="organizationId" align="center" />
+      <el-table-column label="Organization" prop="organizationId" :formatter="locationFormatter" align="center" />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
@@ -49,7 +49,7 @@
 </template>
 <script>
 
-import UserSelect from '@/views/components/UserSelect'
+import UserSelect from '@/views/components/user-select'
 import TreeSelect from "@riophae/vue-treeselect";
 
 import Pagination from "@/components/Pagination";
@@ -60,6 +60,7 @@ import baseService from "@/api/base";
 
 const defaultForm = {
   id: null,
+  a3Id: null,
   userId: null,
   organizationId: null,
 }
@@ -95,6 +96,7 @@ export default {
       listLoading: false,
       formLoading: false,
       listQuery: {
+        a3Id: '',
         Filter: '',
         Sorting: '',
         SkipCount: 0,
@@ -105,12 +107,14 @@ export default {
       multipleSelection: [],
       formTitle: '',
       isEdit: false,
+      noTreeOrgs: [],
     }
   },
   computed: {},
   watch: {},
   created() {
     // this.getList()
+    this.getOrgNodes();
   },
   mounted() {},
   methods: {
@@ -124,6 +128,7 @@ export default {
       });
     },
     fetchData(id) {
+      this.getOrgNodes();
       this.$axios.gets('api/aaa/A3member/' + id).then(response => {
         this.form = response;
       });
@@ -134,6 +139,7 @@ export default {
     },
     handleCreate() {
       this.formTitle = '新增A3Member';
+      this.form.a3Id = this.listQuery.a3Id;
       this.isEdit = false;
       this.getOrgNodes();
       this.dialogFormVisible = true;
@@ -200,6 +206,10 @@ export default {
           this.dialogFormVisible = true;
         }
       }
+    },
+    locationFormatter(row, column, val, index) {
+      let temp = this.noTreeOrgs.find(item => item.id === val);
+      return temp ? temp.label : undefined;
     },
     save() {
       this.$refs.form.validate(valid => {
@@ -295,17 +305,12 @@ export default {
         return;
       }
       baseService.fetchOrgNodesList().then((response) => {
+        this.noTreeOrgs = response.data.items;
         this.loadTree(response.data);
       });
       console.log(this.orgs)
     },
-    fetchData(id) {
-      this.getOrgNodes();
-
-      a3Service.fetchSingle(id).then(response => {
-        this.form = response.data;
-      });
-    },
+   
     loadOrgs({ action, parentNode, callback }) {
       if (action === LOAD_CHILDREN_OPTIONS) {
         fetchOrgs(parentNode.id)

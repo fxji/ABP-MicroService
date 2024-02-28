@@ -9,10 +9,10 @@ namespace AAA.Models
     /// <summary>
     /// 原因
     /// </summary>
-    public class Cause: AuditedAggregateRoot<Guid>, ISoftDelete, IMultiTenant
+    public class Cause : AuditedAggregateRoot<Guid>, ISoftDelete, IMultiTenant
     {
         public Guid? TenantId { get; set; }
-        
+
         /// <summary>
         /// 单行文本
         /// </summary>
@@ -28,7 +28,7 @@ namespace AAA.Models
         /// 下拉选择
         /// </summary>
         public string Status { get; set; }
-        
+
         /// <summary>
         /// 5M 
         /// Man
@@ -43,6 +43,8 @@ namespace AAA.Models
         /// parent why
         /// </summary>
         public Guid? ParentId { get; set; }
+
+        public bool IsRelevant {get;set;}
         
 		
 		public bool IsDeleted { get; set; }

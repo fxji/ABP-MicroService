@@ -15,24 +15,32 @@
     </div>
     <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()"
       :title="formTitle">
-      <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="100px">
+      <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="150px">
         <el-form-item label="Action" prop="name">
           <el-input v-model="form.name" placeholder="请输入activites" clearable :style="{width: '100%'}">
           </el-input>
         </el-form-item>
-        <el-form-item label="responsibility" prop="responsibility">
+        <el-form-item label="Responsibility" prop="responsibility">
           <user-select v-model="form.responsibility"></user-select>
           <!-- <el-input v-model="form.responsibility" placeholder="请输入responsibility" clearable
             :style="{width: '100%'}"></el-input> -->
         </el-form-item>
-        <el-form-item label="status" prop="status">
+        <el-form-item label="Status" prop="status">
           <el-select v-model="form.status" placeholder="请选择status" clearable :style="{width: '100%'}">
            <el-option v-for="item in status" :key="item.id" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="时间选择" prop="dueDate">
+        <el-form-item label="Due Date" prop="dueDate">
           <el-date-picker v-model="form.dueDate" :style="{width: '100%'}" placeholder="请选择时间选择" clearable>
           </el-date-picker>
+        </el-form-item>
+        <el-form-item label="Cause" prop="causeId">
+          <el-select v-model="form.causeId" placeholder="请选择cause" filterable clearable remote
+          @visible-change="handleCauseVisibleChange"
+            :style="{ width: '100%' }">
+            <el-option v-for="item in causeList" :key="item.id" :value="item.id" :label="item.name"></el-option>
+          </el-select>
+          
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -44,9 +52,9 @@
       @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
       <el-table-column type="selection" width="44px"></el-table-column>
       <el-table-column label="Action" prop="name" align="center" />
-      <el-table-column label="responsibility" prop="responsibility" align="center" />
-      <el-table-column label="status" prop="status" align="center" :formatter="statusFormate"/>
-      <el-table-column label="时间选择" prop="dueDate" align="center" />
+      <el-table-column label="Responsibility" prop="responsibility" align="center" />
+      <el-table-column label="Status" prop="status" align="center" :formatter="statusFormate"/>
+      <el-table-column label="DueDate" prop="dueDate" align="center" />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
@@ -59,7 +67,7 @@
   </div>
 </template>
 <script>
-import UserSelect from '@/views/components/UserSelect'
+import UserSelect from '@/views/components/user-select'
 import Pagination from "@/components/Pagination";
 import permission from "@/directive/permission/index.js";
 import baseService from '@/api/base'
@@ -111,6 +119,7 @@ export default {
       formTitle: '',
       isEdit: false,
       status: [],
+      causeList:null,
     }
   },
   computed: {},
@@ -121,6 +130,16 @@ export default {
   },
   mounted() {},
   methods: {
+    handleCauseVisibleChange(val){
+      if (val) {
+        this.getRelateCauseList();
+      }
+    },
+    getRelateCauseList(){
+      this.$axios.gets('api/AAA/cause', {a3Id:this.listQuery.a3Id}).then(response => {
+        this.causeList = response.items;
+      });
+    },
     statusFormate(row, column, val, index) {
       let temp = this.status.find(item => item.value === val);
       // console.log(temp);

@@ -11,9 +11,14 @@ var service = {
 
   fetchOrgs(id) {
     return request({
-      url: "/api/base/orgs/loadOrgs",
+      url: `/api/base/orgs/loadOrgs/${id}`,
       method: "get",
-      params: { id }
+    });
+  },
+  fetchUser(id) {
+    return request({
+      url: `/api/base/user/${id}`,
+      method: "get"
     });
   },
 
@@ -30,8 +35,7 @@ var service = {
       method: "get",
       params: query
     });
-  },
-  
+  }
 };
 
 export default service;

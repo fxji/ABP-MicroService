@@ -12,12 +12,17 @@ namespace AAA.Models
     public class A3Member: AuditedAggregateRoot<Guid>, ISoftDelete, IMultiTenant
     {
         public Guid? TenantId { get; set; }
-        
+
+        public Guid? A3Id { get; set; }
+
+
         /// <summary>
         /// Member
         /// </summary>
         [Required]
         public string UserId { get; set; }
+
+
         
         /// <summary>
         /// Organization

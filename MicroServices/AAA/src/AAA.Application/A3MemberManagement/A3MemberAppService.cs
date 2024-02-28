@@ -37,7 +37,7 @@ namespace AAA.A3MemberManagement
 
         public async Task<PagedResultDto<A3MemberDto>> GetAll(GetA3MemberInputDto input)
         {
-            var query = (await _repository.GetQueryableAsync());
+            var query = (await _repository.GetQueryableAsync()).WhereIf(input.a3Id != Guid.Empty, a => a.A3Id == input.a3Id).WhereIf(!string.IsNullOrWhiteSpace(input.Filter), a => a.UserId.Contains(input.Filter));
 
             var totalCount = await query.CountAsync();
             var items = await query.OrderBy(input.Sorting ?? "Id")

@@ -20,6 +20,7 @@ namespace AAA.CorrectiveActionManagement.Dto
         /// </summary>
         public Guid? A3Id { get; set; }
 
+        public Guid? CauseId { get; set; }
         /// <summary>
         /// 下拉选择
         /// </summary>

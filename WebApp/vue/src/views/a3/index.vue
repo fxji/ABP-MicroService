@@ -16,7 +16,7 @@
           @click="handleDelete()">删除</el-button>
       </div>
       <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()" :title="formTitle">
-        <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="200px">
+        <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="150px">
           <el-form-item label="Title" prop="name">
             <el-tooltip content="description of the issue">
               <el-input v-model="form.name" placeholder="请输入Title" clearable :style="{ width: '100%' }"></el-input>
@@ -26,8 +26,8 @@
             <tree-select :multiple="false" v-model="form.organizationId" :load-options="loadOrgs" :options="orgs"
               placeholder="请选择Location/Plant/Site" />
           </el-form-item>
-          <el-form-item label="Sponsor / Champion" prop="userId">
-            <user-select v-model="form.userId"></user-select>
+          <el-form-item label="Sponsor" prop="userEmail">
+            <user-select v-model="form.userEmail"></user-select>
             <!-- <el-select v-model="form.userId" placeholder="请选择Sponsor" filterable clearable remote
               :remote-method="userListRemoteMethod" v-loadMore="getUserList" @visible-change="handleUserVisibleChange"
               :style="{ width: '100%' }">
@@ -45,8 +45,15 @@
             </el-select>
           </el-form-item>
           <el-form-item label="Reference A3 " prop="parentId">
-            <el-select v-model="form.parentId" placeholder="请选择Reference A3 " clearable :style="{ width: '100%' }">
+            <!-- TODO remote
+              :remote-method="a3ListRemoteMethod" v-loadMore="getA3List"
+            @visible-change="handleA3VisibleChange"  
+          -->
+            <el-select v-model="form.parentId" placeholder="请选择Reference" filterable clearable remote
+              :style="{ width: '100%' }">
+              <el-option v-for="item in list" :key="item.id" :value="item.id" :label="item.name"></el-option>
             </el-select>
+
           </el-form-item>
           <el-form-item label="Source Of Defect" prop="source">
             <el-select v-model="form.source" placeholder="请选择Source Of Defect" clearable
@@ -55,8 +62,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="日期选择" prop="StartDate">
-            <el-date-picker type="date" v-model="form.StartDate" :style="{ width: '100%' }" placeholder="请选择日期选择"
+          <el-form-item label="StartDate" prop="StartDate">
+            <el-date-picker type="date" v-model="form.startDate" :style="{ width: '100%' }" placeholder="请选择日期选择"
               clearable></el-date-picker>
           </el-form-item>
         </el-form>
@@ -70,16 +77,20 @@
         <el-table-column type="selection" width="44px"></el-table-column>
         <el-table-column label="Title" prop="name" align="center" />
         <el-table-column label="Department" prop="organizationId" align="center" :formatter="locationFormatter" />
-        <el-table-column label="Sponsor / Champion" prop="userId" align="center" />
-        <el-table-column label="Re-Occurrence" prop="reOccurrence" align="center" />
-        <el-table-column label="Process of Production issue" prop="process" align="center" :formatter="processFormatter">
+        <el-table-column label="Sponsor" prop="userEmail" align="center" />
+        <el-table-column label="Re-Occurrence" prop="reOccurrence" align="center">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.reOccurrence" active-color="red" inactive-color="Green"
+              @change="changeEnabled(scope.row, scope.row.reOccurrence,)" />
+          </template>
+        </el-table-column>
+        <el-table-column label="Process" prop="process" align="center" :formatter="processFormatter">
           <!-- <template slot-scope="scope">
             <span>{{ scope.row.process | processFilter }}</span>
           </template> -->
         </el-table-column>
-        <el-table-column label="Reference A3 " prop="parentId" align="center" />
-        <el-table-column label="Source Of Defect" prop="source" align="center" :formatter="defectSourceFormatter" />
-        <el-table-column label="日期选择" prop="StartDate" align="center" />
+        <el-table-column label="SOD" prop="source" align="center" :formatter="defectSourceFormatter" />
+        <el-table-column label="StartDate" prop="startDate" align="center" />
         <el-table-column label="操作" align="center">
           <template slot-scope="{ row }">
             <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
@@ -95,53 +106,150 @@
             <A3Member ref="A3MembersDetails"></A3Member>
           </el-tab-pane>
           <el-tab-pane label="Issues" :lazy="false">
-            <el-col :xs="15" :sm="18" :md="19" :lg="20" :xl="20">
-              <Issue ref="IssueDetails"></Issue>
-            </el-col>
-            <el-col :xs="9" :sm="6" :md="5" :lg="4" :xl="4">
-              <el-upload ref="IssueUpload" :file-list="attachments.Issue"
-                :action="storageApi + '/api/storage/image/upload-img?name=' + form.name + Date.now()"
-                :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.Issue, response, file, fileList) }"
-                list-type="picture-card">
-                <i class="el-icon-plus"></i>
-              </el-upload>
-            </el-col>
+            <el-row>
+              <el-col :xs="14" :sm="15" :md="15" :lg="16" :xl="16">
+                <Issue ref="IssueDetails"></Issue>
+              </el-col>
+              <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
+                <el-row style="margin-top: 80px;">
+                  <!-- <el-card class="box-card" shadow="never"> -->
+                  <el-upload ref="IssueUpload" :file-list="attachments.Issue"
+                    :action="storageApi + '/api/storage/image/upload-img?name=' + form.name + Date.now()"
+                    :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.Issue, response, file, fileList) }"
+                    list-type="picture-card">
+                    <i class="el-icon-plus"></i>
+                  </el-upload>
+                  <!-- </el-card> -->
+                </el-row>
+
+                <el-row style="margin-top: 10px;">
+                  <!-- <el-card class="box-card" shadow="never"> -->
+                  <el-upload ref="IssueUploadDoc" :file-list="attachments.IssueDocs"
+                    :action="storageApi + '/api/storage/doc/upload-doc?name=' + form.name + Date.now()"
+                    :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.IssueDocs, response, file, fileList) }"
+                    list-type="text">
+                    <el-button size="small" type="primary">上传文档</el-button>
+                    <!-- <i class="el-icon-plus"></i> -->
+                  </el-upload>
+                  <!-- </el-card> -->
+                </el-row>
+              </el-col>
+            </el-row>
           </el-tab-pane>
           <el-tab-pane label="ContainmentAction" :lazy="false">
 
-            <el-col :xs="15" :sm="18" :md="19" :lg="20" :xl="20">
+            <el-col :xs="14" :sm="15" :md="15" :lg="16" :xl="16">
               <ContainmentAction ref="ContainmentActionDetails"></ContainmentAction>
             </el-col>
-            <el-col :xs="9" :sm="6" :md="5" :lg="4" :xl="4">
-              <el-upload ref="ContainmentActionUpload" :file-list="attachments.ContainmentAction"
-                :action="storageApi + '/api/storage/image/upload-img?name=' + form.name + Date.now()"
-                :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.ContainmentAction, response, file, fileList) }" list-type="picture-card">
-                <i class="el-icon-plus"></i>
-              </el-upload>
+            <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
+              <el-row style="margin-top: 80px;">
+                <el-upload ref="ContainmentActionUpload" :file-list="attachments.ContainmentAction"
+                  :action="storageApi + '/api/storage/image/upload-img?name=' + form.name + Date.now()"
+                  :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.ContainmentAction, response, file, fileList) }"
+                  list-type="picture-card">
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+              </el-row>
+              <el-row style="margin-top: 10px;">
+                <!-- <el-card class="box-card" shadow="never"> -->
+                <el-upload ref="ContainmentActionUploadDoc" :file-list="attachments.ContainmentActionDocs"
+                  :action="storageApi + '/api/storage/doc/upload-doc?name=' + form.name + Date.now()"
+                  :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.ContainmentActionDocs, response, file, fileList) }"
+                  list-type="text">
+                  <el-button size="small" type="primary">上传文档</el-button>
+                  <!-- <i class="el-icon-plus"></i> -->
+                </el-upload>
+                <!-- </el-card> -->
+              </el-row>
             </el-col>
 
           </el-tab-pane>
           <el-tab-pane label="RiskAssesment" :lazy="false">
-            <el-col :xs="15" :sm="18" :md="19" :lg="20" :xl="20">
+            <el-col :xs="14" :sm="15" :md="15" :lg="16" :xl="16">
 
               <RiskAssesment ref="RiskAssesmentDetails"></RiskAssesment>
             </el-col>
-            <el-col :xs="9" :sm="6" :md="5" :lg="4" :xl="4">
-              <el-upload ref="RiskAssesmentUpload" :file-list="attachments.RiskAssesment"
-                :action="storageApi + '/api/storage/image/upload-img?name=' + form.name + Date.now()"
-                :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.RiskAssesment, response, file, fileList) }" list-type="picture-card">
-                <i class="el-icon-plus"></i>
-              </el-upload>
+            <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
+              <el-row style="margin-top: 80px;">
+                <el-upload ref="RiskAssesmentUpload" :file-list="attachments.RiskAssesment"
+                  :action="storageApi + '/api/storage/image/upload-img?name=' + form.name + Date.now()"
+                  :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.RiskAssesment, response, file, fileList) }"
+                  list-type="picture-card">
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+              </el-row>
+              <el-row style="margin-top: 10px;">
+                <!-- <el-card class="box-card" shadow="never"> -->
+                <el-upload ref="RiskAssesmentUploadDoc" :file-list="attachments.RiskAssesmentDocs"
+                  :action="storageApi + '/api/storage/doc/upload-doc?name=' + form.name + Date.now()"
+                  :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.RiskAssesmentDocs, response, file, fileList) }"
+                  list-type="text">
+                  <el-button size="small" type="primary">上传文档</el-button>
+                  <!-- <i class="el-icon-plus"></i> -->
+                </el-upload>
+                <!-- </el-card> -->
+              </el-row>
             </el-col>
           </el-tab-pane>
           <el-tab-pane label="Cause" :lazy="false">
-            <Cause ref="CauseDetails"></Cause>
+            <el-col :xs="14" :sm="15" :md="15" :lg="16" :xl="16">
+
+              <Cause ref="CauseDetails"></Cause>
+            </el-col>
+            <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
+              <el-row style="margin-top: 80px;">
+                <el-upload ref="CauseUpload" :file-list="attachments.Cause"
+                  :action="storageApi + '/api/storage/image/upload-img?name=' + form.name + Date.now()"
+                  :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.Cause, response, file, fileList) }"
+                  list-type="picture-card">
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+              </el-row>
+              <el-row style="margin-top: 10px;">
+                <!-- <el-card class="box-card" shadow="never"> -->
+                <el-upload ref="RiskAssesmentUploadDoc" :file-list="attachments.CauseDocs"
+                  :action="storageApi + '/api/storage/doc/upload-doc?name=' + form.name + Date.now()"
+                  :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.CauseDocs, response, file, fileList) }"
+                  list-type="text">
+                  <el-button size="small" type="primary">上传文档</el-button>
+                  <!-- <i class="el-icon-plus"></i> -->
+                </el-upload>
+                <!-- </el-card> -->
+              </el-row>
+            </el-col>
           </el-tab-pane>
           <el-tab-pane label="CorrectiveAction" :lazy="false">
+            <el-col :xs="14" :sm="15" :md="15" :lg="16" :xl="16">
+
             <CorrectiveAction ref="CorrectiveActionDetails"></CorrectiveAction>
+            </el-col>
+            <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
+              <el-row style="margin-top: 80px;">
+                <el-upload ref="CorrectiveActionUpload" :file-list="attachments.CorrectiveAction"
+                  :action="storageApi + '/api/storage/image/upload-img?name=' + form.name + Date.now()"
+                  :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.CorrectiveAction, response, file, fileList) }"
+                  list-type="picture-card">
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+              </el-row>
+              <el-row style="margin-top: 10px;">
+                <!-- <el-card class="box-card" shadow="never"> -->
+                <el-upload ref="CorrectiveActionUploadDoc" :file-list="attachments.CorrectiveActionDocs"
+                  :action="storageApi + '/api/storage/doc/upload-doc?name=' + form.name + Date.now()"
+                  :on-success="(response, file, fileList) => { return handleSuccess(attachmentTypes.CorrectiveActionDocs, response, file, fileList) }"
+                  list-type="text">
+                  <el-button size="small" type="primary">上传文档</el-button>
+                  <!-- <i class="el-icon-plus"></i> -->
+                </el-upload>
+                <!-- </el-card> -->
+              </el-row>
+            </el-col>
           </el-tab-pane>
         </el-tabs>
       </el-card>
+      <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src="dialogImageUrl" alt="">
+      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -152,7 +260,7 @@ import ContainmentAction from '@/views/a3/action/containment-action'
 import RiskAssesment from '@/views/a3/risk-assesment'
 import Cause from '@/views/a3/cause'
 import CorrectiveAction from '@/views/a3/action/corrective-action'
-import UserSelect from '@/views/components/UserSelect'
+import UserSelect from '@/views/components/user-select'
 import A3Member from '@/views/a3/a3-member'
 
 import Pagination from "@/components/Pagination";
@@ -172,6 +280,7 @@ const defaultForm = {
   name: null,
   organizationId: null,
   userId: null,
+  userEmail: null,
   reOccurrence: false,
   process: null,
   parentId: null,
@@ -183,6 +292,13 @@ const Types = {
   ContainmentAction: 'ContainmentAction',
   RiskAssesment: 'RiskAssesment',
   Issue: 'Issue',
+  Cause: 'Cause',
+  CorrectiveAction: 'CorrectiveAction',
+  ContainmentActionDocs: 'ContainmentActionDocs',
+  RiskAssesmentDocs: 'RiskAssesmentDocs',
+  IssueDocs: 'IssueDocs',
+  CauseDocs: 'CauseDocs',
+  CorrectiveActionDocs: 'CorrectiveActionDocs',
 };
 
 export default {
@@ -217,12 +333,14 @@ export default {
         ],
         organizationId: [],
         userId: [],
+        userEmail: [],
         process: [],
         parentId: [],
         source: [],
         StartDate: []
       },
       orgs: [],
+      noTreeOrgs: [],
       form: Object.assign({}, defaultForm),
       list: null,
       processList: [],
@@ -255,7 +373,14 @@ export default {
       attachments: {
         ContainmentAction: [],
         RiskAssesment: [],
-        Issue: []
+        Issue: [],
+        Cause: [],
+        CorrectiveAction: [],
+        IssueDocs: [],
+        ContainmentActionDocs: [],
+        RiskAssesmentDocs: [],
+        CauseDocs: [],
+        CorrectiveActionDocs: [],
       },
       attachmentTypes: Types,
     };
@@ -355,9 +480,10 @@ export default {
       // return commonFormatter(this.defectSources, val);
     },
     locationFormatter(row, column, val, index) {
-      let temp = this.orgs.find(item => item.id === val);
+      let temp = this.noTreeOrgs.find(item => item.id === val);
       return temp ? temp.label : undefined;
     },
+
     commonFormatter(list, val) {
       return list.find(item => item.value === val).label
     },
@@ -376,6 +502,7 @@ export default {
         return;
       }
       baseService.fetchOrgNodesList().then((response) => {
+        this.noTreeOrgs = response.data.items;
         this.loadTree(response.data);
       });
       console.log(this.orgs)
@@ -569,20 +696,27 @@ export default {
       this.$refs.A3MembersDetails.getList();
 
       this.getAttachment(this.attachmentTypes.Issue);
+      this.getAttachment(this.attachmentTypes.IssueDocs);
       this.$refs.IssueDetails.listQuery.a3Id = row.id;
       this.$refs.IssueDetails.getList();
 
       this.getAttachment(this.attachmentTypes.ContainmentAction);
+      this.getAttachment(this.attachmentTypes.ContainmentActionDocs);
       this.$refs.ContainmentActionDetails.listQuery.a3Id = row.id;
       this.$refs.ContainmentActionDetails.getList();
 
       this.getAttachment(this.attachmentTypes.RiskAssesment);
+      this.getAttachment(this.attachmentTypes.RiskAssesmentDocs);
       this.$refs.RiskAssesmentDetails.listQuery.a3Id = row.id;
       this.$refs.RiskAssesmentDetails.getList();
 
+      this.getAttachment(this.attachmentTypes.Cause);
+      this.getAttachment(this.attachmentTypes.CauseDocs);
       this.$refs.CauseDetails.listQuery.a3Id = row.id;
       this.$refs.CauseDetails.getList();
 
+      this.getAttachment(this.attachmentTypes.CorrectiveAction);
+      this.getAttachment(this.attachmentTypes.CorrectiveActionDocs);
       this.$refs.CorrectiveActionDetails.listQuery.a3Id = row.id;
       this.$refs.CorrectiveActionDetails.getList();
     },
@@ -625,6 +759,33 @@ export default {
       this.$axios.gets('api/AAA/A3Attachment', query).then(response => {
         this.attachments[type] = response.items;
       });
+    },
+    changeEnabled(data, val) {
+      //   data.active = val ? "启用" : "停用";
+      //   this.$confirm("是否" + data.active + data.name + "？", "提示", {
+      //     confirmButtonText: "确定",
+      //     cancelButtonText: "取消",
+      //     type: "warning"
+      //   })
+      //     .then(() => {
+      //       this.$axios
+      //         .puts("/api/base/orgs/" + data.id, data)
+      //         .then(response => {
+      //           this.$notify({
+      //             title: "成功",
+      //             message: "更新成功",
+      //             type: "success",
+      //             duration: 2000
+      //           });
+      //         })
+      //         .catch(() => {
+      //           data.enabled = !data.enabled;
+      //         });
+      //     })
+      //     .catch(() => {
+      //       data.enabled = !data.enabled;
+      //     });
+      // 
     }
 
   }

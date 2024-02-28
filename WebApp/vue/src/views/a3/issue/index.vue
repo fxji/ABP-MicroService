@@ -14,7 +14,7 @@
         @click="handleDelete()">删除</el-button>
     </div>
     <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()" :title="formTitle">
-      <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="100px">
+      <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="150px">
         <el-form-item label="Title" prop="name">
           <el-tooltip content="description of the issue">
             <el-input v-model="form.name" placeholder="请输入Title" clearable :style="{ width: '100%' }"></el-input>
@@ -26,24 +26,24 @@
             <el-option v-for="item in issueTypes" :key="item.id" :value="item.value" :label="item.label"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="Customer Group" prop="customerId">
-          <el-select v-model="form.customerId" placeholder="请选择Customer" filterable clearable remote
+        <el-form-item label="Customer Group" prop="customerGroup">
+          <el-select v-model="form.customerGroup" placeholder="请选择Customer" filterable clearable remote
             :remote-method="customerListRemoteMethod" v-loadMore="getCustomerList"
             @visible-change="handleCustomerVisibleChange" :style="{ width: '100%' }">
-            <el-option v-for="item in customers" :key="item.id" :value="item.id" :label="item.name"></el-option>
+            <el-option v-for="item in customers" :key="item.id" :value="item.name" :label="item.name"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="Project Name" prop="productId">
-          <el-select v-model="form.productId" placeholder="请选择Product" filterable clearable remote
+        <el-form-item label="Project Name" prop="project">
+          <el-select v-model="form.project" placeholder="请选择Product" filterable clearable remote
             :remote-method="projectListRemoteMethod" v-loadMore="getProjectList"
             @visible-change="handleProductVisibleChange" :style="{ width: '100%' }">
-            <el-option v-for="item in projects" :key="item.id" :label="item.ProjectName" :value="item.id"></el-option>
+            <el-option v-for="item in projects" :key="item.id" :label="item.ProjectName" :value="item.ProjectName"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="Failure Qty/Rate" prop="rate">
           <el-input-number v-model="form.rate" :precision=2 placeholder="Failure Qty/Rate"></el-input-number>
         </el-form-item>
-        <el-form-item label="时间选择" prop="occurrenceDate">
+        <el-form-item label="Occurrence Date" prop="occurrenceDate">
           <el-date-picker v-model="form.occurrenceDate" :style="{ width: '100%' }" placeholder="请选择时间选择"
             clearable></el-date-picker>
         </el-form-item>
@@ -73,9 +73,9 @@
       <el-table-column type="selection" width="44px"></el-table-column>
       <el-table-column label="Title" prop="name" align="center" />
       <el-table-column label="Problem Type" prop="type" align="center" :formatter="issueTypeFormatter" />
-      <el-table-column label="Customer Group" prop="customerId" align="center" />
-      <el-table-column label="Project Name" prop="productId" align="center" />
-      <el-table-column label="时间选择" prop="occurrenceDate" align="center" />
+      <el-table-column label="Customer Group" prop="customerGroup" align="center" />
+      <el-table-column label="Project Name" prop="project" align="center" />
+      <el-table-column label="OccurrenceDate" prop="occurrenceDate" align="center" />
       <el-table-column label="Failure Qty/Rate" prop="rate" align="center" />
       <!-- <el-table-column label="Goal Statement" prop="goalStatement" align="center" /> -->
       <!-- <el-table-column label="Description" prop="description" align="center" /> -->
@@ -107,8 +107,8 @@ const defaultForm = {
   description: null,
   symptomDescription: null,
   type: null,
-  customerId: null,
-  productId: null,
+  customerGroup: null,
+  project: null,
   occurrenceDate: null,
 }
 export default {
@@ -141,8 +141,8 @@ export default {
           message: '请选择Problem Type',
           trigger: 'change'
         }],
-        customerId: [],
-        productId: [],
+        customerGroup: [],
+        project: [],
         occurrenceDate: [],
       },
       form: Object.assign({}, defaultForm),
@@ -451,7 +451,7 @@ export default {
     cancel() {
       this.form = Object.assign({}, defaultForm);
       this.dialogFormVisible = false;
-      this.issueTypes = [];
+      // this.issueTypes = [];
       // this.projects = [];
       // this.loadMorePage = 1;
       // this.loadMoreTotalCount = 0;

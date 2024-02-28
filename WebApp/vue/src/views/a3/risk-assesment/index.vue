@@ -14,27 +14,28 @@
         @click="handleDelete()">删除</el-button>
     </div>
     <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()" :title="formTitle">
-      <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="100px">
+      <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="150px">
         <el-form-item label="Factor" prop="name">
           <el-input v-model="form.name" placeholder="请输入Factor" clearable :style="{ width: '100%' }"></el-input>
         </el-form-item>
-        <el-form-item label="safetyRelevant" prop="safetyRelevant">
-          <el-switch v-model="form.safetyRelevant" active-text="safe" inactive-text="unsafe"></el-switch>
+        <el-form-item label="SafetyRelevant" prop="safetyRelevant">
+          <el-switch v-model="form.safetyRelevant" ></el-switch>
         </el-form-item>
-        <el-form-item label="description" prop="description">
-          <el-input v-model="form.description" placeholder="请输入description" :style="{ width: '100%' }">
+        <el-form-item label="Description" prop="description">
+          <el-input v-model="form.description" placeholder="请输入description" type="textarea" :style="{ width: '100%' }">
           </el-input>
         </el-form-item>
-        <el-form-item label="functionally" prop="functionally">
+        <el-form-item label="Functionally" prop="functionally">
           <el-select v-model="form.functionally" placeholder="请选择functionally" clearable :style="{ width: '100%' }">
             <el-option v-for="item in levelOptions" :key="item.id" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="probability" prop="probability">
+        <el-form-item label="Probability" prop="probability">
           <el-select v-model="form.probability" placeholder="请选择probability" clearable :style="{ width: '100%' }">
             <el-option v-for="item in levelOptions" :key="item.id" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
+        
       </el-form>
       <div slot="footer">
         <el-button size="small" type="text" @click="cancel">取消</el-button>
@@ -44,11 +45,15 @@
     <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
       @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
       <el-table-column type="selection" width="44px"></el-table-column>
-      <el-table-column label="factor" prop="name" align="center" />
-      <el-table-column label="safetyRelevant" prop="safetyRelevant" align="center" />
-      <el-table-column label="description" prop="description" align="center" />
-      <el-table-column label="functionally" :formatter="levelFormate" prop="functionally" align="center" />
-      <el-table-column label="probability" :formatter="levelFormate" prop="probability" align="center" />
+      <el-table-column label="Factor" prop="name" align="center" />
+      <el-table-column label="SafetyRelevant" prop="safetyRelevant" align="center" >
+        <template slot-scope="scope">
+            <el-switch :disabled=true v-model="scope.row.safetyRelevant" active-color="Green"                />
+          </template>
+        </el-table-column>
+      <el-table-column label="Functionally" :formatter="levelFormate" prop="functionally" align="center" />
+      <el-table-column label="Probability" :formatter="levelFormate" prop="probability" align="center" />
+      <!-- <el-table-column label="description" prop="description" align="center" /> -->
       <el-table-column label="操作" align="center">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />

@@ -22,10 +22,13 @@ namespace AAA.Models
         public string Name { get; set; }
 
 
+
         /// <summary>
         /// A3
         /// </summary>
         public Guid? A3Id { get; set; }
+
+        public Guid? CauseId { get; set; }
 
         /// <summary>
         /// 下拉选择

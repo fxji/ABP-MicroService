@@ -38,6 +38,7 @@ namespace AAA.CauseManagement.Dto
         /// </summary>
         public Guid? ParentId { get; set; }
 
+        public bool IsRelevant { get; set; }
 
     }
 }

@@ -14,7 +14,7 @@ using AAA.Permissions;
 
 namespace AAA.CorrectiveActionManagement
 {
-    [Authorize(AAAPermissions.CorrectiveAction.Default)]
+    [Authorize(AAAPermissions.A3.Default)]
     public class CorrectiveActionAppService : ApplicationService,ICorrectiveActionAppService
     {
         private const string FormName = "CorrectiveAction";

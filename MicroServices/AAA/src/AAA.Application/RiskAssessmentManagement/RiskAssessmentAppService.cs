@@ -14,7 +14,7 @@ using AAA.Permissions;
 
 namespace AAA.RiskAssessmentManagement
 {
-    [Authorize(AAAPermissions.RiskAssessment.Default)]
+    [Authorize(AAAPermissions.A3.Default)]
     public class RiskAssessmentAppService : ApplicationService,IRiskAssessmentAppService
     {
         private const string FormName = "RiskAssessment";
