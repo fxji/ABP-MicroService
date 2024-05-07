@@ -37,7 +37,8 @@
           <el-select v-model="form.project" placeholder="请选择Product" filterable clearable remote
             :remote-method="projectListRemoteMethod" v-loadMore="getProjectList"
             @visible-change="handleProductVisibleChange" :style="{ width: '100%' }">
-            <el-option v-for="item in projects" :key="item.id" :label="item.ProjectName" :value="item.ProjectName"></el-option>
+            <el-option v-for="item in projects" :key="item.id" :label="item.ProjectName"
+              :value="item.ProjectName"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="Failure Qty/Rate" prop="rate">
@@ -61,42 +62,57 @@
             :style="{ width: '100%' }">
           </el-input>
         </el-form-item>
-        
+
       </el-form>
       <div slot="footer">
         <el-button size="small" type="text" @click="cancel">取消</el-button>
         <el-button size="small" v-loading="formLoading" type="primary" @click="save">确认</el-button>
       </div>
     </el-dialog>
-    <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
-      @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
-      <el-table-column type="selection" width="44px"></el-table-column>
-      <el-table-column label="Title" prop="name" align="center" />
-      <el-table-column label="Problem Type" prop="type" align="center" :formatter="issueTypeFormatter" />
-      <el-table-column label="Customer Group" prop="customerGroup" align="center" />
-      <el-table-column label="Project Name" prop="project" align="center" />
-      <el-table-column label="OccurrenceDate" prop="occurrenceDate" align="center" />
-      <el-table-column label="Failure Qty/Rate" prop="rate" align="center" />
-      <!-- <el-table-column label="Goal Statement" prop="goalStatement" align="center" /> -->
-      <!-- <el-table-column label="Description" prop="description" align="center" /> -->
-      <!-- <el-table-column label="Current Situation" prop="symptomDescription" align="center" /> -->
-      <el-table-column label="操作" align="center">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
-          <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
-        </template>
-      </el-table-column>
-    </el-table>
+
+    <el-row>
+      <el-col :xs="14" :sm="15" :md="15" :lg="16" :xl="16">
+        <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
+          @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
+          <el-table-column type="selection" width="44px"></el-table-column>
+          <el-table-column label="Title" prop="name" align="center" />
+          <el-table-column label="Problem Type" prop="type" align="center" :formatter="issueTypeFormatter" />
+          <el-table-column label="Customer Group" prop="customerGroup" align="center" />
+          <el-table-column label="Project Name" prop="project" align="center" />
+          <el-table-column label="OccurrenceDate" prop="occurrenceDate" align="center" />
+          <el-table-column label="Failure Qty/Rate" prop="rate" align="center" />
+          <!-- <el-table-column label="Goal Statement" prop="goalStatement" align="center" /> -->
+          <!-- <el-table-column label="Description" prop="description" align="center" /> -->
+          <!-- <el-table-column label="Current Situation" prop="symptomDescription" align="center" /> -->
+          <el-table-column label="操作" align="center">
+            <template slot-scope="{row}">
+              <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
+              <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+      <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
+        <el-row style="margin-top: 10px;">
+          <image-upload :type="attachmentTypes.Issue" :a3Id="a3Id"></image-upload>
+        </el-row>
+        <el-row style="margin-top: 10px;">
+          <docs-upload :type="attachmentTypes.IssueDocs" :a3Id="a3Id"></docs-upload>
+        </el-row>
+      </el-col>
+    </el-row>
     <pagination v-show="totalCount > 0" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
       @pagination="getList" />
   </div>
 </template>
 <script>
+import ImageUpload from '@/views/components/image-upload'
+import DocsUpload from '@/views/components/docs-upload'
+
 import Pagination from "@/components/Pagination";
 import permission from "@/directive/permission/index.js";
 import baseService from "@/api/base";
 import lmtService from '@/api/lmt'
-import config from "../../../../static/config";
 
 const defaultForm = {
   name: null,
@@ -111,15 +127,21 @@ const defaultForm = {
   project: null,
   occurrenceDate: null,
 }
+
+
 export default {
   name: 'Issue',
   components: {
-    Pagination
+    Pagination,
+    ImageUpload,
+    DocsUpload
   },
   directives: {
     permission
   },
-  props: [],
+  props: [
+    'a3Id'
+  ],
   filters: {
 
   },
@@ -179,14 +201,37 @@ export default {
       multipleSelection: [],
       formTitle: '',
       isEdit: false,
-      storageApi: config.storage.ip,
+      
+      attachmentTypes: {
+        ContainmentAction: 'ContainmentAction',
+        RiskAssesment: 'RiskAssesment',
+        Issue: 'Issue',
+        Cause: 'Cause',
+        CorrectiveAction: 'CorrectiveAction',
+        ContainmentActionDocs: 'ContainmentActionDocs',
+        RiskAssesmentDocs: 'RiskAssesmentDocs',
+        IssueDocs: 'IssueDocs',
+        CauseDocs: 'CauseDocs',
+        CorrectiveActionDocs: 'CorrectiveActionDocs',
+      },
+
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    a3Id: {
+      handler: function (newVal, oldVal) {
+        this.form.a3Id = newVal;
+        this.listQuery.a3Id = newVal;
+        this.getList();
+      },
+      immediate: true
+    }
+  },
   created() {
-    // this.getList()
+
     this.getIssueTypeList();
+
   },
   mounted() { },
   methods: {
@@ -458,6 +503,9 @@ export default {
       this.$refs.form.clearValidate();
     },
     
+
+    
+
   }
 }
 

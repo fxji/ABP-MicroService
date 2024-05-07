@@ -3,7 +3,7 @@ import request from "@/utils/request";
 var service = {
   fetchProjectList(query) {
     return request({
-      url: `/api/ec/projects/`,
+      url: `/api/launch/pjtname/`,
       method: "get",
       params: query
     });

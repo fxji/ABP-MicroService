@@ -35,11 +35,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="Start Date" prop="startDate">
-          <el-date-picker v-model="form.startDate" :style="{width: '100%'}" placeholder="请选择时间选择" clearable>
+          <el-date-picker v-model="form.startDate" :style="{ width: '100%' }" placeholder="请选择时间选择" clearable>
           </el-date-picker>
         </el-form-item>
         <el-form-item label="End Date" prop="endDate">
-          <el-date-picker v-model="form.endDate" :style="{width: '100%'}" placeholder="请选择时间选择" clearable>
+          <el-date-picker v-model="form.endDate" :style="{ width: '100%' }" placeholder="请选择时间选择" clearable>
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -48,25 +48,40 @@
         <el-button size="small" v-loading="formLoading" type="primary" @click="save">确认</el-button>
       </div>
     </el-dialog>
-    <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
-      @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
-      <el-table-column type="selection" width="44px"></el-table-column>
-      <el-table-column label="activities" prop="name" align="center" />
-      <el-table-column label="responsibility" prop="responsibility" align="center" />
-      <el-table-column label="type" prop="type" align="center" :formatter="typeFormate" />
-      <el-table-column label="status" prop="status" align="center" :formatter="statusFormate" />
-      <el-table-column label="操作" align="center">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
-          <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-row>
+
+      <el-col :xs="14" :sm="15" :md="15" :lg="16" :xl="16">
+        <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
+          @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
+          <el-table-column type="selection" width="44px"></el-table-column>
+          <el-table-column label="activities" prop="name" align="center" />
+          <el-table-column label="responsibility" prop="responsibility" align="center" />
+          <el-table-column label="type" prop="type" align="center" :formatter="typeFormate" />
+          <el-table-column label="status" prop="status" align="center" :formatter="statusFormate" />
+          <el-table-column label="操作" align="center">
+            <template slot-scope="{row}">
+              <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
+              <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+      <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
+        <el-row style="margin-top: 10px;">
+          <image-upload :type="attachmentTypes.ContainmentAction" :a3Id="a3Id"></image-upload>
+        </el-row>
+        <el-row style="margin-top: 10px;">
+          <docs-upload :type="attachmentTypes.ContainmentActionDocs" :a3Id="a3Id"></docs-upload>
+        </el-row>
+      </el-col>
+    </el-row>
     <pagination v-show="totalCount > 0" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
       @pagination="getList" />
   </div>
 </template>
 <script>
+import ImageUpload from '@/views/components/image-upload'
+import DocsUpload from '@/views/components/docs-upload'
 import Pagination from "@/components/Pagination";
 import permission from "@/directive/permission/index.js";
 
@@ -81,23 +96,27 @@ const defaultForm = {
   responsibility: null,
   type: null,
   status: null,
-  startDate:null,
-  endDate:null,
+  startDate: null,
+  endDate: null,
 }
 export default {
   name: 'ContainmentAction',
   components: {
     Pagination,
+    ImageUpload,
+    DocsUpload,
     UserSelect
   },
   directives: {
     permission
   },
-  props: [],
+  props: [
+    'a3Id'
+  ],
   data() {
     return {
       rules: {
-        
+
         name: [{
           required: true,
           message: '请输入name',
@@ -106,8 +125,8 @@ export default {
         responsibility: [],
         type: [],
         status: [],
-        startDate:[],
-        endDate:[],
+        startDate: [],
+        endDate: [],
       },
       form: Object.assign({}, defaultForm),
       list: null,
@@ -128,10 +147,31 @@ export default {
       isEdit: false,
       actionTypes: [],
       status: [],
+      attachmentTypes: {
+        ContainmentAction: 'ContainmentAction',
+        RiskAssesment: 'RiskAssesment',
+        Issue: 'Issue',
+        Cause: 'Cause',
+        CorrectiveAction: 'CorrectiveAction',
+        ContainmentActionDocs: 'ContainmentActionDocs',
+        RiskAssesmentDocs: 'RiskAssesmentDocs',
+        IssueDocs: 'IssueDocs',
+        CauseDocs: 'CauseDocs',
+        CorrectiveActionDocs: 'CorrectiveActionDocs',
+      },
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    a3Id: {
+      handler: function (newVal, oldVal) {
+        this.form.a3Id = newVal;
+        this.listQuery.a3Id = newVal;
+        this.getList();
+      },
+      immediate: true
+    }
+  },
   created() {
     // this.getList()
     this.getActionTypes();

@@ -30,41 +30,56 @@
         </el-form-item>
         <el-form-item label="Parent" prop="parentId">
           <el-select v-model="form.parentId" placeholder="请选择parent" filterable clearable remote
-            
             :style="{ width: '100%' }">
             <el-option v-for="item in list" :key="item.id" :value="item.id" :label="item.name"></el-option>
           </el-select>
-          
+
         </el-form-item>
         <el-form-item label="IsRelevant" prop="isRelevant">
-            <el-switch v-model="form.isRelevant" :active-value="undefined" :inactive-value="undefined">
-            </el-switch>
-          </el-form-item>
+          <el-switch v-model="form.isRelevant" :active-value="undefined" :inactive-value="undefined">
+          </el-switch>
+        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button size="small" type="text" @click="cancel">取消</el-button>
         <el-button size="small" v-loading="formLoading" type="primary" @click="save">确认</el-button>
       </div>
     </el-dialog>
-    <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
-      @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
-      <el-table-column type="selection" width="44px"></el-table-column>
-      <el-table-column label="Type" prop="type" align="center" :formatter="typeFormate"/>
-      <el-table-column label="Title" prop="name" align="center" />
-      <el-table-column label="Status" prop="status" align="center" :formatter="statusFormate"/>
-      <!-- <el-table-column label="parent" prop="parentId" align="center" /> -->
-      <el-table-column label="操作" align="center">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
-          <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
-        </template>
-      </el-table-column>
-    </el-table>
+
+    <el-row>
+      <el-col :xs="14" :sm="15" :md="15" :lg="16" :xl="16">
+
+        <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
+          @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
+          <el-table-column type="selection" width="44px"></el-table-column>
+          <el-table-column label="Type" prop="type" align="center" :formatter="typeFormate" />
+          <el-table-column label="Title" prop="name" align="center" />
+          <el-table-column label="Status" prop="status" align="center" :formatter="statusFormate" />
+          <!-- <el-table-column label="parent" prop="parentId" align="center" /> -->
+          <el-table-column label="操作" align="center">
+            <template slot-scope="{row}">
+              <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
+              <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+      <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
+        <el-row style="margin-top: 10px;">
+          <image-upload :type="attachmentTypes.Cause" :a3Id="a3Id"></image-upload>
+        </el-row>
+        <el-row style="margin-top: 10px;">
+          <docs-upload :type="attachmentTypes.CauseDocs" :a3Id="a3Id"></docs-upload>
+        </el-row>
+      </el-col>
+    </el-row>
     <pagination v-show="totalCount > 0" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
       @pagination="getList" />
   </div>
 </template>
 <script>
+import ImageUpload from '@/views/components/image-upload'
+import DocsUpload from '@/views/components/docs-upload'
 import Pagination from "@/components/Pagination";
 import permission from "@/directive/permission/index.js";
 import baseService from '@/api/base'
@@ -76,12 +91,14 @@ const defaultForm = {
   status: null,
   type: null,
   parentId: null,
-  isRelevant:false
+  isRelevant: false
 }
 export default {
   name: 'Cause',
   components: {
-    Pagination
+    Pagination,
+    ImageUpload,
+    DocsUpload
   },
   directives: {
     permission
@@ -98,7 +115,7 @@ export default {
         status: [],
         type: [],
         parentId: [],
-        isRelevant:[],
+        isRelevant: [],
       },
       form: Object.assign({}, defaultForm),
       list: null,
@@ -118,12 +135,36 @@ export default {
       formTitle: '',
       isEdit: false,
       status: [],
-  causeStatus: [],
+      causeStatus: [],
       causeTypes: [],
+      attachmentTypes: {
+        ContainmentAction: 'ContainmentAction',
+        RiskAssesment: 'RiskAssesment',
+        Issue: 'Issue',
+        Cause: 'Cause',
+        CorrectiveAction: 'CorrectiveAction',
+        ContainmentActionDocs: 'ContainmentActionDocs',
+        RiskAssesmentDocs: 'RiskAssesmentDocs',
+        IssueDocs: 'IssueDocs',
+        CauseDocs: 'CauseDocs',
+        CorrectiveActionDocs: 'CorrectiveActionDocs',
+      },
     }
   },
   computed: {},
-  watch: {},
+  props: [
+    'a3Id'
+  ],
+  watch: {
+    a3Id: {
+      handler: function (newVal, oldVal) {
+        this.form.a3Id = newVal;
+        this.listQuery.a3Id = newVal;
+        this.getList();
+      },
+      immediate: true
+    }
+  },
   created() {
     // this.getList()
     this.getStatusOptions();
@@ -174,7 +215,7 @@ export default {
       )
 
     },
-    
+
     getList() {
       this.listLoading = true;
       this.listQuery.SkipCount = (this.page - 1) * this.listQuery.MaxResultCount;

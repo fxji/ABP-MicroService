@@ -13,11 +13,10 @@
       <el-button slot="reference" class="filter-item" type="danger" icon="el-icon-delete" size="mini"
         @click="handleDelete()">删除</el-button>
     </div>
-    <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()"
-      :title="formTitle">
+    <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()" :title="formTitle">
       <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="150px">
         <el-form-item label="Action" prop="name">
-          <el-input v-model="form.name" placeholder="请输入activites" clearable :style="{width: '100%'}">
+          <el-input v-model="form.name" placeholder="请输入activites" clearable :style="{ width: '100%' }">
           </el-input>
         </el-form-item>
         <el-form-item label="Responsibility" prop="responsibility">
@@ -26,21 +25,20 @@
             :style="{width: '100%'}"></el-input> -->
         </el-form-item>
         <el-form-item label="Status" prop="status">
-          <el-select v-model="form.status" placeholder="请选择status" clearable :style="{width: '100%'}">
-           <el-option v-for="item in status" :key="item.id" :label="item.label" :value="item.value"></el-option>
+          <el-select v-model="form.status" placeholder="请选择status" clearable :style="{ width: '100%' }">
+            <el-option v-for="item in status" :key="item.id" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="Due Date" prop="dueDate">
-          <el-date-picker v-model="form.dueDate" :style="{width: '100%'}" placeholder="请选择时间选择" clearable>
+          <el-date-picker v-model="form.dueDate" :style="{ width: '100%' }" placeholder="请选择时间选择" clearable>
           </el-date-picker>
         </el-form-item>
         <el-form-item label="Cause" prop="causeId">
           <el-select v-model="form.causeId" placeholder="请选择cause" filterable clearable remote
-          @visible-change="handleCauseVisibleChange"
-            :style="{ width: '100%' }">
+            @visible-change="handleCauseVisibleChange" :style="{ width: '100%' }">
             <el-option v-for="item in causeList" :key="item.id" :value="item.id" :label="item.name"></el-option>
           </el-select>
-          
+
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -48,32 +46,48 @@
         <el-button size="small" v-loading="formLoading" type="primary" @click="save">确认</el-button>
       </div>
     </el-dialog>
-    <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
-      @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
-      <el-table-column type="selection" width="44px"></el-table-column>
-      <el-table-column label="Action" prop="name" align="center" />
-      <el-table-column label="Responsibility" prop="responsibility" align="center" />
-      <el-table-column label="Status" prop="status" align="center" :formatter="statusFormate"/>
-      <el-table-column label="DueDate" prop="dueDate" align="center" />
-      <el-table-column label="操作" align="center">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
-          <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
-        </template>
-      </el-table-column>
-    </el-table>
-    <pagination v-show="totalCount>0" :total="totalCount" :page.sync="page"
-      :limit.sync="listQuery.MaxResultCount" @pagination="getList" />
+
+    <el-row>
+      <el-col :xs="14" :sm="15" :md="15" :lg="16" :xl="16">
+
+        <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
+          @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
+          <el-table-column type="selection" width="44px"></el-table-column>
+          <el-table-column label="Action" prop="name" align="center" />
+          <el-table-column label="Responsibility" prop="responsibility" align="center" />
+          <el-table-column label="Status" prop="status" align="center" :formatter="statusFormate" />
+          <el-table-column label="DueDate" prop="dueDate" align="center" />
+          <el-table-column label="操作" align="center">
+            <template slot-scope="{row}">
+              <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
+              <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+      <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
+        <el-row style="margin-top: 10px;">
+          <image-upload :type="attachmentTypes.CorrectiveAction" :a3Id="a3Id"></image-upload>
+        </el-row>
+        <el-row style="margin-top: 10px;">
+          <docs-upload :type="attachmentTypes.CorrectiveActionDocs" :a3Id="a3Id"></docs-upload>
+        </el-row>
+      </el-col>
+    </el-row>
+    <pagination v-show="totalCount > 0" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
+      @pagination="getList" />
   </div>
 </template>
 <script>
+import ImageUpload from '@/views/components/image-upload'
+import DocsUpload from '@/views/components/docs-upload'
 import UserSelect from '@/views/components/user-select'
 import Pagination from "@/components/Pagination";
 import permission from "@/directive/permission/index.js";
 import baseService from '@/api/base'
 const defaultForm = {
   id: null,
-  a3Id:null,
+  a3Id: null,
   name: null,
   responsibility: null,
   status: null,
@@ -83,12 +97,16 @@ export default {
   name: 'CorrectiveAction',
   components: {
     Pagination,
-    UserSelect
+    UserSelect,
+    ImageUpload,
+    DocsUpload
   },
   directives: {
     permission
   },
-  props: [],
+  props: [
+    'a3Id'
+  ],
   data() {
     return {
       rules: {
@@ -107,7 +125,7 @@ export default {
       listLoading: false,
       formLoading: false,
       listQuery: {
-        a3Id:'',
+        a3Id: '',
         Filter: '',
         Sorting: '',
         SkipCount: 0,
@@ -119,24 +137,45 @@ export default {
       formTitle: '',
       isEdit: false,
       status: [],
-      causeList:null,
+      causeList: null,
+      attachmentTypes: {
+        ContainmentAction: 'ContainmentAction',
+        RiskAssesment: 'RiskAssesment',
+        Issue: 'Issue',
+        Cause: 'Cause',
+        CorrectiveAction: 'CorrectiveAction',
+        ContainmentActionDocs: 'ContainmentActionDocs',
+        RiskAssesmentDocs: 'RiskAssesmentDocs',
+        IssueDocs: 'IssueDocs',
+        CauseDocs: 'CauseDocs',
+        CorrectiveActionDocs: 'CorrectiveActionDocs',
+      },
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    a3Id: {
+      handler: function (newVal, oldVal) {
+        this.form.a3Id = newVal;
+        this.listQuery.a3Id = newVal;
+        this.getList();
+      },
+      immediate: true
+    }
+  },
   created() {
     // this.getList()
     this.getStatusOptions();
   },
-  mounted() {},
+  mounted() { },
   methods: {
-    handleCauseVisibleChange(val){
+    handleCauseVisibleChange(val) {
       if (val) {
         this.getRelateCauseList();
       }
     },
-    getRelateCauseList(){
-      this.$axios.gets('api/AAA/cause', {a3Id:this.listQuery.a3Id}).then(response => {
+    getRelateCauseList() {
+      this.$axios.gets('api/AAA/cause', { a3Id: this.listQuery.a3Id }).then(response => {
         this.causeList = response.items;
       });
     },
@@ -309,5 +348,4 @@ export default {
 }
 
 </script>
-<style>
-</style>
+<style></style>

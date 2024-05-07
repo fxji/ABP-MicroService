@@ -13,8 +13,7 @@
       <el-button slot="reference" class="filter-item" type="danger" icon="el-icon-delete" size="mini"
         @click="handleDelete()">删除</el-button>
     </div>
-    <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()"
-      :title="formTitle">
+    <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()" :title="formTitle">
       <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="120px">
         <el-form-item label="Member" prop="userId">
           <user-select v-model="form.userId"></user-select>
@@ -22,9 +21,9 @@
           </el-select> -->
         </el-form-item>
         <el-form-item label="Department" prop="organizationId">
-            <tree-select :multiple="false" v-model="form.organizationId" :load-options="loadOrgs" :options="orgs"
-              placeholder="请选择Location/Plant/Site" />
-          </el-form-item>
+          <tree-select :multiple="false" v-model="form.organizationId" :load-options="loadOrgs" :options="orgs"
+            placeholder="请选择Location/Plant/Site" />
+        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button size="small" type="text" @click="cancel">取消</el-button>
@@ -43,8 +42,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="totalCount>0" :total="totalCount" :page.sync="page"
-      :limit.sync="listQuery.MaxResultCount" @pagination="getList" />
+    <pagination v-show="totalCount > 0" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
+      @pagination="getList" />
   </div>
 </template>
 <script>
@@ -74,7 +73,6 @@ export default {
   directives: {
     permission
   },
-  props: [],
   data() {
     return {
       rules: {
@@ -111,12 +109,25 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  props: [
+    'a3Id'
+  ],
+  watch: {
+    a3Id: {
+      handler: function (newVal, oldVal) {
+        this.form.a3Id = newVal;
+        this.listQuery.a3Id = newVal;
+        this.getList();
+      },
+      immediate: true
+    }
+  },
   created() {
     // this.getList()
     this.getOrgNodes();
+
   },
-  mounted() {},
+  mounted() { },
   methods: {
     getList() {
       this.listLoading = true;
@@ -310,7 +321,7 @@ export default {
       });
       console.log(this.orgs)
     },
-   
+
     loadOrgs({ action, parentNode, callback }) {
       if (action === LOAD_CHILDREN_OPTIONS) {
         fetchOrgs(parentNode.id)
@@ -331,5 +342,4 @@ export default {
 }
 
 </script>
-<style>
-</style>
+<style></style>

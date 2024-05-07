@@ -19,7 +19,7 @@
           <el-input v-model="form.name" placeholder="请输入Factor" clearable :style="{ width: '100%' }"></el-input>
         </el-form-item>
         <el-form-item label="SafetyRelevant" prop="safetyRelevant">
-          <el-switch v-model="form.safetyRelevant" ></el-switch>
+          <el-switch v-model="form.safetyRelevant"></el-switch>
         </el-form-item>
         <el-form-item label="Description" prop="description">
           <el-input v-model="form.description" placeholder="请输入description" type="textarea" :style="{ width: '100%' }">
@@ -35,37 +35,55 @@
             <el-option v-for="item in levelOptions" :key="item.id" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        
+
       </el-form>
       <div slot="footer">
         <el-button size="small" type="text" @click="cancel">取消</el-button>
         <el-button size="small" v-loading="formLoading" type="primary" @click="save">确认</el-button>
       </div>
     </el-dialog>
-    <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
-      @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
-      <el-table-column type="selection" width="44px"></el-table-column>
-      <el-table-column label="Factor" prop="name" align="center" />
-      <el-table-column label="SafetyRelevant" prop="safetyRelevant" align="center" >
-        <template slot-scope="scope">
-            <el-switch :disabled=true v-model="scope.row.safetyRelevant" active-color="Green"                />
-          </template>
-        </el-table-column>
-      <el-table-column label="Functionally" :formatter="levelFormate" prop="functionally" align="center" />
-      <el-table-column label="Probability" :formatter="levelFormate" prop="probability" align="center" />
-      <!-- <el-table-column label="description" prop="description" align="center" /> -->
-      <el-table-column label="操作" align="center">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
-          <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
-        </template>
-      </el-table-column>
-    </el-table>
+
+    <el-row>
+      <el-col :xs="14" :sm="15" :md="15" :lg="16" :xl="16">
+
+        <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
+          @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
+          <el-table-column type="selection" width="44px"></el-table-column>
+          <el-table-column label="Factor" prop="name" align="center" />
+          <el-table-column label="SafetyRelevant" prop="safetyRelevant" align="center">
+            <template slot-scope="scope">
+              <el-switch :disabled=true v-model="scope.row.safetyRelevant" active-color="Green" />
+            </template>
+          </el-table-column>
+          <el-table-column label="Functionally" :formatter="levelFormate" prop="functionally" align="center" />
+          <el-table-column label="Probability" :formatter="levelFormate" prop="probability" align="center" />
+          <!-- <el-table-column label="description" prop="description" align="center" /> -->
+          <el-table-column label="操作" align="center">
+            <template slot-scope="{row}">
+              <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
+              <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+      <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
+        <el-row style="margin-top: 10px;">
+          <image-upload :type="attachmentTypes.RiskAssesment" :a3Id="a3Id"></image-upload>
+        </el-row>
+        <el-row style="margin-top: 10px;">
+          <docs-upload :type="attachmentTypes.RiskAssesmentDocs" :a3Id="a3Id"></docs-upload>
+        </el-row>
+      </el-col>
+    </el-row>
     <pagination v-show="totalCount > 0" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
       @pagination="getList" />
   </div>
 </template>
 <script>
+
+import ImageUpload from '@/views/components/image-upload'
+import DocsUpload from '@/views/components/docs-upload'
+
 import Pagination from "@/components/Pagination";
 import permission from "@/directive/permission/index.js";
 
@@ -83,7 +101,9 @@ const defaultForm = {
 export default {
   name: 'RiskAssessment',
   components: {
-    Pagination
+    Pagination,
+    ImageUpload,
+    DocsUpload
   },
   directives: {
     permission
@@ -124,10 +144,36 @@ export default {
       formTitle: '',
       isEdit: false,
       levelOptions: [],
+
+      attachmentTypes: {
+        ContainmentAction: 'ContainmentAction',
+        RiskAssesment: 'RiskAssesment',
+        Issue: 'Issue',
+        Cause: 'Cause',
+        CorrectiveAction: 'CorrectiveAction',
+        ContainmentActionDocs: 'ContainmentActionDocs',
+        RiskAssesmentDocs: 'RiskAssesmentDocs',
+        IssueDocs: 'IssueDocs',
+        CauseDocs: 'CauseDocs',
+        CorrectiveActionDocs: 'CorrectiveActionDocs',
+      },
+
     }
   },
   computed: {},
-  watch: {},
+  props: [
+    'a3Id'
+  ],
+  watch: {
+    a3Id: {
+      handler: function (newVal, oldVal) {
+        this.form.a3Id = newVal;
+        this.listQuery.a3Id = newVal;
+        this.getList();
+      },
+      immediate: true
+    }
+  },
   created() {
     // this.getList()
     this.getLevelOptions();
@@ -138,7 +184,7 @@ export default {
       let temp = this.levelOptions.find(item => item.value === val);
       // console.log(temp);
       return temp ? temp.label : 'undefined';
-    },    
+    },
     getLevelOptions() {
       // if (Object.keys(levelOptions).length > 0) {
       //   return;
