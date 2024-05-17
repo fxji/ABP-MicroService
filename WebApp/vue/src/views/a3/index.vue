@@ -93,14 +93,15 @@
         <el-table-column label="StartDate" prop="startDate" align="center" />
         <el-table-column label="操作" align="center">
           <template slot-scope="{ row }">
-            <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
-            <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
+            <el-button type="success" size="mini" circle @click="handleShare(row)" icon="el-icon-message" />
+            <el-button type="success" size="mini" circle @click="handleConfirm(row)" icon="el-icon-edit-outline" />
           </template>
         </el-table-column>
       </el-table>
       <pagination v-show="totalCount > 0" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
         @pagination="getList" />
-      <div v-if="selectA3Id">
+        
+      <div class="details-taps" v-if="selectA3Id">
         <el-card>
           <el-tabs>
             <el-tab-pane label="A3Members" :lazy="true">
@@ -121,12 +122,40 @@
             <el-tab-pane label="CorrectiveAction" :lazy="true">
               <CorrectiveAction ref="CorrectiveActionDetails" :a3Id="selectA3Id"></CorrectiveAction>
             </el-tab-pane>
+            <el-tab-pane label="ConfirmInfo" :lazy="true">
+              <ConfirmInfo ref="ConfirmInfoDetails" :a3Id="selectA3Id"></ConfirmInfo>
+            </el-tab-pane>
           </el-tabs>
         </el-card>
       </div>
       <!-- <el-dialog :visible.sync="dialogVisible">
         <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog> -->
+      <el-dialog :visible.sync="dialogShareVisible" @close="handleShareCancel()" title="Send Email">
+        <el-form ref="sharedForm" :model="shareInfo" :rules="sharedRules" label-width="100px">
+          <el-form-item label="ShareTo" prop="emailAddress">
+            <user-select :multiple="true" v-model="shareInfo.emailAddress"></user-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="handleShareCancel()">取 消</el-button>
+          <el-button type="primary" v-loading="formLoading" @click="handleShareSave()">确 定</el-button>
+        </div>
+      </el-dialog>
+
+      <el-dialog :visible.sync="dialogConfirmVisible" @close="handleConfirmCancel()" title="Send Email">
+        <el-form ref="confirmForm" :rules="confirmRules" :model="confirmInfo" label-width="100px">
+
+          <el-form-item label="Comments" prop="Comments">
+            <el-input v-model="confirmInfo.Comments" placeholder="请输入Comments" type="textarea"
+              :style="{ width: '100%' }"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="handleConfirmCancel()">取 消</el-button>
+          <el-button type="primary" v-loading="formLoading" @click="handleConfirmSave()">确 定</el-button>
+        </div>
+      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -139,6 +168,7 @@ import Cause from '@/views/a3/cause'
 import CorrectiveAction from '@/views/a3/action/corrective-action'
 import UserSelect from '@/views/components/user-select'
 import A3Member from '@/views/a3/a3-member'
+import ConfirmInfo from '@/views/a3/confirm-info'
 
 import Pagination from "@/components/Pagination";
 import TreeSelect from "@riophae/vue-treeselect";
@@ -166,6 +196,11 @@ const defaultForm = {
   StartDate: null
 };
 
+const defaultInfo = {
+  emailAddress: null,
+  A3: null
+}
+
 const Types = {
   ContainmentAction: 'ContainmentAction',
   RiskAssesment: 'RiskAssesment',
@@ -190,7 +225,8 @@ export default {
     Cause,
     CorrectiveAction,
     UserSelect,
-    A3Member
+    A3Member,
+    ConfirmInfo
   },
   directives: {
     permission
@@ -208,18 +244,31 @@ export default {
             message: "请输入Title",
             trigger: "blur"
           }
-        ],
-        organizationId: [],
-        userId: [],
-        userEmail: [],
-        process: [],
-        parentId: [],
-        source: [],
-        StartDate: []
+        ]
+      },
+      sharedRules: {
+        emailAddress: [
+          {
+            required: true,
+            message: "请Select Emails",
+            trigger: "blur"
+          }
+        ]
+      },
+      confirmRules: {
+        Comments: [
+          {
+            required: true,
+            message: "请Type something",
+            trigger: "blur"
+          }
+        ]
       },
       orgs: [],
       noTreeOrgs: [],
       form: Object.assign({}, defaultForm),
+      shareInfo: Object.assign({}, defaultInfo),
+      confirmInfo: {},
       list: null,
       processList: [],
       defectSources: [],
@@ -243,6 +292,8 @@ export default {
         total: 0,
       },
       dialogFormVisible: false,
+      dialogShareVisible: false,
+      dialogConfirmVisible: false,
       multipleSelection: [],
       formTitle: "",
       isEdit: false,
@@ -540,7 +591,7 @@ export default {
                   type: "success",
                   duration: 2000
                 });
-                this.dialogFormVisible = false;
+                this.dialogConfirmVisible = false;
                 this.getList();
               })
               .catch(() => {
@@ -580,6 +631,75 @@ export default {
       // this.defectSources = [];
       this.dialogFormVisible = false;
       this.$refs.form.clearValidate();
+    },
+    handleShareCancel() {
+      this.shareInfo = Object.assign({}, defaultInfo);
+      this.dialogShareVisible = false;
+      this.$refs.sharedForm.clearValidate();
+    },
+    handleShareSave() {
+      //TODO: valid
+      this.$refs.sharedForm.validate(valid => {
+        if (valid) {
+          this.formLoading = true;
+          let data = {
+            emailAddress: this.shareInfo.emailAddress.join(','),
+            A3: this.shareInfo.A3,
+          }
+          a3Service.share(data)
+            .then(response => {
+              this.formLoading = false;
+              this.$notify({
+                title: "成功",
+                message: "分享成功",
+                type: "success",
+                duration: 2000
+              });
+              this.dialogShareVisible = false;
+              // this.getList();
+            })
+            .catch(() => {
+              this.formLoading = false;
+            });
+          // this.shareInfo= Object.assign({}, {emailAddress:''});
+          // this.dialogShareVisible = false;
+        }
+      }
+      )
+    },
+    handleShare(row) {
+      this.dialogShareVisible = true;
+      this.shareInfo.A3 = row;
+    },
+    handleConfirm(row) {
+      this.dialogConfirmVisible = true;
+      this.confirmInfo.a3Id = row.id;
+    },
+    handleConfirmSave() {
+      this.$refs.confirmForm.validate(valid => {
+        if (valid) {
+          this.formLoading = true;
+          this.$axios.posts('api/AAA/ConfirmInfo/data-post', this.confirmInfo).then(response => {
+            this.formLoading = false;
+            this.$notify({
+              title: '成功',
+              message: '更新成功',
+              type: 'success',
+              duration: 2000
+            });
+            this.dialogFormVisible = false;
+          }).catch(() => {
+            this.formLoading = false;
+          });
+          this.dialogConfirmVisible = false;
+        }
+      }
+      )
+    },
+    handleConfirmCancel() {
+      this.confirmInfo = {};
+      this.dialogConfirmVisible = false;
+      this.$refs.confirmForm.clearValidate();
     },
 
     changeEnabled(data, val) {

@@ -119,5 +119,14 @@ public static class AAADbContextModelCreatingExtensions
             b.ConfigureByConvention();
 
         });
+        builder.Entity<ConfirmInfo>(b =>
+        {
+            b.ToTable("ConfirmInfo");
+
+            b.ConfigureByConvention();
+
+            b.Property(x => x.A3Id).IsRequired();
+            b.Property(x => x.Comments).IsRequired();
+        });
     }
 }

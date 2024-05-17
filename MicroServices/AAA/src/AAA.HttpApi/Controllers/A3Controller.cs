@@ -36,6 +36,13 @@ namespace AAA.Controllers
             return _A3AppService.Delete(ids);
         }
 
+        [HttpPost]
+        [Route("share")]
+        public Task Share(ShareDto info)
+        {
+            return _A3AppService.Share(info);
+        }
+
         [HttpGet]
         [Route("{id}")]
         public Task<A3Dto> Get(Guid id)

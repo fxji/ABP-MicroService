@@ -2,6 +2,7 @@
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.Application;
+using Email;
 
 namespace AAA;
 
@@ -9,7 +10,8 @@ namespace AAA;
     typeof(AAADomainModule),
     typeof(AAAApplicationContractsModule),
     typeof(AbpDddApplicationModule),
-    typeof(AbpAutoMapperModule)
+    typeof(AbpAutoMapperModule),
+    typeof(EmailApplicationModule)
     )]
 public class AAAApplicationModule : AbpModule
 {

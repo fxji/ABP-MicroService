@@ -84,12 +84,12 @@
           <!-- <el-table-column label="Goal Statement" prop="goalStatement" align="center" /> -->
           <!-- <el-table-column label="Description" prop="description" align="center" /> -->
           <!-- <el-table-column label="Current Situation" prop="symptomDescription" align="center" /> -->
-          <el-table-column label="操作" align="center">
+          <!-- <el-table-column label="操作" align="center">
             <template slot-scope="{row}">
               <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
               <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
       </el-col>
       <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
@@ -101,7 +101,7 @@
         </el-row>
       </el-col>
     </el-row>
-    <pagination v-show="totalCount > 0" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
+    <pagination v-show="totalCount > 10" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
       @pagination="getList" />
   </div>
 </template>

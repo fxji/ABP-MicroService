@@ -27,6 +27,9 @@ public class AAADbContext : AbpDbContext<AAADbContext>, IAAADbContext
 
     public DbSet<A3Member> A3Members { get; set; }
 
+    public DbSet<ConfirmInfo> ConfirmInfos { get; set; }
+
+
     public AAADbContext(DbContextOptions<AAADbContext> options)
         : base(options)
     {

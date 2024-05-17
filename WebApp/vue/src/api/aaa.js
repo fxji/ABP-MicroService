@@ -23,6 +23,13 @@ var service = {
     //     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8;"
     //   }
     });
+  },
+  share(data) {
+    return request({
+      url: `/api/AAA/A3/share`,
+      method: "post",
+      data,    
+    });
   }
 };
 

@@ -1,7 +1,7 @@
 <template>
-    <el-select v-model="handleValue" placeholder="" :key="propKeyValue" filterable clearable remote :remote-method="userListRemoteMethod"
-        v-loadMore="getUserList" @visible-change="handleUserVisibleChange" :style="{ width: '100%' }" v-bind="$attrs"
-        v-on="$listeners">
+    <el-select v-model="handleValue" placeholder="" :key="propKeyValue" :multiple="multiple" filterable clearable remote
+        :remote-method="userListRemoteMethod" v-loadMore="getUserList" @visible-change="handleUserVisibleChange"
+        :style="{ width: '100%' }" v-bind="$attrs" v-on="$listeners">
         <el-option v-for="item in users" :key="item.id" :value="item.email" :label="item.email"></el-option>
     </el-select>
 </template>
@@ -11,17 +11,21 @@ import baseService from "@/api/base";
 export default {
     props: {
         value: {
-            type: [String, Number],
+            type: [String, Number, Array, Boolean],
             default: ''
         },
         keyValue: {
             type: String,
             default: 'select-single'
         },
+        multiple: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return {
-            propKeyValue:'',
+            propKeyValue: '',
             users: [],
             userLoadMoreConfig: {
                 offset: 0,
@@ -35,7 +39,19 @@ export default {
     computed: {
         handleValue: {
             get() {
-                return this.value
+                let value = null
+                if (this.multiple) {
+                    value = []
+                    if (this.value instanceof Array) {
+                        this.value.forEach(element => {
+                            value.push(element)
+                        });
+                    }
+                } else {
+                    value = ''
+                    value = this.value;
+                }
+                return value
             },
             set(value) {
                 this.$emit('input', value)

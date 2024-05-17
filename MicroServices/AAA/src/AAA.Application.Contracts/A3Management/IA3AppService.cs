@@ -16,5 +16,7 @@ namespace AAA.A3Management
         Task<A3Dto> DataPost(CreateOrUpdateA3Dto input);
 
         Task Delete(List<Guid> ids);
+
+        Task Share(ShareDto shareInfo);
     }
 }

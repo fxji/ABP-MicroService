@@ -1,0 +1,79 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "Email.Domain.Shared": {
+      "path": "src/Email.Domain.Shared/Email.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Email.Domain": {
+      "path": "src/Email.Domain/Email.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "Email.Application.Contracts": {
+      "path": "src/Email.Application.Contracts/Email.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "Email.Application": {
+      "path": "src/Email.Application/Email.Application.abppkg.json",
+      "folder": "src"
+    },
+    "Email.EntityFrameworkCore": {
+      "path": "src/Email.EntityFrameworkCore/Email.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "Email.MongoDB": {
+      "path": "src/Email.MongoDB/Email.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "Email.HttpApi": {
+      "path": "src/Email.HttpApi/Email.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "Email.HttpApi.Client": {
+      "path": "src/Email.HttpApi.Client/Email.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "Email.TestBase": {
+      "path": "test/Email.TestBase/Email.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "Email.EntityFrameworkCore.Tests": {
+      "path": "test/Email.EntityFrameworkCore.Tests/Email.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Email.MongoDB.Tests": {
+      "path": "test/Email.MongoDB.Tests/Email.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Email.Domain.Tests": {
+      "path": "test/Email.Domain.Tests/Email.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Email.Application.Tests": {
+      "path": "test/Email.Application.Tests/Email.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Email.HttpApi.Host": {
+      "path": "host/Email.HttpApi.Host/Email.HttpApi.Host.abppkg.json",
+      "folder": "host"
+    },
+    "Email.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/Email.HttpApi.Client.ConsoleTestApp/Email.HttpApi.Client.ConsoleTestApp.abppkg.json",
+      "folder": "test"
+    },
+    "Email.AuthServer": {
+      "path": "host/Email.AuthServer/Email.AuthServer.abppkg.json",
+      "folder": "host"
+    },
+    "Email.Host.Shared": {
+      "path": "host/Email.Host.Shared/Email.Host.Shared.abppkg.json",
+      "folder": "host"
+    }
+  }
+}

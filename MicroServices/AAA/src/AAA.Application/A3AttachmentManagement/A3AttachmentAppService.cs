@@ -14,7 +14,7 @@ using AAA.Permissions;
 
 namespace AAA.A3AttachmentManagement
 {
-    [Authorize(AAAPermissions.A3Attachment.Default)]
+    [Authorize(AAAPermissions.A3.Default)]
     public class A3AttachmentAppService : ApplicationService,IA3AttachmentAppService
     {
         private const string FormName = "A3Attachment";

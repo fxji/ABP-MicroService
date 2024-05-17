@@ -35,14 +35,14 @@
       <el-table-column type="selection" width="44px"></el-table-column>
       <el-table-column label="Member" prop="userId" align="center" />
       <el-table-column label="Organization" prop="organizationId" :formatter="locationFormatter" align="center" />
-      <el-table-column label="操作" align="center">
+      <!-- <el-table-column label="操作" align="center">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
           <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
-    <pagination v-show="totalCount > 0" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
+    <pagination v-show="totalCount > 10" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
       @pagination="getList" />
   </div>
 </template>
