@@ -10,7 +10,7 @@ import config from "../../../../static/config";
 export default {
     name: 'DocsUpload',
     props: {
-        type: {
+        category: {
             type: String,
             default: 'u did not input type',
             required: true
@@ -44,7 +44,8 @@ export default {
                 return;
             let item = {
                 A3Id: this.a3Id,
-                Type: this.type,
+                category: this.category,
+                type:'Doc',
                 Name: response.realName,
                 Url: this.storageApi + response.url
             }
@@ -63,7 +64,8 @@ export default {
         getAttachment() {
             let query = {
                 a3Id: this.a3Id,
-                Type: this.type,
+                category: this.category,
+                type:'Doc'
 
             }
             this.$axios.gets('api/AAA/A3Attachment', query).then(response => {

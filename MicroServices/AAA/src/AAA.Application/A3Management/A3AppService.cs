@@ -41,7 +41,12 @@ namespace AAA.A3Management
 
         public async Task<PagedResultDto<A3Dto>> GetAll(GetA3InputDto input)
         {
-            var query = (await _repository.GetQueryableAsync()).WhereIf(!string.IsNullOrWhiteSpace(input.Filter), a => a.Name.Contains(input.Filter));
+            var query = (await _repository.GetQueryableAsync())
+                .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), a => a.Name.Contains(input.Filter))
+                .WhereIf(!string.IsNullOrWhiteSpace(input.Source),a=>a.Source.Equals(input.Source))
+                .WhereIf(!string.IsNullOrWhiteSpace(input.Process),a=>a.Process.Equals(input.Process))
+                .WhereIf(!(input.OrganizationId==Guid.Empty||input.OrganizationId is null), a => a.OrganizationId.Equals(input.OrganizationId))
+                ;
 
             var totalCount = await query.CountAsync();
             var items = await query.OrderBy(input.Sorting ?? "Id")

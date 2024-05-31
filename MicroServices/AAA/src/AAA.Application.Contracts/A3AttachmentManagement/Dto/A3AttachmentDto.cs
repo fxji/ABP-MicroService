@@ -19,7 +19,9 @@ namespace AAA.A3AttachmentManagement.Dto
         public string Name { get; set; }
 
         public string Type { get; set; }
-        
+
+        public string Category { get; set; }
+
         /// <summary>
         /// 单行文本
         /// </summary>

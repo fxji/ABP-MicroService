@@ -66,10 +66,10 @@
       </el-col>
       <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
         <el-row style="margin-top: 10px;">
-          <image-upload :type="attachmentTypes.Cause" :a3Id="a3Id"></image-upload>
+          <image-upload :category="attachmentTypes.Cause" :a3Id="a3Id"></image-upload>
         </el-row>
         <el-row style="margin-top: 10px;">
-          <docs-upload :type="attachmentTypes.CauseDocs" :a3Id="a3Id"></docs-upload>
+          <docs-upload :category="attachmentTypes.Cause" :a3Id="a3Id"></docs-upload>
         </el-row>
       </el-col>
     </el-row>
@@ -141,12 +141,7 @@ export default {
         RiskAssesment: 'RiskAssesment',
         Issue: 'Issue',
         Cause: 'Cause',
-        CorrectiveAction: 'CorrectiveAction',
-        ContainmentActionDocs: 'ContainmentActionDocs',
-        RiskAssesmentDocs: 'RiskAssesmentDocs',
-        IssueDocs: 'IssueDocs',
-        CauseDocs: 'CauseDocs',
-        CorrectiveActionDocs: 'CorrectiveActionDocs',
+        CorrectiveAction: 'CorrectiveAction',        
       },
     }
   },

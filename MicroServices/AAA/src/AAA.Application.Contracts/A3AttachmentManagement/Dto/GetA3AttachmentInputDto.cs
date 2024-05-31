@@ -9,6 +9,8 @@ namespace AAA.A3AttachmentManagement.Dto
 
         public string Type { get; set; }
 
+        public string Category { get; set; }
+
         public Guid A3Id { get; set; }
     }
 }

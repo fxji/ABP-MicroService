@@ -3,8 +3,25 @@
     <el-card>
       <div class="head-container">
         <!-- 搜索 -->
-        <el-input v-model="listQuery.Filter" clearable size="small" placeholder="搜索..." style="width: 200px;"
+        <el-input v-model="listQuery.Filter" clearable size="mini" placeholder="输入Title..." style="width: 120px"
           class="filter-item" @keyup.enter.native="handleFilter" />
+        <el-select class="filter-item" style="width: 120px" size="mini" v-model="listQuery.process"
+          placeholder="请选择Process of Production issue" clearable @visible-change="handleProcessVisibleChange">
+          <el-option v-for="item in processList" :key="item.id" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+        <tree-select class="filter-item" size="mini" style="width: 120px" :multiple="false"
+          v-model="listQuery.organizationId" :load-options="loadOrgs" :options="orgs"
+          placeholder="请选择Location/Plant/Site" />
+        <el-select class="filter-item" size="mini" style="width: 120px" v-model="listQuery.source" placeholder="请选择Source Of Defect" clearable
+          @visible-change="handleDefectSourceVisibleChange" >
+          <el-option v-for="item in defectSources" :key="item.id" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+
+
+
+
+
         <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="handleFilter">{{
           $t("table.search") }}
         </el-button>
@@ -75,6 +92,7 @@
       <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
         @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
         <el-table-column type="selection" width="44px"></el-table-column>
+        <el-table-column label="ID" prop="id" align="center" />
         <el-table-column label="Title" prop="name" align="center" />
         <el-table-column label="Department" prop="organizationId" align="center" :formatter="locationFormatter" />
         <el-table-column label="Sponsor" prop="userEmail" align="center" />
@@ -100,7 +118,7 @@
       </el-table>
       <pagination v-show="totalCount > 0" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
         @pagination="getList" />
-        
+
       <div class="details-taps" v-if="selectA3Id">
         <el-card>
           <el-tabs>
@@ -131,7 +149,7 @@
       <!-- <el-dialog :visible.sync="dialogVisible">
         <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog> -->
-      <el-dialog :visible.sync="dialogShareVisible" @close="handleShareCancel()" title="Send Email">
+      <el-dialog :visible.sync="dialogShareVisible" @close="handleShareCancel()" title="Share">
         <el-form ref="sharedForm" :model="shareInfo" :rules="sharedRules" label-width="100px">
           <el-form-item label="ShareTo" prop="emailAddress">
             <user-select :multiple="true" v-model="shareInfo.emailAddress"></user-select>
@@ -143,7 +161,7 @@
         </div>
       </el-dialog>
 
-      <el-dialog :visible.sync="dialogConfirmVisible" @close="handleConfirmCancel()" title="Send Email">
+      <el-dialog :visible.sync="dialogConfirmVisible" @close="handleConfirmCancel()" title="Confirm">
         <el-form ref="confirmForm" :rules="confirmRules" :model="confirmInfo" label-width="100px">
 
           <el-form-item label="Comments" prop="Comments">
@@ -201,18 +219,7 @@ const defaultInfo = {
   A3: null
 }
 
-const Types = {
-  ContainmentAction: 'ContainmentAction',
-  RiskAssesment: 'RiskAssesment',
-  Issue: 'Issue',
-  Cause: 'Cause',
-  CorrectiveAction: 'CorrectiveAction',
-  ContainmentActionDocs: 'ContainmentActionDocs',
-  RiskAssesmentDocs: 'RiskAssesmentDocs',
-  IssueDocs: 'IssueDocs',
-  CauseDocs: 'CauseDocs',
-  CorrectiveActionDocs: 'CorrectiveActionDocs',
-};
+
 
 export default {
   name: "A3",
@@ -278,6 +285,9 @@ export default {
       listQuery: {
         a3Id: '',
         Filter: "",
+        organizationId: "",
+        process: "",
+        source: "",
         Sorting: "",
         SkipCount: 0,
         MaxResultCount: 10
@@ -299,19 +309,18 @@ export default {
       isEdit: false,
       storageApi: config.storage.ip,
       selectA3Id: "",
-      attachments: {
-        ContainmentAction: [],
-        RiskAssesment: [],
-        Issue: [],
-        Cause: [],
-        CorrectiveAction: [],
-        IssueDocs: [],
-        ContainmentActionDocs: [],
-        RiskAssesmentDocs: [],
-        CauseDocs: [],
-        CorrectiveActionDocs: [],
-      },
-      attachmentTypes: Types,
+      // attachments: {
+      //   ContainmentAction: [],
+      //   RiskAssesment: [],
+      //   Issue: [],
+      //   Cause: [],
+      //   CorrectiveAction: [],
+      //   IssueDocs: [],
+      //   ContainmentActionDocs: [],
+      //   RiskAssesmentDocs: [],
+      //   CauseDocs: [],
+      //   CorrectiveActionDocs: [],
+      // },
     };
   },
   computed: {},
@@ -733,4 +742,33 @@ export default {
   }
 };
 </script>
-<style></style>
+<style lang="scss" scoped>
+// treeselect 样式设置
+// search 为父元素的calss
+
+.head-container {
+  display: flex;
+  // align-items: center;
+  justify-content: start;
+  gap: 0.5rem;
+
+  ::v-deep .vue-treeselect {
+    // width: 198px;
+    // height: 28px;
+    // line-height: 28px;
+    // margin-top: 7px;
+    font-size: 12px;
+    display: inline-block;
+  }
+
+  ::v-deep .vue-treeselect__control {
+    // font-size: 12px;
+    height: 28px;
+  }
+
+  ::v-deep .vue-treeselect__placeholder,
+  ::v-deep .vue-treeselect__single-value {
+    line-height: 28px;
+  }
+}
+</style>
