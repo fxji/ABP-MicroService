@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "DataExport": {
+      "path": "DataExport.abpmdl.json"
+    }
+  }
+}

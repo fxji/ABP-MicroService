@@ -209,3 +209,4 @@ MicroServices/FileStorage/FileStorage.EntityFrameworkCore/bin/
 /MicroServices/Business/Business.Core/bin
 /MicroServices/Business/Business.Domain/bin
 /MicroServices/Business/Business.EntityFrameworkCore/bin
+/MicroServices/Business/Business.Host/wwwroot

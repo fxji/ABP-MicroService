@@ -1,0 +1,79 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "DataExport.Domain.Shared": {
+      "path": "src/DataExport.Domain.Shared/DataExport.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "DataExport.Domain": {
+      "path": "src/DataExport.Domain/DataExport.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "DataExport.Application.Contracts": {
+      "path": "src/DataExport.Application.Contracts/DataExport.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "DataExport.Application": {
+      "path": "src/DataExport.Application/DataExport.Application.abppkg.json",
+      "folder": "src"
+    },
+    "DataExport.EntityFrameworkCore": {
+      "path": "src/DataExport.EntityFrameworkCore/DataExport.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "DataExport.MongoDB": {
+      "path": "src/DataExport.MongoDB/DataExport.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "DataExport.HttpApi": {
+      "path": "src/DataExport.HttpApi/DataExport.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "DataExport.HttpApi.Client": {
+      "path": "src/DataExport.HttpApi.Client/DataExport.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "DataExport.TestBase": {
+      "path": "test/DataExport.TestBase/DataExport.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "DataExport.EntityFrameworkCore.Tests": {
+      "path": "test/DataExport.EntityFrameworkCore.Tests/DataExport.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "DataExport.MongoDB.Tests": {
+      "path": "test/DataExport.MongoDB.Tests/DataExport.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "DataExport.Domain.Tests": {
+      "path": "test/DataExport.Domain.Tests/DataExport.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "DataExport.Application.Tests": {
+      "path": "test/DataExport.Application.Tests/DataExport.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "DataExport.HttpApi.Host": {
+      "path": "host/DataExport.HttpApi.Host/DataExport.HttpApi.Host.abppkg.json",
+      "folder": "host"
+    },
+    "DataExport.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/DataExport.HttpApi.Client.ConsoleTestApp/DataExport.HttpApi.Client.ConsoleTestApp.abppkg.json",
+      "folder": "test"
+    },
+    "DataExport.AuthServer": {
+      "path": "host/DataExport.AuthServer/DataExport.AuthServer.abppkg.json",
+      "folder": "host"
+    },
+    "DataExport.Host.Shared": {
+      "path": "host/DataExport.Host.Shared/DataExport.Host.Shared.abppkg.json",
+      "folder": "host"
+    }
+  }
+}
