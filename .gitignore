@@ -201,3 +201,11 @@ MicroServices/FileStorage/FileStorage.Application.Contracts/bin/
 MicroServices/FileStorage/FileStorage.Application/bin/
 MicroServices/FileStorage/FileStorage.Domain/bin/
 MicroServices/FileStorage/FileStorage.EntityFrameworkCore/bin/
+/MicroServices/FileStorage/FileStorage.HttpApi.Client/obj
+/MicroServices/FileStorage/FileStorage.HttpApi.Client/bin
+/MicroServices/AAA/host/AAA.HttpApi.Host/UploadFile
+/MicroServices/Business/Business.Application.Contracts/bin
+/MicroServices/Business/Business.Application/bin
+/MicroServices/Business/Business.Core/bin
+/MicroServices/Business/Business.Domain/bin
+/MicroServices/Business/Business.EntityFrameworkCore/bin

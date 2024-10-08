@@ -10,6 +10,7 @@ $serviceArray += [PsObject]@{ Path = $rootFolder + "/../AuthServer/IdentityServe
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../Gateways/WebAppGateway/WebAppGateway.Host/"; Service = "web-gateway" }
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../BaseService/BaseService.Host/"; Service = "base-service" }
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../MicroServices/FileStorage/FileStorage.Host/"; Service = "file-storage" }
+$serviceArray += [PsObject]@{ Path = $rootFolder + "/../MicroServices/Business/Business.Host/"; Service = "Business-service" }
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../MicroServices/AAA/host/AAA.HttpApi.Host/"; Service = "3a-report" }
 
 
