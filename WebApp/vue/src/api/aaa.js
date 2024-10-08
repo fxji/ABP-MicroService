@@ -30,6 +30,12 @@ var service = {
       method: "post",
       data,    
     });
+  },
+  export(id) {
+    return request({
+      url: `/api/AAA/A3/export/${id}`,
+      method: "get",
+    });
   }
 };
 

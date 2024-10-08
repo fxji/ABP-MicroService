@@ -92,7 +92,9 @@ public class AAAHttpApiHostModule : AbpModule
             configuration["AuthServer:Authority"],
             new Dictionary<string, string>
             {
-                {"AAAService", "AAAService API"}
+                {"BaseService", "BaseService API"},
+                {"WebAppGateway", "WebAppGateway API"},
+                {"AAAService", "AAAService API"},
             },
             options =>
             {

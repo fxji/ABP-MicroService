@@ -10,20 +10,24 @@
 
 
                     <el-table label="a3" ref="a3" :data="generalData" size="small" style="width: 90%;">
-                        <el-table-column label="ID" prop="id" align="center" />
+                        <el-table-column label="ID" prop="id" align="center">
+                            <template slot-scope="{row}">
+                                <span class="link-type" @click="handleJumpTo(row)">{{ row.id }}</span>
+                            </template>
+                        </el-table-column>
                         <el-table-column label="Title" prop="name" align="center" />
-                        <!-- <el-table-column label="Department" prop="organizationId" align="center"
-                        :formatter="locationFormatter" /> -->
+                        <el-table-column label="Department" prop="organizationId" align="center"
+                            :formatter="locationFormatter" />
                         <el-table-column label="Sponsor" prop="userEmail" align="center" />
                         <el-table-column label="Re-Occurrence" prop="reOccurrence" align="center">
                             <template slot-scope="scope">
-                                <el-switch v-model="scope.row.reOccurrence" active-color="red" inactive-color="Green" />
+                                <el-switch disabled v-model="scope.row.reOccurrence" active-color="red"
+                                    inactive-color="Green" />
                             </template>
                         </el-table-column>
-                        <!-- <el-table-column label="Process" prop="process" align="center" :formatter="processFormatter">
-
-                    </el-table-column> -->
-                        <!-- <el-table-column label="SOD" prop="source" align="center" :formatter="defectSourceFormatter" /> -->
+                        <el-table-column label="Process" prop="process" align="center" :formatter="processFormatter">
+                        </el-table-column>
+                        <el-table-column label="SOD" prop="source" align="center" :formatter="defectSourceFormatter" />
                         <el-table-column label="StartDate" prop="startDate" align="center" />
 
                     </el-table>
@@ -37,7 +41,7 @@
                         Issue
                     </div>
                     <div>
-                        <el-table ref="issue" :data="list.issue" size="small" style="width: 90%;">
+                        <el-table ref="issue" :data="list.Issue" size="small" style="width: 90%;">
                             <el-table-column label="Title" prop="name" />
                             <el-table-column label="Problem Type" prop="type" :formatter="issueTypeFormatter" />
                             <el-table-column label="Customer Group" prop="customerGroup" />
@@ -50,25 +54,12 @@
                 </el-card>
             </el-col>
             <el-col :xs="24" :sm="24" :lg="8">
-                <el-card>
+                <el-card class="card">
                     <div slot="header">
-                        Attachment
+                        AttachFiles
                     </div>
-                    <div>
-                        <el-row>
-                            <div v-for="(item, index) in attachFiles.issue" :key="item.id">
-                                <el-image :key="index" style="width: 100px; height: 100px" :src="item.url"
-                                    fit="fill"></el-image>
-                            </div>
-                        </el-row>
+                    <attachment :Id="form.a3Id" :category="category.Issue"></attachment>
 
-                        <el-row>
-                            <div v-for="(item, index) in attachDocs.issue" :key="item.id" style="margin-top: 16px;">
-                                <el-link :key="index" icon="el-icon-document" :href="item.url">{{ item.name
-                                    }}</el-link>
-                            </div>
-                        </el-row>
-                    </div>
                 </el-card>
             </el-col>
 
@@ -78,10 +69,10 @@
         <el-row :gutter="16">
             <el-col :xs="24" :sm="24" :lg="16">
                 <el-card class="card">
-                    <div slot="header" >
+                    <div slot="header">
                         ContainmentAction
                     </div>
-                    <el-table ref="action1" :data="list.containmentAction" size="small" style="width: 90%;">
+                    <el-table ref="containmentAction" :data="list.ContainmentAction" size="small" style="width: 90%;">
                         <el-table-column label="Activities" prop="name" />
                         <el-table-column label="Responsibility" prop="responsibility" />
                         <el-table-column label="Type" prop="type" :formatter="actionTypeFormate" />
@@ -91,19 +82,12 @@
                 </el-card>
             </el-col>
             <el-col :xs="24" :sm="24" :lg="8">
-                <el-card class="card" >
-                    <div slot="header" >
-                        attachFiles
+                <el-card class="card">
+                    <div slot="header">
+                        AttachFiles
                     </div>
-                    <el-row>
-                        <el-image v-for="item in attachFiles.containmentAction" :key="item.id"
-                            style="width: 100px; height: 100px" :src="item.url" fit="fill"></el-image>
-                    </el-row>
-                    <el-row>
-                        <div v-for="(item, index) in attachDocs.containmentAction" :key="item.id">
-                            <el-link :key="index" icon="el-icon-document" :href="item.url">{{ item.name }}</el-link>
-                        </div>
-                    </el-row>
+                    <attachment :Id="form.a3Id" :category="category.ContainmentAction"></attachment>
+
                 </el-card>
             </el-col>
 
@@ -117,7 +101,7 @@
                         <el-table-column label="Factor" prop="name" />
                         <el-table-column label="SafetyRelevant" prop="safetyRelevant">
                             <template slot-scope="scope">
-                                <el-switch :disabled=true v-model="scope.row.safetyRelevant" active-color="Green" />
+                                <el-switch disabled v-model="scope.row.safetyRelevant" active-color="Green" />
                             </template>
                         </el-table-column>
                         <el-table-column label="Functionally" :formatter="levelFormate" prop="functionally" />
@@ -128,19 +112,9 @@
             </el-col>
             <el-col :xs="24" :sm="24" :lg="8">
                 <el-card class="card">
-                    <div slot="header">attachFiles</div>
-                    
-                    <el-row>
-                        <div v-for="(item, index) in attachFiles.RiskAssessment" :key="item.id">
-                            <el-image :key="index" style="width: 100px; height: 100px" :src="item.url"
-                                fit="fill"></el-image>
-                        </div>
-                    </el-row>
-                    <el-row>
-                        <div v-for="(item, index) in attachDocs.RiskAssessment" :key="item.id">
-                            <el-link :key="index" icon="el-icon-document" :href="item.url">{{ item.name }}</el-link>
-                        </div>
-                    </el-row>
+                    <div slot="header">AttachFiles</div>
+                    <attachment :Id="form.a3Id" :category="category.RiskAssessment"></attachment>
+
                 </el-card>
             </el-col>
 
@@ -150,7 +124,7 @@
             <el-col :xs="24" :sm="24" :lg="16">
                 <el-card class="card">
                     <div slot="header">Cause</div>
-                    <el-table ref="cause" :data="list.cause" size="small" style="width: 90%;">
+                    <el-table ref="cause" :data="list.Cause" size="small" style="width: 90%;">
                         <el-table-column label="Type" prop="type" :formatter="typeFormate" />
                         <el-table-column label="Title" prop="name" />
                         <el-table-column label="Status" prop="status" :formatter="statusFormate" />
@@ -161,18 +135,9 @@
             </el-col>
             <el-col :xs="24" :sm="24" :lg="8">
                 <el-card class="card">
-                    <div slot="header">attachFiles</div>
-                    <el-row>
-                        <div v-for="(item, index) in attachFiles.cause" :key="item.id">
-                            <el-image :key="index" style="width: 100px; height: 100px" :src="item.url"
-                                fit="fill"></el-image>
-                        </div>
-                    </el-row>
-                    <el-row>
-                        <div v-for="(item, index) in attachDocs.cause" :key="item.id">
-                            <el-link :key="index" icon="el-icon-document" :href="item.url">{{ item.name }}</el-link>
-                        </div>
-                    </el-row>
+                    <div slot="header">AttachFiles</div>
+                    <attachment :Id="form.a3Id" :category="category.Cause"></attachment>
+
                 </el-card>
             </el-col>
 
@@ -182,7 +147,7 @@
             <el-col :xs="24" :sm="24" :lg="16">
                 <el-card class="card">
                     <div slot="header">CorrectiveAction</div>
-                    <el-table ref="action2" :data="list.CorrectiveAction" size="small" style="width: 90%;">
+                    <el-table ref="CorrectiveAction" :data="list.CorrectiveAction" size="small" style="width: 90%;">
                         <el-table-column label="Action" prop="name" />
                         <el-table-column label="Responsibility" prop="responsibility" />
                         <el-table-column label="Status" prop="status" :formatter="statusFormate" />
@@ -193,18 +158,9 @@
             </el-col>
             <el-col :xs="24" :sm="24" :lg="8">
                 <el-card class="card">
-                    <div slot="header">attachFiles</div>
-                    <el-row>
-                        <div v-for="(item, index) in attachFiles.CorrectiveAction" :key="item.id">
-                            <el-image :key="index" style="width: 100px; height: 100px" :src="item.url"
-                                fit="fill"></el-image>
-                        </div>
-                    </el-row>
-                    <el-row>
-                        <div v-for="(item, index) in attachDocs.CorrectiveAction" :key="item.id">
-                            <el-link :key="index" icon="el-icon-document" :href="item.url">{{ item.name }}</el-link>
-                        </div>
-                    </el-row>
+                    <div slot="header">AttachFiles</div>
+                    <attachment :Id="form.a3Id" :category="category.CorrectiveAction"></attachment>
+
                 </el-card>
             </el-col>
 
@@ -214,10 +170,12 @@
 </template>
 
 <script>
+import Attachment from './../../components/attachment/index.vue'
 import baseService from "@/api/base";
 const defaultForm = {
     id: '',
-    a3Id: '15d7702c-385a-b8de-ecf3-3a0de7b020fa',
+    // a3Id: '15d7702c-385a-b8de-ecf3-3a0de7b020fa',
+    a3Id: null,
     name: null,
     organizationId: null,
     userId: null,
@@ -230,45 +188,85 @@ const defaultForm = {
 };
 export default {
     name: 'A3Details',
+    components: { Attachment },
     data() {
         return {
             form: Object.assign({}, defaultForm),
             generalData: [],
             list: {
-                issue: [],
-                containmentAction: [],
-                RiskAssessment: [],
-                cause: [],
-                CorrectiveAction: []
+                // Issue: [],
+                // ContainmentAction: [],
+                // RiskAssessment: [],
+                // Cause: [],
+                // CorrectiveAction: []
             },
-            attachFiles: {},
-            attachDocs: {},
-            category: ['issue', 'containmentAction', 'cause', 'RiskAssessment', 'CorrectiveAction'],
-            issueTypes: [],
-            causeTypes: [],
-            causeStatus: [],
-            levelOptions: [],
-            url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'
+            category: {
+                Issue: 'Issue',
+                ContainmentAction: 'ContainmentAction',
+                Cause: 'Cause',
+                RiskAssessment: 'RiskAssessment',
+                CorrectiveAction: 'CorrectiveAction'
+            },
+            dicts: {
+                // issueType: [],
+                // process: [],
+                // defectSource: [],
+                // actionType: [],
+                // status: [],
+                // levels: [],
+                // causeTypes: [],
+                // causeStatus: [],
+            },
+            dictType: {
+                issueType: 'issueType',
+                process: 'process',
+                defectSource: 'defectSource',
+                actionType: 'actionType',
+                status: 'status',
+                levels: 'levels',
+                causeTypes: 'causeTypes',
+                causeStatus: 'causeStatus',
+            },
+            noTreeOrgs: []
         }
     },
     created() {
-        this.getActionTypes();
-        this.getIssueTypeList();
-        this.getLevelOptions();
-        this.getCauseTypes();
-        this.getStatus();
+        this.setA3Id();
+        this.fetchDicts();
+        this.getOrgNodes();
         setTimeout(() => {
             this.fetchData();
         }, 500);
     },
     methods: {
+        handleJumpTo(row) {
+            let location = {
+                path: '/A3',
+                query: { a3Id: row.id }
+            }
+            this.$router.push(location)
+        },
+        setA3Id() {
+            this.form.a3Id = this.$route.params.id;
+            // console.log('接收到参数id:' + id)
+            // this.form.a3Id = id ? id : this.defaultForm.a3Id;
+        },
+        fetchDicts() {
+            Object.keys(this.dictType).forEach(
+                key => {
+                    this.getDicts(this.dictType[key])
+                }
+            );
+        },
         fetchData() {
             this.getGeneral();
-            this.category.forEach(item => {
-                this.getList(item);
-                this.getImages(item);
-                this.getDocs(item);
-            })
+            Object.keys(this.category).forEach
+                (key => {
+                    this.getList(this.category[key]);
+                    // this.getImages(item);
+                    // this.getDocs(item);
+                });
+
         },
         getGeneral() {
             this.$axios.gets('api/AAA/A3/' + this.form.a3Id).then(response => {
@@ -278,103 +276,76 @@ export default {
             });
 
         },
-        getImages(category) {
-            this.$axios.gets('api/AAA/A3Attachment', { a3id: this.form.a3Id, category: category, type: 'image' }).then(response => {
-                //强制页面刷新数据
-                // this.list[category] = response.items;
-                this.$set(this.attachFiles, category, response.items);
-            });
-        },
-        getDocs(category) {
-            this.$axios.gets('api/AAA/A3Attachment', { a3id: this.form.a3Id, category: category, type: 'doc' }).then(response => {
-                //强制页面刷新数据
-                // this.list[category] = response.items;
-                this.$set(this.attachDocs, category, response.items);
-            });
-        },
+
         getList(category) {
-            this.$axios.gets('api/AAA/' + category, { a3id: this.form.a3Id }).then(response => {
+            this.$axios.gets('api/AAA/' + category, { a3Id: this.form.a3Id }).then(response => {
                 //强制页面刷新数据
                 // this.list[category] = response.items;
                 this.$set(this.list, category, response.items);
             });
         },
-        getIssueTypeList() {
-            if (this.issueTypes.length > 0) {
-                return;
-            }
-            baseService.fetchOptionsList({ name: 'issueType' }).then(
+        getDicts(type) {
+            baseService.fetchOptionsList({ name: type }).then(
                 res => {
-                    this.issueTypes = res.data.items;
+                    this.$set(this.dicts, type, res.data.items);
                 }
             )
         },
+        getOrgNodes() {
+            baseService.fetchOrgNodesList().then((response) => {
+                this.noTreeOrgs = response.data.items;
+                // this.loadTree(response.data);
+            });
+        },
         issueTypeFormatter(row, column, val, index) {
             // this.getIssueTypeList();
-            let temp = this.issueTypes.find(item => item.value === val);
+            let temp = this.dicts[this.dictType.issueType].find(item => item.value === val);
             // console.log(temp);
             return temp ? temp.label : 'undefined';
             // return this.commonFormatter(this.issueTypes, val);
         },
-        getActionTypes() {
-            baseService.fetchOptionsList({ name: 'actionType' }).then(
-                res => {
-                    this.actionTypes = res.data.items;
-                }
-            )
-        },
+
         actionTypeFormate(row, column, val, index) {
-            let temp = this.actionTypes.find(item => item.value === val);
+            let temp = this.dicts.actionType.find(item => item.value === val);
             // console.log(temp);
             return temp ? temp.label : 'undefined';
         },
-        getCauseTypes() {
-            if (this.causeTypes.length > 0) {
-                return;
-            }
-            baseService.fetchOptionsList({ name: 'causeTypes' }).then(
-                res => {
-                    this.causeTypes = res.data.items;
-                }
-            )
 
-        },
         typeFormate(row, column, val, index) {
-            let temp = this.causeTypes.find(item => item.value === val);
-            // console.log(temp);
-            return temp ? temp.label : 'undefined';
-        },
-        getStatus() {
-            baseService.fetchOptionsList({ name: 'status' }).then(
-                res => {
-                    this.status = res.data.items;
-                })
-        },
-        statusFormate(row, column, val, index) {
-            let temp = this.status.find(item => item.value === val);
-            // console.log(temp);
-            return temp ? temp.label : 'undefined';
-        },
-        getLevelOptions() {
-            // if (Object.keys(levelOptions).length > 0) {
-            //   return;
-            // }
-            //减少访问后台次数
-            if (this.levelOptions.length > 0) {
-                return;
-            }
-            baseService.fetchOptionsList({ name: 'levels' }).then(
-                res => {
-                    this.levelOptions = res.data.items;
-                }
-            )
-        },
-        levelFormate(row, column, val, index) {
-            let temp = this.levelOptions.find(item => item.value === val);
+            let temp = this.dicts.causeTypes.find(item => item.value === val);
             // console.log(temp);
             return temp ? temp.label : 'undefined';
         },
 
+        statusFormate(row, column, val, index) {
+            let temp = this.dicts.status.find(item => item.value === val);
+            // console.log(temp);
+            return temp ? temp.label : 'undefined';
+        },
+
+        levelFormate(row, column, val, index) {
+            let temp = this.dicts.levels.find(item => item.value === val);
+            // console.log(temp);
+            return temp ? temp.label : 'undefined';
+        },
+        processFormatter(row, column, val, index) {
+            // this.getProcessList();
+            let temp = this.dicts.process.find(item => item.value === val);
+            return temp ? temp.label : undefined;
+            // return commonFormatter(this.processList, val);
+        },
+        defectSourceFormatter(row, column, val, index) {
+            // return this.defectSources.find(item => item.value === val).label;
+            // this.getDefectSource();
+            let temp = this.dicts.defectSource.find(item => item.value === val);
+            return temp ? temp.label : undefined;
+            // return temp.label;
+            // return commonFormatter(this.defectSources, val);
+        },
+        locationFormatter(row, column, val, index) {
+            let temp = this.noTreeOrgs.find(item => item.id === val);
+            return temp ? temp.label : undefined;
+        },
 
     }
 }
@@ -387,31 +358,10 @@ export default {
     position: relative;
 
 
-
-    .chart-wrapper {}
-
     .card {
         background: rgb(255, 255, 255);
         padding: 16px 16px 0;
         margin-bottom: 16px;
-    }
-
-    .images {
-        width: 100px;
-        height: 100px
-    }
-
-    .attachment-doc {
-        // color: #606266;
-        // display: block;
-        // margin-right: 40px;
-        // overflow: hidden;
-        // padding-left: 4px;
-        // text-overflow: ellipsis;
-        // -webkit-transition: color .3s;
-        // transition: color .3s;
-        // white-space: nowrap;
-        margin-top: 10px;
     }
 }
 </style>

@@ -3,6 +3,7 @@ using AAA.A3Management.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -48,6 +49,22 @@ namespace AAA.Controllers
         public Task<A3Dto> Get(Guid id)
         {
             return _A3AppService.Get(id);
+        }
+
+        [HttpGet]
+        [Route("Export/{id}")]
+        public async Task<ActionResult> Export(Guid id)
+        {
+
+            string path = await _A3AppService.Export(id);
+
+
+            var bytes = System.IO.File.ReadAllBytes(path);
+
+            return new FileContentResult(bytes, "application/octet-stream")
+            {
+                FileDownloadName = Path.GetFileName(path)
+            };
         }
 
         [HttpGet]

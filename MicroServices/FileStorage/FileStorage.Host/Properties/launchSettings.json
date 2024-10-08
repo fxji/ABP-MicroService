@@ -17,7 +17,7 @@
     },
     "FileStorage.Host": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "applicationUrl": "http://localhost:59958",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

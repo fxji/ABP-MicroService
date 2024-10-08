@@ -48,10 +48,7 @@
         <el-button size="small" v-loading="formLoading" type="primary" @click="save">确认</el-button>
       </div>
     </el-dialog>
-    <el-row>
-
-      <el-col :xs="14" :sm="15" :md="15" :lg="16" :xl="16">
-        <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
+    <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
           @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
           <el-table-column type="selection" width="44px"></el-table-column>
           <el-table-column label="activities" prop="name" align="center" />
@@ -65,23 +62,12 @@
             </template>
           </el-table-column> -->
         </el-table>
-      </el-col>
-      <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
-        <el-row style="margin-top: 10px;">
-          <image-upload :category="attachmentTypes.ContainmentAction" :a3Id="a3Id"></image-upload>
-        </el-row>
-        <el-row style="margin-top: 10px;">
-          <docs-upload :category="attachmentTypes.ContainmentAction" :a3Id="a3Id"></docs-upload>
-        </el-row>
-      </el-col>
-    </el-row>
+   
     <pagination v-show="totalCount > 10" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
       @pagination="getList" />
   </div>
 </template>
 <script>
-import ImageUpload from '@/views/components/image-upload'
-import DocsUpload from '@/views/components/docs-upload'
 import Pagination from "@/components/Pagination";
 import permission from "@/directive/permission/index.js";
 
@@ -103,8 +89,6 @@ export default {
   name: 'ContainmentAction',
   components: {
     Pagination,
-    ImageUpload,
-    DocsUpload,
     UserSelect
   },
   directives: {
@@ -147,13 +131,6 @@ export default {
       isEdit: false,
       actionTypes: [],
       status: [],
-      attachmentTypes: {
-        ContainmentAction: 'ContainmentAction',
-        RiskAssesment: 'RiskAssesment',
-        Issue: 'Issue',
-        Cause: 'Cause',
-        CorrectiveAction: 'CorrectiveAction',       
-      },
     }
   },
   computed: {},

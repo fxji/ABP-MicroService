@@ -47,20 +47,20 @@ export const constantRoutes = [
       }
     ]
   },
+
   {
-    path: "/demo",
+    path: "/a3/:id",
     component: Layout,
-    redirect: "/demo",
+    redirect: "/a3/:id",
     children: [
       {
-        path: "/demo",
+        path: "/a3/:id",
         component: () => import("@/views/a3/details/index"),
         hidden: true,
         name: "details",
         meta: {
-          title: "dashboard",
-          icon: "dashboard",
-          affix: true
+          title: "details",
+          icon: "details",
         }
       }
     ]

@@ -1,20 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\common.props" />
+	<Import Project="..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>AAA</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<RootNamespace>AAA</RootNamespace>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
-    <PackageReference Include="Volo.Abp.AutoMapper" Version="7.0.1" />
-    <PackageReference Include="Volo.Abp.Ddd.Application" Version="7.0.1" />
-    <ProjectReference Include="..\..\..\Email\src\Email.Application.Contracts\Email.Application.Contracts.csproj" />
-    <ProjectReference Include="..\..\..\Email\src\Email.Application\Email.Application.csproj" />
-    <ProjectReference Include="..\AAA.Application.Contracts\AAA.Application.Contracts.csproj" />
-    <ProjectReference Include="..\AAA.Domain\AAA.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
+		<PackageReference Include="Volo.Abp.AutoMapper" Version="7.0.1" />
+		<PackageReference Include="Volo.Abp.Ddd.Application" Version="7.0.1" />
+		<ProjectReference Include="..\..\..\..\BaseService\BaseService.Application.Contracts\BaseService.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\..\..\BaseService\BaseService.HttpApi.Client\BaseService.HttpApi.Client.csproj" />
+		
+
+		<ProjectReference Include="..\AAA.Application.Contracts\AAA.Application.Contracts.csproj" />
+		<ProjectReference Include="..\AAA.Domain\AAA.Domain.csproj" />
+
+		<ProjectReference Include="..\..\..\Email\src\Email.Application.Contracts\Email.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\..\Email\src\Email.Application\Email.Application.csproj" />
+
+		<ProjectReference Include="..\..\..\DataExport\src\DataExport.Application.Contracts\DataExport.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\..\DataExport\src\DataExport.Application\DataExport.Application.csproj" />
+	</ItemGroup>
 
 </Project>

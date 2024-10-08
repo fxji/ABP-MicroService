@@ -12,6 +12,7 @@
       </el-button>
       <el-button slot="reference" class="filter-item" type="danger" icon="el-icon-delete" size="mini"
         @click="handleDelete()">删除</el-button>
+      
     </div>
     <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()" :title="formTitle">
       <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="100px">
@@ -46,10 +47,11 @@
       </div>
     </el-dialog>
 
-    <el-row>
-      <el-col :xs="14" :sm="15" :md="15" :lg="16" :xl="16">
+    <el-dialog :visible.sync="dialogUploadVisible" :close-on-click-modal="false" @close="cancel()" :title="formTitle">
+      <file-upload></file-upload>
+    </el-dialog>
 
-        <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
+    <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="width: 90%;"
           @sort-change="sortChange" @selection-change="handleSelectionChange" @row-click="handleRowClick">
           <el-table-column type="selection" width="44px"></el-table-column>
           <el-table-column label="Type" prop="type" align="center" :formatter="typeFormate" />
@@ -61,25 +63,14 @@
               <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
               <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
             </template>
-          </el-table-column> -->
+</el-table-column> -->
         </el-table>
-      </el-col>
-      <el-col :xs="10" :sm="9" :md="9" :lg="8" :xl="8">
-        <el-row style="margin-top: 10px;">
-          <image-upload :category="attachmentTypes.Cause" :a3Id="a3Id"></image-upload>
-        </el-row>
-        <el-row style="margin-top: 10px;">
-          <docs-upload :category="attachmentTypes.Cause" :a3Id="a3Id"></docs-upload>
-        </el-row>
-      </el-col>
-    </el-row>
+    
     <pagination v-show="totalCount > 10" :total="totalCount" :page.sync="page" :limit.sync="listQuery.MaxResultCount"
       @pagination="getList" />
   </div>
 </template>
 <script>
-import ImageUpload from '@/views/components/image-upload'
-import DocsUpload from '@/views/components/docs-upload'
 import Pagination from "@/components/Pagination";
 import permission from "@/directive/permission/index.js";
 import baseService from '@/api/base'
@@ -97,8 +88,6 @@ export default {
   name: 'Cause',
   components: {
     Pagination,
-    ImageUpload,
-    DocsUpload
   },
   directives: {
     permission
@@ -130,19 +119,14 @@ export default {
       },
       page: 1,
       dialogFormVisible: false,
+      dialogUploadVisible: false,
       multipleSelection: [],
       formTitle: '',
       isEdit: false,
       status: [],
       causeStatus: [],
       causeTypes: [],
-      attachmentTypes: {
-        ContainmentAction: 'ContainmentAction',
-        RiskAssesment: 'RiskAssesment',
-        Issue: 'Issue',
-        Cause: 'Cause',
-        CorrectiveAction: 'CorrectiveAction',        
-      },
+     
     }
   },
   computed: {},
@@ -299,6 +283,7 @@ export default {
         }
       }
     },
+    
     save() {
       this.$refs.form.validate(valid => {
         if (valid) {

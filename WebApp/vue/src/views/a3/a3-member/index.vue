@@ -319,7 +319,6 @@ export default {
         this.noTreeOrgs = response.data.items;
         this.loadTree(response.data);
       });
-      console.log(this.orgs)
     },
 
     loadOrgs({ action, parentNode, callback }) {

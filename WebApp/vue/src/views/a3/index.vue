@@ -5,15 +5,16 @@
         <!-- 搜索 -->
         <el-input v-model="listQuery.Filter" clearable size="mini" placeholder="输入Title..." style="width: 120px"
           class="filter-item" @keyup.enter.native="handleFilter" />
+        <el-input v-model="listQuery.a3Id" clearable size="mini" placeholder="输入ID..." style="width: 120px"
+          class="filter-item" @keyup.enter.native="handleFilter" />
         <el-select class="filter-item" style="width: 120px" size="mini" v-model="listQuery.process"
           placeholder="请选择Process of Production issue" clearable @visible-change="handleProcessVisibleChange">
           <el-option v-for="item in processList" :key="item.id" :label="item.label" :value="item.value"></el-option>
         </el-select>
-        <tree-select class="filter-item" size="mini" style="width: 120px" :multiple="false"
-          v-model="listQuery.organizationId" :load-options="loadOrgs" :options="orgs"
-          placeholder="请选择Location/Plant/Site" />
-        <el-select class="filter-item" size="mini" style="width: 120px" v-model="listQuery.source" placeholder="请选择Source Of Defect" clearable
-          @visible-change="handleDefectSourceVisibleChange" >
+        <tree-select :multiple="false" class="filter-item" style="width: 120px" v-model="listQuery.organizationId"
+          :load-options="loadOrgs" :options="orgs" placeholder="请选择department" />
+        <el-select class="filter-item" size="mini" style="width: 120px" v-model="listQuery.source"
+          placeholder="请选择Source Of Defect" clearable @visible-change="handleDefectSourceVisibleChange">
           <el-option v-for="item in defectSources" :key="item.id" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
@@ -113,6 +114,8 @@
           <template slot-scope="{ row }">
             <el-button type="success" size="mini" circle @click="handleShare(row)" icon="el-icon-message" />
             <el-button type="success" size="mini" circle @click="handleConfirm(row)" icon="el-icon-edit-outline" />
+            <el-button type="success" size="mini" circle @click="handleToDetails(row)" icon="el-icon-search" />
+            <el-button type="success" size="mini" circle @click="handleExport(row)" icon="el-icon-open" />
           </template>
         </el-table-column>
       </el-table>
@@ -126,19 +129,45 @@
               <A3Member ref="A3MembersDetails" :a3Id="selectA3Id"></A3Member>
             </el-tab-pane>
             <el-tab-pane label="Issues" :lazy="true">
-              <Issue ref="IssueDetails" :a3Id="selectA3Id"></Issue>
+              <el-col :xs="24" :sm="24" :md="15" :lg="16" :xl="16">
+                <Issue ref="IssueDetails" :a3Id="selectA3Id"></Issue>
+              </el-col>
+              <el-col :xs="24" :sm="24" :md="9" :lg="8" :xl="8">
+                <file-upload :Id="selectA3Id" :category="attachmentTypes.Issue"></file-upload>
+              </el-col>
             </el-tab-pane>
             <el-tab-pane label="ContainmentAction" :lazy="true">
-              <ContainmentAction ref="ContainmentActionDetails" :a3Id="selectA3Id"></ContainmentAction>
+              <el-col :xs="24" :sm="24" :md="15" :lg="16" :xl="16">
+                <ContainmentAction ref="ContainmentActionDetails" :a3Id="selectA3Id"></ContainmentAction>
+              </el-col>
+              <el-col :xs="24" :sm="24" :md="9" :lg="8" :xl="8">
+                <file-upload :Id="selectA3Id" :category="attachmentTypes.ContainmentAction"></file-upload>
+              </el-col>
             </el-tab-pane>
             <el-tab-pane label="RiskAssesment" :lazy="true">
-              <RiskAssesment ref="RiskAssesmentDetails" :a3Id="selectA3Id"></RiskAssesment>
+              <el-col :xs="24" :sm="24" :md="15" :lg="16" :xl="16">
+                <RiskAssesment ref="RiskAssesmentDetails" :a3Id="selectA3Id"></RiskAssesment>
+              </el-col>
+              <el-col :xs="24" :sm="24" :md="9" :lg="8" :xl="8">
+                <file-upload :Id="selectA3Id" :category="attachmentTypes.RiskAssesment"></file-upload>
+              </el-col>
             </el-tab-pane>
             <el-tab-pane label="Cause" :lazy="true">
-              <Cause ref="CauseDetails" :a3Id="selectA3Id"></Cause>
+              <el-col :xs="24" :sm="24" :md="15" :lg="16" :xl="16">
+                <Cause ref="CauseDetails" :a3Id="selectA3Id"></Cause>
+              </el-col>
+              <el-col :xs="24" :sm="24" :md="9" :lg="8" :xl="8">
+                <file-upload :Id="selectA3Id" :category="attachmentTypes.Cause"></file-upload>
+              </el-col>
+
             </el-tab-pane>
             <el-tab-pane label="CorrectiveAction" :lazy="true">
-              <CorrectiveAction ref="CorrectiveActionDetails" :a3Id="selectA3Id"></CorrectiveAction>
+              <el-col :xs="24" :sm="24" :md="15" :lg="16" :xl="16">
+                <CorrectiveAction ref="CorrectiveActionDetails" :a3Id="selectA3Id"></CorrectiveAction>
+              </el-col>
+              <el-col :xs="24" :sm="24" :md="9" :lg="8" :xl="8">
+                <file-upload :Id="selectA3Id" :category="attachmentTypes.CorrectiveAction"></file-upload>
+              </el-col>
             </el-tab-pane>
             <el-tab-pane label="ConfirmInfo" :lazy="true">
               <ConfirmInfo ref="ConfirmInfoDetails" :a3Id="selectA3Id"></ConfirmInfo>
@@ -157,7 +186,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="handleShareCancel()">取 消</el-button>
-          <el-button type="primary" v-loading="formLoading" @click="handleShareSave()">确 定</el-button>
+          <el-button type="primary" v-loading="shareLoading" @click="handleShareSave()">确 定</el-button>
         </div>
       </el-dialog>
 
@@ -171,11 +200,12 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="handleConfirmCancel()">取 消</el-button>
-          <el-button type="primary" v-loading="formLoading" @click="handleConfirmSave()">确 定</el-button>
+          <el-button type="primary" v-loading="confirmLoading" @click="handleConfirmSave()">确 定</el-button>
         </div>
       </el-dialog>
     </el-card>
   </div>
+
 </template>
 <script>
 
@@ -199,6 +229,7 @@ import baseService from "@/api/base";
 import a3Service from "@/api/aaa";
 import config from "../../../static/config";
 import { eventBus } from "@/utils/event-bus"
+import FileUpload from '@/views/components/file-upload'
 
 const defaultForm = {
   id: null,
@@ -233,7 +264,8 @@ export default {
     CorrectiveAction,
     UserSelect,
     A3Member,
-    ConfirmInfo
+    ConfirmInfo,
+    FileUpload
   },
   directives: {
     permission
@@ -282,6 +314,8 @@ export default {
       totalCount: 0,
       listLoading: true,
       formLoading: false,
+      shareLoading: false,
+      confirmLoading: false,
       listQuery: {
         a3Id: '',
         Filter: "",
@@ -309,23 +343,19 @@ export default {
       isEdit: false,
       storageApi: config.storage.ip,
       selectA3Id: "",
-      // attachments: {
-      //   ContainmentAction: [],
-      //   RiskAssesment: [],
-      //   Issue: [],
-      //   Cause: [],
-      //   CorrectiveAction: [],
-      //   IssueDocs: [],
-      //   ContainmentActionDocs: [],
-      //   RiskAssesmentDocs: [],
-      //   CauseDocs: [],
-      //   CorrectiveActionDocs: [],
-      // },
+      attachmentTypes: {
+        ContainmentAction: 'ContainmentAction',
+        RiskAssesment: 'RiskAssesment',
+        Issue: 'Issue',
+        Cause: 'Cause',
+        CorrectiveAction: 'CorrectiveAction',
+      },
     };
   },
   computed: {},
   watch: {},
   created() {
+    this.dealRoute();
     this.getProcessList();
     this.getDefectSource();
     this.getOrgNodes();
@@ -337,6 +367,12 @@ export default {
 
   },
   methods: {
+    dealRoute() {
+      // this.listQuery.a3Id=this.$route.query.a3id
+      if (this.$route.query) {
+        this.listQuery.a3Id = this.$route.query.a3id
+      }
+    },
     getList() {
       this.listLoading = true;
       this.listQuery.SkipCount = (this.page - 1) * this.listQuery.MaxResultCount;
@@ -443,7 +479,6 @@ export default {
         this.noTreeOrgs = response.data.items;
         this.loadTree(response.data);
       });
-      console.log(this.orgs)
     },
     //TODO：引用公共方法
     loadTree(data) {
@@ -650,14 +685,14 @@ export default {
       //TODO: valid
       this.$refs.sharedForm.validate(valid => {
         if (valid) {
-          this.formLoading = true;
+          this.shareLoading = true;
           let data = {
             emailAddress: this.shareInfo.emailAddress.join(','),
             A3: this.shareInfo.A3,
           }
           a3Service.share(data)
             .then(response => {
-              this.formLoading = false;
+              this.shareLoading = false;
               this.$notify({
                 title: "成功",
                 message: "分享成功",
@@ -668,7 +703,7 @@ export default {
               // this.getList();
             })
             .catch(() => {
-              this.formLoading = false;
+              this.shareLoading = false;
             });
           // this.shareInfo= Object.assign({}, {emailAddress:''});
           // this.dialogShareVisible = false;
@@ -684,12 +719,41 @@ export default {
       this.dialogConfirmVisible = true;
       this.confirmInfo.a3Id = row.id;
     },
+    handleToDetails(row) {
+      this.$router.push('/A3/' + row.id)
+    },
+    handleExport(row) {
+      this.listLoading = true;
+
+
+
+      this.$axios
+            .downLoad("/api/AAA/A3/export/" + row.id)
+        .then(response => {
+          this.listLoading = false;
+          this.$notify({
+            title: "成功",
+            message: "导出成功",
+            type: "success",
+            duration: 2000
+          });
+          let url = window.URL.createObjectURL(new Blob([response.data]));
+          let link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', row.id + '.xlsx');
+          document.body.appendChild(link);
+          link.click();
+        })
+        .catch(() => {
+          this.listLoading = false;
+        });
+    },
     handleConfirmSave() {
       this.$refs.confirmForm.validate(valid => {
         if (valid) {
-          this.formLoading = true;
+          this.confirmLoading = true;
           this.$axios.posts('api/AAA/ConfirmInfo/data-post', this.confirmInfo).then(response => {
-            this.formLoading = false;
+            this.confirmLoading = false;
             this.$notify({
               title: '成功',
               message: '更新成功',
@@ -698,7 +762,7 @@ export default {
             });
             this.dialogFormVisible = false;
           }).catch(() => {
-            this.formLoading = false;
+            this.confirmLoading = false;
           });
           this.dialogConfirmVisible = false;
         }
@@ -747,10 +811,11 @@ export default {
 // search 为父元素的calss
 
 .head-container {
-  display: flex;
+  // display: flex;
   // align-items: center;
-  justify-content: start;
-  gap: 0.5rem;
+  // justify-content: start;
+  // // align-items: center;
+  // gap: 0.5rem;
 
   ::v-deep .vue-treeselect {
     // width: 198px;
