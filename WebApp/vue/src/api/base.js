@@ -1,40 +1,22 @@
-import request from "@/utils/request";
+import request from "@/axios";
 
 var service = {
   fetchOrgNodesList(query) {
-    return request({
-      url: `/api/base/orgs/loadNodes`,
-      method: "get",
-      params: query
-    });
+    return request.gets(`/api/base/orgs/loadNodes`, query);
   },
 
   fetchOrgs(id) {
-    return request({
-      url: `/api/base/orgs/loadOrgs/${id}`,
-      method: "get",
-    });
+    return request.gets(`/api/base/orgs/loadOrgs/${id}`);
   },
   fetchUser(id) {
-    return request({
-      url: `/api/base/user/${id}`,
-      method: "get"
-    });
+    return request.gets(`/api/base/user/${id}`);
   },
 
   fetchOptionsList(query) {
-    return request({
-      url: `/api/base/dictDetails/list`,
-      method: "get",
-      params: query
-    });
+    return request.gets(`/api/base/dictDetails/list`, query);
   },
   fetchUserList(query) {
-    return request({
-      url: `/api/base/user`,
-      method: "get",
-      params: query
-    });
+    return request.gets(`/api/base/user`, query);
   }
 };
 

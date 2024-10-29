@@ -112,10 +112,10 @@
         <el-table-column label="StartDate" prop="startDate" align="center" />
         <el-table-column label="操作" align="center">
           <template slot-scope="{ row }">
-            <el-button type="success" size="mini" circle @click="handleShare(row)" icon="el-icon-message" />
+            <el-button type="success" size="mini" circle @click="handleShare(row)" icon="el-icon-share" />
             <el-button type="success" size="mini" circle @click="handleConfirm(row)" icon="el-icon-edit-outline" />
-            <el-button type="success" size="mini" circle @click="handleToDetails(row)" icon="el-icon-search" />
-            <el-button type="success" size="mini" circle @click="handleExport(row)" icon="el-icon-open" />
+            <!-- <el-button type="success" size="mini" circle @click="handleToDetails(row)" icon="el-icon-search" /> -->
+            <el-button type="success" size="mini" circle @click="handleExport(row)" icon="el-icon-download" />
           </template>
         </el-table-column>
       </el-table>
@@ -377,8 +377,8 @@ export default {
       this.listLoading = true;
       this.listQuery.SkipCount = (this.page - 1) * this.listQuery.MaxResultCount;
       a3Service.fetchList(this.listQuery).then(response => {
-        this.list = response.data.items;
-        this.totalCount = response.data.totalCount;
+        this.list = response.items;
+        this.totalCount = response.totalCount;
         this.listLoading = false;
       });
     },
@@ -388,7 +388,7 @@ export default {
       }
       baseService.fetchOptionsList({ name: 'process' }).then(
         res => {
-          this.processList = res.data.items;
+          this.processList = res.items;
         }
       )
     },
@@ -398,7 +398,7 @@ export default {
       }
       baseService.fetchOptionsList({ name: 'defectSource' }).then(
         res => {
-          this.defectSources = res.data.items;
+          this.defectSources = res.items;
         }
       )
     },
@@ -407,8 +407,8 @@ export default {
     //     this.userLoadMoreConfig.offset = (this.userLoadMoreConfig.page - 1) * this.userLoadMoreConfig.limit;
     //     baseService.fetchUserList(this.userLoadMoreConfig).then(
     //       res => {
-    //         let temp = res.data.items;
-    //         this.userLoadMoreConfig.total = res.data.totalCount;
+    //         let temp = res.items;
+    //         this.userLoadMoreConfig.total = res.totalCount;
 
     //         this.users = this.userLoadMoreConfig.page == 1 ? temp : [...this.users, ...temp];
     //         this.userLoadMoreConfig.page++;
@@ -476,8 +476,8 @@ export default {
         return;
       }
       baseService.fetchOrgNodesList().then((response) => {
-        this.noTreeOrgs = response.data.items;
-        this.loadTree(response.data);
+        this.noTreeOrgs = response.items;
+        this.loadTree(response);
       });
     },
     //TODO：引用公共方法
@@ -510,7 +510,7 @@ export default {
       this.getOrgNodes();
 
       a3Service.fetchSingle(id).then(response => {
-        this.form = response.data;
+        this.form = response;
       });
     },
     loadOrgs({ action, parentNode, callback }) {

@@ -162,7 +162,7 @@ export default {
       }
       baseService.fetchOptionsList({ name: 'status' }).then(
         res => {
-          this.status = res.data.items;
+          this.status = res.items;
         }
       )
     },

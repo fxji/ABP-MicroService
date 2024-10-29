@@ -316,8 +316,8 @@ export default {
         return;
       }
       baseService.fetchOrgNodesList().then((response) => {
-        this.noTreeOrgs = response.data.items;
-        this.loadTree(response.data);
+        this.noTreeOrgs = response.items;
+        this.loadTree(response);
       });
     },
 

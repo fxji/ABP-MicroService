@@ -271,7 +271,7 @@ export default {
         getGeneral() {
             this.$axios.gets('api/AAA/A3/' + this.form.a3Id).then(response => {
                 this.generalData = [response];
-                // console.log(response.data);
+                // console.log(response);
                 // console.log(this.generalData);
             });
 
@@ -287,14 +287,14 @@ export default {
         getDicts(type) {
             baseService.fetchOptionsList({ name: type }).then(
                 res => {
-                    this.$set(this.dicts, type, res.data.items);
+                    this.$set(this.dicts, type, res.items);
                 }
             )
         },
         getOrgNodes() {
             baseService.fetchOrgNodesList().then((response) => {
-                this.noTreeOrgs = response.data.items;
-                // this.loadTree(response.data);
+                this.noTreeOrgs = response.items;
+                // this.loadTree(response);
             });
         },
         issueTypeFormatter(row, column, val, index) {

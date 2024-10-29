@@ -69,8 +69,8 @@ export default {
                 this.userLoadMoreConfig.offset = (this.userLoadMoreConfig.page - 1) * this.userLoadMoreConfig.limit;
                 baseService.fetchUserList(this.userLoadMoreConfig).then(
                     res => {
-                        let temp = res.data.items;
-                        this.userLoadMoreConfig.total = res.data.totalCount;
+                        let temp = res.items;
+                        this.userLoadMoreConfig.total = res.totalCount;
 
                         this.users = this.userLoadMoreConfig.page == 1 ? temp : [...this.users, ...temp];
                         this.userLoadMoreConfig.page++;

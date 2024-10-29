@@ -1,41 +1,20 @@
-import request from "@/utils/request";
+import request from "@/axios";
 
 var service = {
   fetchList(query) {
-    return request({
-      url: `/api/AAA/A3`,
-      method: "get",
-      params: query
-    });
+    return request.gets(`/api/AAA/A3`, query);
   },
   fetchSingle(id) {
-    return request({
-      url: `/api/AAA/A3/${id}`,
-      method: "get"
-    });
+    return request.gets(`/api/AAA/A3/${id}`);
   },
   post(data) {
-    return request({
-      url: `/api/AAA/A3/data-post`,
-      method: "post",
-      data,
-    //   headers: {
-    //     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8;"
-    //   }
-    });
+    return request.posts(`/api/AAA/A3/data-post`, data);
   },
   share(data) {
-    return request({
-      url: `/api/AAA/A3/share`,
-      method: "post",
-      data,    
-    });
+    return request.posts(`/api/AAA/A3/share`, data);
   },
   export(id) {
-    return request({
-      url: `/api/AAA/A3/export/${id}`,
-      method: "get",
-    });
+    return request.gets(`/api/AAA/A3/export/${id}`);
   }
 };
 

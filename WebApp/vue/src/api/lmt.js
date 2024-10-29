@@ -1,19 +1,11 @@
-import request from "@/utils/request";
+import request from "@/axios";
 
 var service = {
   fetchProjectList(query) {
-    return request({
-      url: `/api/launch/pjtname/`,
-      method: "get",
-      params: query
-    });
+    return request.gets(`/api/launch/pjtname/`, query);
   },
   fetchCustomerList(query) {
-    return request({
-      url: `/api/pj/ctmGp/`,
-      method: "get",
-      params: query
-    });
-  },
+    return request.gets(`/api/pj/ctmGp/`, query);
+  }
 };
 export default service;

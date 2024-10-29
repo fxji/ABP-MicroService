@@ -165,7 +165,7 @@ export default {
       }
       baseService.fetchOptionsList({ name: 'levels' }).then(
         res => {
-          this.levelOptions = res.data.items;
+          this.levelOptions = res.items;
         }
       )
     },

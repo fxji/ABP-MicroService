@@ -167,7 +167,7 @@ export default {
       }
       baseService.fetchOptionsList({ name: 'status' }).then(
         res => {
-          this.status = res.data.items;
+          this.status = res.items;
         }
       )
     },
@@ -177,7 +177,7 @@ export default {
       }
       baseService.fetchOptionsList({ name: 'causeTypes' }).then(
         res => {
-          this.causeTypes = res.data.items;
+          this.causeTypes = res.items;
         }
       )
 
@@ -188,7 +188,7 @@ export default {
       }
       baseService.fetchOptionsList({ name: 'causeStatus' }).then(
         res => {
-          this.causeStatus = res.data.items;
+          this.causeStatus = res.items;
         }
       )
 

@@ -164,14 +164,14 @@ export default {
     getActionTypes() {
       baseService.fetchOptionsList({ name: 'actionType' }).then(
         res => {
-          this.actionTypes = res.data.items;
+          this.actionTypes = res.items;
         }
       )
     },
     getStatus() {
       baseService.fetchOptionsList({ name: 'status' }).then(
         res => {
-          this.status = res.data.items;
+          this.status = res.items;
         })
     },
 

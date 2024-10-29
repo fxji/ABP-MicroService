@@ -220,7 +220,7 @@ export default {
       }
       baseService.fetchOptionsList({ name: 'issueType' }).then(
         res => {
-          this.issueTypes = res.data.items;
+          this.issueTypes = res.items;
         }
       )
     },
@@ -231,8 +231,8 @@ export default {
 
         lmtService.fetchProjectList(this.loadMoreConfig).then(
           res => {
-            let temp = res.data.data.results;
-            this.loadMoreTotalCount = res.data.data.count;
+            let temp = res.results;
+            this.loadMoreTotalCount = res.count;
             //合并新增
             this.projects = this.loadMorePage == 1 ? temp : [...this.projects, ...temp]
             this.loadMorePage++;
@@ -268,8 +268,8 @@ export default {
         this.customerLoadMoreConfig.offset = (this.customerLoadMoreConfig.page - 1) * this.customerLoadMoreConfig.limit;
         lmtService.fetchCustomerList(this.customerLoadMoreConfig).then(
           res => {
-            let temp = res.data.data.results;
-            this.customerLoadMoreConfig.total = res.data.data.count;
+            let temp = res.results;
+            this.customerLoadMoreConfig.total = res.count;
 
             this.customers = this.customerLoadMoreConfig.page == 1 ? temp : [...this.customers, ...temp];
             this.customerLoadMoreConfig.page++;
