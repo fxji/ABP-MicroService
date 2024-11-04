@@ -1,4 +1,7 @@
-using Microsoft.EntityFrameworkCore;
+using AAA.ConfirmInfoManagement.Dto;
+using AAA.Models;
+using AAA.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +10,6 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using AAA.ConfirmInfoManagement.Dto;
-using AAA.Models;
-using Microsoft.AspNetCore.Authorization;
-using AAA.Permissions;
 
 namespace AAA.ConfirmInfoManagement
 {
@@ -39,11 +38,11 @@ namespace AAA.ConfirmInfoManagement
         {
             //var query = (await _repository.GetQueryableAsync()).WhereIf(!string.IsNullOrWhiteSpace(input.Filter), a => a.Name.Contains(input.Filter));
             var query = (await _repository.GetQueryableAsync()).WhereIf(input.a3Id != Guid.Empty, a => a.A3Id == input.a3Id);
-            var totalCount = await query.CountAsync();
-            var items = await query.OrderBy(input.Sorting ?? "Id")
+            var totalCount = query.Count();
+            var items = query.OrderBy(input.Sorting ?? "Id")
                        .Skip(input.SkipCount)
                        .Take(input.MaxResultCount)
-                       .ToListAsync();
+                       .ToList();
 
             var dto = ObjectMapper.Map<List<ConfirmInfo>, List<ConfirmInfoDto>>(items);
             return new PagedResultDto<ConfirmInfoDto>(totalCount, dto);

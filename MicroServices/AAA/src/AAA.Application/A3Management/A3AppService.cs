@@ -1,4 +1,8 @@
-using Microsoft.EntityFrameworkCore;
+using AAA.A3Management.Dto;
+using AAA.Models;
+using AAA.Permissions;
+using Email.SendEmail;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +11,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using AAA.A3Management.Dto;
-using AAA.Models;
-using Microsoft.AspNetCore.Authorization;
-using AAA.Permissions;
-using Email.SendEmail;
 using Volo.Abp.EventBus.Distributed;
-using Microsoft.AspNetCore.Mvc;
-using System.IO;
 
 
 namespace AAA.A3Management
@@ -80,11 +77,11 @@ namespace AAA.A3Management
                 .WhereIf(!(input.OrganizationId == Guid.Empty || input.OrganizationId is null), a => a.OrganizationId.Equals(input.OrganizationId))
                 ;
 
-            var totalCount = await query.CountAsync();
-            var items = await query.OrderBy(input.Sorting ?? "Id")
+            var totalCount = query.Count();
+            var items =  query.OrderBy(input.Sorting ?? "Id")
                        .Skip(input.SkipCount)
                        .Take(input.MaxResultCount)
-                       .ToListAsync();
+                       .ToList();
 
             var dto = ObjectMapper.Map<List<A3>, List<A3Dto>>(items);
             return new PagedResultDto<A3Dto>(totalCount, dto);

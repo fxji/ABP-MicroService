@@ -1,4 +1,7 @@
-using Microsoft.EntityFrameworkCore;
+using AAA.A3MemberManagement.Dto;
+using AAA.Models;
+using AAA.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +10,6 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using AAA.A3MemberManagement.Dto;
-using AAA.Models;
-using Microsoft.AspNetCore.Authorization;
-using AAA.Permissions;
 
 namespace AAA.A3MemberManagement
 {
@@ -39,11 +38,11 @@ namespace AAA.A3MemberManagement
         {
             var query = (await _repository.GetQueryableAsync()).WhereIf(input.a3Id != Guid.Empty, a => a.A3Id == input.a3Id).WhereIf(!string.IsNullOrWhiteSpace(input.Filter), a => a.UserId.Contains(input.Filter));
 
-            var totalCount = await query.CountAsync();
-            var items = await query.OrderBy(input.Sorting ?? "Id")
+            var totalCount = query.Count();
+            var items = query.OrderBy(input.Sorting ?? "Id")
                        .Skip(input.SkipCount)
                        .Take(input.MaxResultCount)
-                       .ToListAsync();
+                       .ToList();
 
             var dto = ObjectMapper.Map<List<A3Member>, List<A3MemberDto>>(items);
             return new PagedResultDto<A3MemberDto>(totalCount, dto);
