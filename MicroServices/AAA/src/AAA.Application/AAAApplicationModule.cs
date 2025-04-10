@@ -1,12 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AAA.A3Management;
+using BaseService;
+using BaseService.HttpApi.Client;
+using DataExport;
+using Email;
+using FileStore;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
-using Volo.Abp.Application;
-using Email;
-using DataExport;
-using BaseService.HttpApi.Client;
-using BaseService;
-using AAA.A3Management;
 
 namespace AAA;
 
@@ -15,10 +16,18 @@ namespace AAA;
     typeof(AAAApplicationContractsModule),
     typeof(AbpDddApplicationModule),
     typeof(AbpAutoMapperModule),
+
     typeof(EmailApplicationModule),
+    typeof(EmailApplicationContractsModule),
+
     typeof(DataExportApplicationModule),
+    typeof(DataExportApplicationContractsModule),
+
     typeof(BaseServiceHttpApiClientModule),
-    typeof(BaseServiceApplicationContractsModule)
+    //typeof(BaseServiceApplicationContractsModule)    ,
+    typeof(FileStoreHttpApiClientModule)
+    ,
+    typeof(FileStoreApplicationContractsModule)
     )]
 public class AAAApplicationModule : AbpModule
 {

@@ -8,8 +8,7 @@ namespace AAA.CauseManagement
     {
         public CauseAutoMapperProfile()
         {
-            CreateMap<Cause, CauseDto>();
-            CreateMap<CreateOrUpdateCauseDto, Cause>();
+           
         }
     }
 }

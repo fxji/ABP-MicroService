@@ -6,7 +6,7 @@ using Volo.Abp.Application.Services;
 
 namespace Email.SendEmail
 {
-    public interface ISendEmailAppService
+    public interface ISendEmailAppService : IApplicationService
     {
          Task Send(EmailSendingArgs email);
     }

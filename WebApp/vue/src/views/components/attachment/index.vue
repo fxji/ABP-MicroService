@@ -7,7 +7,7 @@
         <template v-for="item in attachments">
 
             <div v-if="!isImage(item)" :key="item.id" style="margin-top: 6px;">
-                <el-link :key="item.id" icon="el-icon-document" :href="item.url">{{ item.name
+                <el-link :key="item.id" icon="el-icon-document" :href="storageApi + item.url">{{ item.name
                     }}</el-link>
             </div>
         </template>

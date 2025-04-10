@@ -8,8 +8,7 @@ namespace AAA.A3MemberManagement
     {
         public A3MemberAutoMapperProfile()
         {
-            CreateMap<A3Member, A3MemberDto>();
-            CreateMap<CreateOrUpdateA3MemberDto, A3Member>();
+            
         }
     }
 }

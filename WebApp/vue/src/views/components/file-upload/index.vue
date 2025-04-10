@@ -12,7 +12,7 @@
                 </el-form-item>
                 <el-form-item label="上传">
                     <el-upload ref="upload" :limit="1" :before-upload="beforeUpload" :auto-upload="false"
-                        :on-success="handleSuccess" :on-error="handleError"
+                        :on-progress="handleFileName" :on-success="handleSuccess" :on-error="handleError"
                         :action="storageApi + '/api/storage/file/upload?name=' + form.name">
                         <div class="upload">
                             <i class="el-icon-upload" /> 添加文件
@@ -91,6 +91,9 @@ export default {
             })
 
         },
+        handleFileName(event, file, fileList) {
+            this.form.name = file.name;
+        },
         beforeUpload(file) {
             let isLt2M = true;
             isLt2M = file.size / 1024 / 1024 < 100;
@@ -106,7 +109,7 @@ export default {
 
             let item = {
                 A3Id: this.Id,
-                Type: response.url.includes('/Image/') ? 'Image' : 'File',
+                Type: response.type == 0 ? "Image" : "File",
                 category: this.category,
                 Name: response.name,
                 Url: response.url

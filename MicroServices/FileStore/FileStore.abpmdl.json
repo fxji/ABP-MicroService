@@ -1,0 +1,79 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "FileStore.Domain.Shared": {
+      "path": "src/FileStore.Domain.Shared/FileStore.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "FileStore.Domain": {
+      "path": "src/FileStore.Domain/FileStore.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "FileStore.Application.Contracts": {
+      "path": "src/FileStore.Application.Contracts/FileStore.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "FileStore.Application": {
+      "path": "src/FileStore.Application/FileStore.Application.abppkg.json",
+      "folder": "src"
+    },
+    "FileStore.EntityFrameworkCore": {
+      "path": "src/FileStore.EntityFrameworkCore/FileStore.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "FileStore.MongoDB": {
+      "path": "src/FileStore.MongoDB/FileStore.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "FileStore.HttpApi": {
+      "path": "src/FileStore.HttpApi/FileStore.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "FileStore.HttpApi.Client": {
+      "path": "src/FileStore.HttpApi.Client/FileStore.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "FileStore.TestBase": {
+      "path": "test/FileStore.TestBase/FileStore.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "FileStore.EntityFrameworkCore.Tests": {
+      "path": "test/FileStore.EntityFrameworkCore.Tests/FileStore.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "FileStore.MongoDB.Tests": {
+      "path": "test/FileStore.MongoDB.Tests/FileStore.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "FileStore.Domain.Tests": {
+      "path": "test/FileStore.Domain.Tests/FileStore.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "FileStore.Application.Tests": {
+      "path": "test/FileStore.Application.Tests/FileStore.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "FileStore.HttpApi.Host": {
+      "path": "host/FileStore.HttpApi.Host/FileStore.HttpApi.Host.abppkg.json",
+      "folder": "host"
+    },
+    "FileStore.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/FileStore.HttpApi.Client.ConsoleTestApp/FileStore.HttpApi.Client.ConsoleTestApp.abppkg.json",
+      "folder": "test"
+    },
+    "FileStore.AuthServer": {
+      "path": "host/FileStore.AuthServer/FileStore.AuthServer.abppkg.json",
+      "folder": "host"
+    },
+    "FileStore.Host.Shared": {
+      "path": "host/FileStore.Host.Shared/FileStore.Host.Shared.abppkg.json",
+      "folder": "host"
+    }
+  }
+}

@@ -10,18 +10,18 @@
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.AutoMapper" Version="7.0.1" />
 		<PackageReference Include="Volo.Abp.Ddd.Application" Version="7.0.1" />
-		<ProjectReference Include="..\..\..\..\BaseService\BaseService.Application.Contracts\BaseService.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\..\..\BaseService\BaseService.HttpApi.Client\BaseService.HttpApi.Client.csproj" />
+		<ProjectReference Include="..\..\..\DataExport\src\DataExport.Application\DataExport.Application.csproj" />
+		<ProjectReference Include="..\..\..\Email\src\Email.Application\Email.Application.csproj" />
+		<ProjectReference Include="..\..\..\FileStore\src\FileStore.HttpApi.Client\FileStore.HttpApi.Client.csproj" />
 		
 
 		<ProjectReference Include="..\AAA.Application.Contracts\AAA.Application.Contracts.csproj" />
 		<ProjectReference Include="..\AAA.Domain\AAA.Domain.csproj" />
 
 		<ProjectReference Include="..\..\..\Email\src\Email.Application.Contracts\Email.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\..\Email\src\Email.Application\Email.Application.csproj" />
 
 		<ProjectReference Include="..\..\..\DataExport\src\DataExport.Application.Contracts\DataExport.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\..\DataExport\src\DataExport.Application\DataExport.Application.csproj" />
 	</ItemGroup>
 
 </Project>

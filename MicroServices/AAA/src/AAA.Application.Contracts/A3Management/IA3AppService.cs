@@ -11,7 +11,7 @@ namespace AAA.A3Management
     {
         Task<A3Dto> Get(Guid id);
 
-        Task<string> Export(Guid id);
+        Task<ExportDto> Export(Guid id);
 
 
         Task<PagedResultDto<A3Dto>> GetAll(GetA3InputDto input);

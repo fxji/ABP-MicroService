@@ -1,8 +1,10 @@
-﻿using DataExport.Settings;
+﻿using DataExport.ExportManagement;
+using DataExport.Settings;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.Util;
 using NPOI.XSSF.UserModel;
 using SixLabors.ImageSharp;
 using System;
@@ -11,7 +13,7 @@ using System.IO;
 
 namespace DataExport.Export
 {
-    public class ExportAppService : DataExportAppService
+    public class ExportAppService : DataExportAppService, IExportAppService
     {
         private const int HEADERROWINDEX = 1;
         private const int FOOTERROWINDEX = 16;
@@ -61,7 +63,38 @@ namespace DataExport.Export
 
         }
 
-        public void OpenExcel()
+        //TODO:make it as async
+        public byte[] Export(InputExDto input)
+        {
+            OpenExcel();
+
+            WriteHeader(input.A3.Id.ToString(), input.A3.Name);
+
+            input.Issues.ForEach(item => WriteIssue(item.Name, item.CustomerGroup, item.Description, item.OccurrenceDate, item.Project, item.Type, item.Rate, item.SymptomDescription, item.GoalStatement));
+            input.ContainmentActions.ForEach(item => WriteContainmentAction(item.Type, item.Name, item.Responsibility, item.Status));
+            input.RiskAssessments.ForEach(item => WriteRisk(item.Name, item.Description, item.Probability, item.Functionally, item.SafetyRelevant));
+            input.Causes.ForEach(item => WriteCause(item.Type, item.Name, item.Status));
+            input.CorrectiveActions.ForEach(item => WriteCorrectiveActions(item.Name, item.Responsibility, item.DueDate, item.Status));
+            input.ConfirmInfos.ForEach(item => WriteReadAcross(item.Comments, item.CreatorId.Value.ToString(), item.CreationTime));
+
+            input.A3Attachments.ForEach(item => WriteImage(item.Content));
+
+            WriteFooter(input.A3.OrganizationId.ToString(), input.A3.UserEmail, input.A3.StartDate);
+
+            return ConvertToBytes();
+        }
+
+        private byte[] ConvertToBytes()
+        {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            workbook.Write(bos);
+            return bos.ToByteArray();
+            //throw new NotImplementedException();
+        }
+
+
+
+        private void OpenExcel()
         {
             //"D:\\Projects\\ABP-MicroService\\MicroServices\\AAA\\host\\AAA.HttpApi.Host/"
             var loadPath = _environment.ContentRootPath + "\\" + _exportOptions.TemplatePath + "\\";//>>>相当于HttpContext.Current.Server.MapPath("") 
@@ -70,12 +103,12 @@ namespace DataExport.Export
             this.workbook = new XSSFWorkbook(excelStream);
         }
 
-        public void WriteToSheet(string name)
+        private void WriteToSheet(string name)
         {
 
         }
 
-        public void WriteHeader(string id, string title)
+        private void WriteHeader(string id, string title)
         {
             var sheet = this.workbook.GetSheet(SHEET_SUMMARY);
             //id
@@ -85,7 +118,7 @@ namespace DataExport.Export
             sheet.GetRow(HEADERROWINDEX).GetCell(y).SetCellValue(title);
         }
 
-        public void WriteIssue(string name,
+        private void WriteIssue(string name,
             string customerGroup,
             string description,
             DateTime occurrenceDate,
@@ -113,101 +146,103 @@ namespace DataExport.Export
             //throw new NotImplementedException();
         }
 
-        public string Export(string excelName)
-        {
-            return WriteToFile(excelName, this.workbook);
-        }
+        //[Obsolete("use Export(InputExDto input) instead")]
+        //public string Export(string excelName)
+        //{
+        //    return WriteToFile(excelName, this.workbook);
+        //}
 
 
-        public bool Export(out string resultMsg, out string excelFilePath)
-        {
-            var result = true;
-            excelFilePath = "";
-            resultMsg = "successfully";
-            //Excel导出名称
-            string excelName = "A3-Report";
-            try
-            {
-                //excelFilePath = CreateNew(excelName);
+        //[Obsolete("use Export(InputExDto input) instead")]
+        //private bool Export(out string resultMsg, out string excelFilePath)
+        //{
+        //    var result = true;
+        //    excelFilePath = "";
+        //    resultMsg = "successfully";
+        //    //Excel导出名称
+        //    string excelName = "A3-Report";
+        //    try
+        //    {
+        //        //excelFilePath = CreateNew(excelName);
 
-                excelFilePath = CreateFromTemplate(excelName);
-            }
-            catch (Exception e)
-            {
-                result = false;
-                resultMsg = e.Message;
-            }
-            return result;
-        }
+        //        excelFilePath = CreateFromTemplate(excelName);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        result = false;
+        //        resultMsg = e.Message;
+        //    }
+        //    return result;
+        //}
 
-        private string CreateFromTemplate(string excelName)
-        {
+        //private string CreateFromTemplate(string excelName)
+        //{
 
-            string excelFilePath;
-            var loadPath = _environment.ContentRootPath + "/";//>>>相当于HttpContext.Current.Server.MapPath("") 
-                                                              ////首先读取Excel文件
-                                                              //var excelStream = File.Open(@loadPath + "template.xlsx", FileMode.Open, FileAccess.Read);
-                                                              //var workbook = new XSSFWorkbook(excelStream);
-
-
-
-
-            excelFilePath = WriteToFile(excelName, workbook);
-
-            return excelFilePath;
-        }
-
-        private int LoadImage(Stream file, XSSFWorkbook workbook)
-        {
-            //FileStream fileStream = new FileStream("path", FileMode.Create, FileAccess.Write);
-            //file.CopyTo(fileStream);
-            byte[] buffer = new byte[file.Length];
-            file.Read(buffer, 0, (int)file.Length);
-            return workbook.AddPicture(buffer, PictureType.PNG);
-        }
-
-        private string WriteToFile(string excelName, XSSFWorkbook workbook)
-        {
-            string excelFilePath;
-            string folder = DateTime.Now.ToString("yyyyMMdd");
+        //    string excelFilePath;
+        //    var loadPath = _environment.ContentRootPath + "/";//>>>相当于HttpContext.Current.Server.MapPath("") 
+        //                                                      ////首先读取Excel文件
+        //                                                      //var excelStream = File.Open(@loadPath + "template.xlsx", FileMode.Open, FileAccess.Read);
+        //                                                      //var workbook = new XSSFWorkbook(excelStream);
 
 
-            //保存文件到静态资源文件夹中（wwwroot）,使用绝对路径
-            var uploadPath = _environment.ContentRootPath + "/UploadFile/" + folder + "/";
-
-            //excel保存文件名
-            string excelFileName = excelName + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
-
-            //创建目录文件夹
-            if (!Directory.Exists(uploadPath))
-            {
-                Directory.CreateDirectory(uploadPath);
-            }
-
-            //Excel的路径及名称
-            string excelPath = uploadPath + excelFileName;
-
-            //使用FileStream文件流来写入数据（传入参数为：文件所在路径，对文件的操作方式，对文件内数据的操作）
-            var fileStream = new FileStream(excelPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-
-            //向Excel文件对象写入文件流，生成Excel文件
-            workbook.Write(fileStream);
 
 
-            //关闭文件流
-            fileStream.Close();
+        //    excelFilePath = WriteToFile(excelName, workbook);
 
-            //释放流所占用的资源
-            fileStream.Dispose();
+        //    return excelFilePath;
+        //}
 
-            //excel文件保存的相对路径，提供前端下载
-            var relativePositioning = "/UploadFile/" + folder + "/" + excelFileName;
+        //private int LoadImage(Stream file, XSSFWorkbook workbook)
+        //{
+        //    //FileStream fileStream = new FileStream("path", FileMode.Create, FileAccess.Write);
+        //    //file.CopyTo(fileStream);
+        //    byte[] buffer = new byte[file.Length];
+        //    file.Read(buffer, 0, (int)file.Length);
+        //    return workbook.AddPicture(buffer, PictureType.PNG);
+        //}
 
-            excelFilePath = relativePositioning;
-            return excelPath;
-        }
+        //private string WriteToFile(string excelName, XSSFWorkbook workbook)
+        //{
+        //    string excelFilePath;
+        //    string folder = DateTime.Now.ToString("yyyyMMdd");
 
-        public void WriteRisk(string name, string description, string probability, string functionally, bool safetyRelevant)
+
+        //    //保存文件到静态资源文件夹中（wwwroot）,使用绝对路径
+        //    var uploadPath = _environment.ContentRootPath + "/UploadFile/" + folder + "/";
+
+        //    //excel保存文件名
+        //    string excelFileName = excelName + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+
+        //    //创建目录文件夹
+        //    if (!Directory.Exists(uploadPath))
+        //    {
+        //        Directory.CreateDirectory(uploadPath);
+        //    }
+
+        //    //Excel的路径及名称
+        //    string excelPath = uploadPath + excelFileName;
+
+        //    //使用FileStream文件流来写入数据（传入参数为：文件所在路径，对文件的操作方式，对文件内数据的操作）
+        //    var fileStream = new FileStream(excelPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+        //    //向Excel文件对象写入文件流，生成Excel文件
+        //    workbook.Write(fileStream);
+
+
+        //    //关闭文件流
+        //    fileStream.Close();
+
+        //    //释放流所占用的资源
+        //    fileStream.Dispose();
+
+        //    //excel文件保存的相对路径，提供前端下载
+        //    var relativePositioning = "/UploadFile/" + folder + "/" + excelFileName;
+
+        //    excelFilePath = relativePositioning;
+        //    return excelPath;
+        //}
+
+        private void WriteRisk(string name, string description, string probability, string functionally, bool safetyRelevant)
         {
             var sheet = this.workbook.GetSheet(SHEET_SUMMARY);
             var factorIndex = CellReference.ConvertColStringToIndex("A");
@@ -225,7 +260,7 @@ namespace DataExport.Export
             this._riskIndex++;
         }
 
-        public void WriteCause(string type, string name, string status)
+        private void WriteCause(string type, string name, string status)
         {
             var sheet = this.workbook.GetSheet(SHEET_SUMMARY);
             var typeIndex = CellReference.ConvertColStringToIndex("B");
@@ -240,7 +275,7 @@ namespace DataExport.Export
             this._causeIndex++;
         }
 
-        public void WriteContainmentAction(string type, string name, string responsibility, string status)
+        private void WriteContainmentAction(string type, string name, string responsibility, string status)
         {
             var columnIndex = -1;
             var rowIndex = 24;
@@ -286,7 +321,7 @@ namespace DataExport.Export
 
         }
 
-        public void WriteCorrectiveActions(string name, string responsibility, DateTime dueDate, string status)
+        private void WriteCorrectiveActions(string name, string responsibility, DateTime dueDate, string status)
         {
             var sheet = this.workbook.GetSheet(SHEET_SUMMARY);
 
@@ -305,7 +340,7 @@ namespace DataExport.Export
             this._correctActionIndex++;
         }
 
-        public void WriteReadAcross(string comments, string creatorId, DateTime creationTime)
+        private void WriteReadAcross(string comments, string creatorId, DateTime creationTime)
         {
             var sheet = this.workbook.GetSheet(SHEET_SUMMARY);
             var activitiesIndex = CellReference.ConvertColStringToIndex("O");
@@ -321,7 +356,7 @@ namespace DataExport.Export
             this._readAcrossIndex += 4;
         }
 
-        public void WriteFooter(string v, string userEmail, DateTime? startDate)
+        private void WriteFooter(string v, string userEmail, DateTime? startDate)
         {
             var sheet = this.workbook.GetSheet(SHEET_SUMMARY);
             var locationIndex = CellReference.ConvertColStringToIndex("C");
@@ -340,7 +375,7 @@ namespace DataExport.Export
             sheet.GetRow(_footerIndex + 1).GetCell(dateIndex).CellStyle = DateStyle;// (startDate.Value);
         }
 
-        public void WriteImage(byte[] imageBytes)
+        private void WriteImage(byte[] imageBytes)
         {
             //读取工作表，也就是Excel中的sheet，给工作表赋一个名称(Excel底部名称)
             var sheet = this.workbook.GetSheet(SHEET_SUMMARY);

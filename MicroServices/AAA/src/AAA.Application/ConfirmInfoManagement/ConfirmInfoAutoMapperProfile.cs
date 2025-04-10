@@ -8,8 +8,7 @@ namespace AAA.ConfirmInfoManagement
     {
         public ConfirmInfoAutoMapperProfile()
         {
-            CreateMap<ConfirmInfo, ConfirmInfoDto>();
-            CreateMap<CreateOrUpdateConfirmInfoDto, ConfirmInfo>();
+            
         }
     }
 }

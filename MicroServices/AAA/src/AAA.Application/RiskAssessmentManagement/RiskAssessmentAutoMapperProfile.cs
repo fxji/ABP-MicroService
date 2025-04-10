@@ -8,8 +8,7 @@ namespace AAA.RiskAssessmentManagement
     {
         public RiskAssessmentAutoMapperProfile()
         {
-            CreateMap<RiskAssessment, RiskAssessmentDto>();
-            CreateMap<CreateOrUpdateRiskAssessmentDto, RiskAssessment>();
+          
         }
     }
 }

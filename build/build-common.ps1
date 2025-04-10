@@ -9,7 +9,7 @@ $rootFolder = (Get-Item -Path "./" -Verbose).FullName
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../AuthServer/IdentityServer/AuthServer.Host/"; Service = "authserver" }
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../Gateways/WebAppGateway/WebAppGateway.Host/"; Service = "web-gateway" }
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../BaseService/BaseService.Host/"; Service = "base-service" }
-$serviceArray += [PsObject]@{ Path = $rootFolder + "/../MicroServices/FileStorage/FileStorage.Host/"; Service = "file-storage" }
+$serviceArray += [PsObject]@{ Path = $rootFolder + "/../MicroServices/FileStore/host/FileStore.HttpApi.Host/"; Service = "file-storage" }
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../MicroServices/Business/Business.Host/"; Service = "Business-service" }
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../MicroServices/AAA/host/AAA.HttpApi.Host/"; Service = "3a-report" }
 

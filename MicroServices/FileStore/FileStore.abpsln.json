@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "FileStore": {
+      "path": "FileStore.abpmdl.json"
+    }
+  }
+}

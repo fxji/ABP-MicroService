@@ -728,7 +728,7 @@ export default {
 
 
       this.$axios
-            .downLoad("/api/AAA/A3/export/" + row.id)
+        .gets("/api/AAA/A3/export/" + row.id)
         .then(response => {
           this.listLoading = false;
           this.$notify({
@@ -737,12 +737,16 @@ export default {
             type: "success",
             duration: 2000
           });
-          let url = window.URL.createObjectURL(new Blob([response.data]));
-          let link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', row.id + '.xlsx');
-          document.body.appendChild(link);
-          link.click();
+          // method one
+          // let url = window.URL.createObjectURL(new Blob([response.data]));
+          // let link = document.createElement('a');
+          // link.href = url;
+          // link.setAttribute('download', row.id + '.xlsx');
+          // document.body.appendChild(link);
+          // link.click();
+          //method two
+          console.log(response);
+          window.open(response.path);
         })
         .catch(() => {
           this.listLoading = false;

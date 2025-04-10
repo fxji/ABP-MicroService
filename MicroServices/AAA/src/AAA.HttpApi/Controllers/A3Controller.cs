@@ -53,18 +53,9 @@ namespace AAA.Controllers
 
         [HttpGet]
         [Route("Export/{id}")]
-        public async Task<ActionResult> Export(Guid id)
+        public async Task<ExportDto> Export(Guid id)
         {
-
-            string path = await _A3AppService.Export(id);
-
-
-            var bytes = System.IO.File.ReadAllBytes(path);
-
-            return new FileContentResult(bytes, "application/octet-stream")
-            {
-                FileDownloadName = Path.GetFileName(path)
-            };
+            return await _A3AppService.Export(id);
         }
 
         [HttpGet]

@@ -1,0 +1,31 @@
+using System;
+using System.Collections.Generic;
+using Volo.Abp.Application.Dtos;
+using System.ComponentModel.DataAnnotations;
+
+namespace DataExport.ExportManagement
+{
+    public class A3AttachmentExDto : EntityDto<Guid?>
+    {
+        
+        /// <summary>
+        /// 单行文本
+        /// </summary>
+        public Guid A3Id { get; set; }
+        
+        /// <summary>
+        /// 单行文本
+        /// </summary>
+        public string Name { get; set; }
+
+        public string Type { get; set; }
+
+        public string Category { get; set; }
+
+        /// <summary>
+        /// 单行文本
+        /// </summary>
+        public string Url { get; set; }
+        public byte[] Content { get; set; }
+    }
+}
