@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "avalon": {
+      "path": "avalon.abpmdl.json"
+    }
+  }
+}

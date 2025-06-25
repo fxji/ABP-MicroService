@@ -1,0 +1,79 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "avalon.Domain.Shared": {
+      "path": "src/avalon.Domain.Shared/avalon.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "avalon.Domain": {
+      "path": "src/avalon.Domain/avalon.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "avalon.Application.Contracts": {
+      "path": "src/avalon.Application.Contracts/avalon.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "avalon.Application": {
+      "path": "src/avalon.Application/avalon.Application.abppkg.json",
+      "folder": "src"
+    },
+    "avalon.EntityFrameworkCore": {
+      "path": "src/avalon.EntityFrameworkCore/avalon.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "avalon.MongoDB": {
+      "path": "src/avalon.MongoDB/avalon.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "avalon.HttpApi": {
+      "path": "src/avalon.HttpApi/avalon.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "avalon.HttpApi.Client": {
+      "path": "src/avalon.HttpApi.Client/avalon.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "avalon.TestBase": {
+      "path": "test/avalon.TestBase/avalon.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "avalon.EntityFrameworkCore.Tests": {
+      "path": "test/avalon.EntityFrameworkCore.Tests/avalon.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "avalon.MongoDB.Tests": {
+      "path": "test/avalon.MongoDB.Tests/avalon.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "avalon.Domain.Tests": {
+      "path": "test/avalon.Domain.Tests/avalon.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "avalon.Application.Tests": {
+      "path": "test/avalon.Application.Tests/avalon.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "avalon.HttpApi.Host": {
+      "path": "host/avalon.HttpApi.Host/avalon.HttpApi.Host.abppkg.json",
+      "folder": "host"
+    },
+    "avalon.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/avalon.HttpApi.Client.ConsoleTestApp/avalon.HttpApi.Client.ConsoleTestApp.abppkg.json",
+      "folder": "test"
+    },
+    "avalon.AuthServer": {
+      "path": "host/avalon.AuthServer/avalon.AuthServer.abppkg.json",
+      "folder": "host"
+    },
+    "avalon.Host.Shared": {
+      "path": "host/avalon.Host.Shared/avalon.Host.Shared.abppkg.json",
+      "folder": "host"
+    }
+  }
+}
