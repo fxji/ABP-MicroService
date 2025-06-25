@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "FeedBack": {
+      "path": "FeedBack.abpmdl.json"
+    }
+  }
+}

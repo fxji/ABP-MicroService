@@ -1,0 +1,79 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "FeedBack.Domain.Shared": {
+      "path": "src/FeedBack.Domain.Shared/FeedBack.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "FeedBack.Domain": {
+      "path": "src/FeedBack.Domain/FeedBack.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "FeedBack.Application.Contracts": {
+      "path": "src/FeedBack.Application.Contracts/FeedBack.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "FeedBack.Application": {
+      "path": "src/FeedBack.Application/FeedBack.Application.abppkg.json",
+      "folder": "src"
+    },
+    "FeedBack.EntityFrameworkCore": {
+      "path": "src/FeedBack.EntityFrameworkCore/FeedBack.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "FeedBack.MongoDB": {
+      "path": "src/FeedBack.MongoDB/FeedBack.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "FeedBack.HttpApi": {
+      "path": "src/FeedBack.HttpApi/FeedBack.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "FeedBack.HttpApi.Client": {
+      "path": "src/FeedBack.HttpApi.Client/FeedBack.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "FeedBack.TestBase": {
+      "path": "test/FeedBack.TestBase/FeedBack.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "FeedBack.EntityFrameworkCore.Tests": {
+      "path": "test/FeedBack.EntityFrameworkCore.Tests/FeedBack.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "FeedBack.MongoDB.Tests": {
+      "path": "test/FeedBack.MongoDB.Tests/FeedBack.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "FeedBack.Domain.Tests": {
+      "path": "test/FeedBack.Domain.Tests/FeedBack.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "FeedBack.Application.Tests": {
+      "path": "test/FeedBack.Application.Tests/FeedBack.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "FeedBack.HttpApi.Host": {
+      "path": "host/FeedBack.HttpApi.Host/FeedBack.HttpApi.Host.abppkg.json",
+      "folder": "host"
+    },
+    "FeedBack.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/FeedBack.HttpApi.Client.ConsoleTestApp/FeedBack.HttpApi.Client.ConsoleTestApp.abppkg.json",
+      "folder": "test"
+    },
+    "FeedBack.AuthServer": {
+      "path": "host/FeedBack.AuthServer/FeedBack.AuthServer.abppkg.json",
+      "folder": "host"
+    },
+    "FeedBack.Host.Shared": {
+      "path": "host/FeedBack.Host.Shared/FeedBack.Host.Shared.abppkg.json",
+      "folder": "host"
+    }
+  }
+}
