@@ -60,7 +60,10 @@ const actions = {
     return new Promise((resolve, reject) => {
       axiosMethods.instancePosts('/connect/token', data)
         .then(response => {
+          // console.log(response)
           commit('SET_TOKEN', response.access_token)
+          // console.log(response)
+          // console.log(response.access_token)
           setToken(response.access_token)
           resolve()
         }).catch((error) => {

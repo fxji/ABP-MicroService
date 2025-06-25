@@ -221,6 +221,7 @@ export default {
     })
   },
   instancePosts(url, params) { // 登录
+    // console.log(params)
     var instance = axios.create({
       baseURL: config.auth.ip
     })
@@ -228,9 +229,11 @@ export default {
       url = url + "?__tenant=" + params.tenant
     }
     var data = qs.stringify(params)
+    // console.log(data)
     return new Promise((resolve, reject) => {
       instance.post(url, data)
         .then(response => {
+          // console.log(response)
           resolve(response.data)
         }, err => {
           if (err.response.status === 400) {

@@ -81,4 +81,17 @@ export default [
       }
     }
   }
+  // userLogin({ commit }, data) { // 用户登录
+  //   return new Promise((resolve, reject) => {
+  //     axiosMethods.instancePosts('/connect/token', data)
+  //       .then(response => {
+  //         // console.log(response)
+  //         commit('SET_TOKEN', response.access_token)
+  //         setToken(response.access_token)
+  //         resolve()
+  //       }).catch((error) => {
+  //         reject(error)
+  //       })
+  //   })
+  // },
 ]

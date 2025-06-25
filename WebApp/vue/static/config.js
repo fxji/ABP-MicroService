@@ -23,7 +23,7 @@ export default {
   client: {
     client_id: 'basic-web',
     grant_type: 'password',
-    scope: 'WebAppGateway BaseService BusinessService AAAService PeBusiness'
+    scope: 'WebAppGateway BaseService BusinessService AAAService PeBusiness FeedBackService'
   }
 }
 // 测试环境

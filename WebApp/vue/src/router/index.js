@@ -49,23 +49,6 @@ export const constantRoutes = [
   },
 
   {
-    path: "/a3/:id",
-    component: Layout,
-    redirect: "/a3/:id",
-    children: [
-      {
-        path: "/a3/:id",
-        component: () => import("@/views/a3/details/index"),
-        hidden: true,
-        name: "details",
-        meta: {
-          title: "details",
-          icon: "details",
-        }
-      }
-    ]
-  },
-  {
     path: "/login",
     component: () => import("@/views/login/index"),
     hidden: true
@@ -98,6 +81,40 @@ export const constantRoutes = [
           title: "dashboard",
           icon: "dashboard",
           affix: true
+        }
+      }
+    ]
+  },
+  {
+    path: "/demo",
+    component: Layout,
+    name: "demo",
+    meta: {
+      title: "demo",
+      icon: "cloud",
+      isAffix: false
+    },
+    children: [
+      {
+        path: "/program",
+        component: () =>
+          import("@/views/edb-verification/program-info/index.vue"),
+        hidden: false,
+        name: "program-demo",
+        meta: {
+          title: "program-demo",
+          icon: "cascader"
+        }
+      },
+      {
+        path: "/shape",
+        component: () =>
+          import("@/views/edb-verification/shape-info/index.vue"),
+        hidden: false,
+        name: "shape-demo",
+        meta: {
+          title: "shape-demo",
+          icon: "cascader"
         }
       }
     ]

@@ -62,6 +62,7 @@ namespace AuthServer.Host
             await CreateApiScopeAsync("BusinessService");
             await CreateApiScopeAsync("AAAService");
             await CreateApiScopeAsync("PeBusiness");
+            await CreateApiScopeAsync("FeedBackService");
         }
 
         private async Task CreateApiResourcesAsync()
@@ -82,6 +83,7 @@ namespace AuthServer.Host
             await CreateApiResourceAsync("BusinessService", commonApiUserClaims);
             await CreateApiResourceAsync("AAAService", commonApiUserClaims);
             await CreateApiResourceAsync("PeBusiness", commonApiUserClaims);
+            await CreateApiResourceAsync("FeedBackService", commonApiUserClaims);
         }
 
         private async Task<ApiResource> CreateApiResourceAsync(string name, IEnumerable<string> claims)
@@ -148,12 +150,12 @@ namespace AuthServer.Host
                     requireClientSecret: false,
                     redirectUri: $"http://localhost:44307/authentication/login-callback",
                     postLogoutRedirectUri: $"http://localhost:44307/authentication/logout-callback",
-                    corsOrigins: new[] { "http://localhost:44307","http://10.221.128.160:44307" }
+                    corsOrigins: new[] { "http://localhost:44307", "http://10.221.128.160:44307" }
                 );
 
             await CreateClientAsync(
                 name: "basic-web",
-                scopes: commonScopes.Append("BaseService").Append("WebAppGateway").Append("BusinessService").Append("AAAService").Append("PeBusiness"),
+                scopes: commonScopes.Append("BaseService").Append("WebAppGateway").Append("BusinessService").Append("AAAService").Append("PeBusiness").Append("FeedBackService"),
                 grantTypes: new[] { "password" },
                 secret: null,
                 requireClientSecret: false
@@ -175,6 +177,15 @@ namespace AuthServer.Host
                 secret: "1q2w3e*".Sha256(),
                 permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
                     corsOrigins: new[] { "http://localhost:44308", "http://10.221.128.160:44308" }
+
+            );
+            await CreateClientAsync(
+                name: "feedback-app",
+                scopes: new[] { "InternalGateway", "BaseService", "FeedBackService" },
+                grantTypes: new[] { "client_credentials" },
+                secret: "1q2w3e*".Sha256(),
+                permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default, "FeedBack.ProgramInfo", "FeedBack.ShapeInfo" },
+                    corsOrigins: new[] { "http://localhost:44309", "http://10.221.128.160:44309" }
 
             );
             await CreateClientAsync(
@@ -203,6 +214,15 @@ namespace AuthServer.Host
                 redirectUri: "http://localhost:44308/swagger/oauth2-redirect.html",
                 permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
                 corsOrigins: new[] { "http://localhost:44308", "http://10.221.128.160:44308" }
+            );
+            await CreateClientAsync(
+                name: "FeedBack_Swagger",
+                scopes: commonScopes.Append("BaseService").Append("WebAppGateway").Append("FeedBackService"),
+                grantTypes: new[] { "authorization_code" },
+                secret: "1q2w3e*".Sha256(),
+                redirectUri: "http://localhost:44309/swagger/oauth2-redirect.html",
+                permissions: new[] { IdentityPermissions.Users.Default, IdentityPermissions.UserLookup.Default },
+                corsOrigins: new[] { "http://localhost:44309", "http://10.221.128.160:44309" }
             );
         }
 

@@ -5,12 +5,16 @@ import user from './user'
 import role from './role'
 import article from './article'
 import search from './remote-search'
+import demo from './demo'
+
+import qs from 'qs'
 
 const mocks = [
   ...user,
   ...role,
   ...article,
-  ...search
+  ...search,
+  ...demo
 ]
 
 // for front mock
@@ -36,10 +40,18 @@ export function mockXHR() {
       let result = null
       if (respond instanceof Function) {
         const { body, type, url } = options
+        // console.log('request invoke:' + url)
+        // console.log('request body:' + body)
+        // console.log('request type:' + type)
         // https://expressjs.com/en/4x/api.html#req
         result = respond({
           method: type,
-          body: JSON.parse(body),
+          /**
+           * //请求类型 | 解析方式
+          //application/json | 直接用对象（推荐）
+          //application/x-www-form-urlencoded | 用 qs.parse() 转换
+           */
+          body: qs.parse(body),
           query: param2Obj(url)
         })
       } else {
