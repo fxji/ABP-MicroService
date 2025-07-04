@@ -9,17 +9,16 @@ public class GamePlayer : Entity<Guid>
 
     public Role Role { get; set; }
 
-    public bool IsWinner { get; set; }
 
     public bool MistakeKilled { get; set; }
 
 
-    public GamePlayer(Guid id, Guid gameResultId, Guid playerId, Role role, bool isWinner): base(id)
+    public GamePlayer(Guid id, Guid gameResultId, Guid playerId, Role role, bool mistakeKilled) : base(id)
     {
         GameResultId = gameResultId;
         PlayerId = playerId;
         Role = role;
-        IsWinner = isWinner;
+        MistakeKilled = mistakeKilled;
     }
 
     public override object[] GetKeys()

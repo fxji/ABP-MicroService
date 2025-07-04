@@ -33,9 +33,6 @@ namespace avalon.Migrations
                     b.Property<Guid>("GameResultId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsWinner")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("MistakeKilled")
                         .HasColumnType("bit");
 

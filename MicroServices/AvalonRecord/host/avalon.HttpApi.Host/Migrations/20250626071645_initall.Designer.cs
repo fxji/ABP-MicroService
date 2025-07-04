@@ -13,8 +13,8 @@ using avalon.EntityFrameworkCore;
 namespace avalon.Migrations
 {
     [DbContext(typeof(avalonHttpApiHostMigrationsDbContext))]
-    [Migration("20250623024230_init")]
-    partial class init
+    [Migration("20250626071645_initall")]
+    partial class initall
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,9 +35,6 @@ namespace avalon.Migrations
 
                     b.Property<Guid>("GameResultId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsWinner")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("MistakeKilled")
                         .HasColumnType("bit");

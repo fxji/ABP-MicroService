@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace avalon.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class initall : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -62,7 +62,6 @@ namespace avalon.Migrations
                     GameResultId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PlayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
-                    IsWinner = table.Column<bool>(type: "bit", nullable: false),
                     MistakeKilled = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
