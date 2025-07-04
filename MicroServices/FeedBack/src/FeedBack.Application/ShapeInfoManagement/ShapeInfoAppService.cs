@@ -53,18 +53,19 @@ namespace Feedback.ShapeInfoManagement
                        .Take(input.MaxResultCount)
                        .ToList();
 
-            
+
 
             var programIds = items.Select(i => i.ProgramId).Distinct().ToList();
             var programs = await _programInfoRepository.GetListAsync(p => programIds.Contains(p.Id));
             var programDict = programs.ToDictionary(p => p.Id, p => p.Name);
 
-            var dto = items.Select(item => {
+            var dto = items.Select(item =>
+            {
                 var shapeInfoDto = ObjectMapper.Map<ShapeInfo, ShapeInfoDto>(item);
                 shapeInfoDto.ProgramName = programDict[item.ProgramId];
                 return shapeInfoDto;
             }).ToList();
-            
+
             return new PagedResultDto<ShapeInfoDto>(totalCount, dto);
         }
 
@@ -101,6 +102,26 @@ namespace Feedback.ShapeInfoManagement
                 .FirstOrDefault();
 
             return ObjectMapper.Map<ShapeInfo, ShapeInfoDto>(query);
+        }
+
+        public async Task<List<ShapeInfoDto>> BatchUpdateCauseAsync(BatchUpdateShapeInfoDto input)
+        {
+            var shapeInfos = await _repository.GetListAsync(a => input.Ids.Contains(a.Id));
+
+            foreach (var shapeInfo in shapeInfos)
+            {
+                shapeInfo.Cause = input.Cause;
+            }
+
+            await _repository.UpdateManyAsync(shapeInfos);
+
+            return shapeInfos
+        .Select(x => new ShapeInfoDto
+        {
+            Id = x.Id,
+            Cause = x.Cause
+            // ...其他字段
+        }).ToList();
         }
 
 

@@ -13,6 +13,9 @@ public class Worker : BackgroundService
 
     private readonly Channel<string> _fileQueue = Channel.CreateUnbounded<string>();
 
+    private readonly Dictionary<string, Timer> _debounceTimers = new();
+    private readonly TimeSpan _debounceDelay = TimeSpan.FromMinutes(5);
+
     private FileSystemWatcher _watcher = null!;
 
     private readonly IConfiguration _configuration;
@@ -75,20 +78,78 @@ public class Worker : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("Worker started.");
-
-
-        // 模式一，文件队列
-        while (await _fileQueue.Reader.WaitToReadAsync(stoppingToken))
+        await foreach (var filePath in _fileQueue.Reader.ReadAllAsync(stoppingToken))
         {
-            while (_fileQueue.Reader.TryRead(out var filePath))
+            // 去抖动逻辑：每个文件路径对应一个 Timer
+            if (_debounceTimers.TryGetValue(filePath, out var existingTimer))
             {
-                var result = await _logParser.ParseAsync(filePath, stoppingToken);
+                // 重置计时器（延迟再处理）
+                existingTimer.Change(_debounceDelay, Timeout.InfiniteTimeSpan);
+            }
+            else
+            {
+                // Create a new Timer for handling the file processing with a debounce delay
+                var timer = new Timer(_ =>
+                {
+                    // Use Task.Run to execute the file processing asynchronously
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            // Check if the file is ready for processing
+                            if (IsFileReady(filePath))
+                            {
+                                // Parse the log file asynchronously and get the result
+                                var result = await _logParser.ParseAsync(filePath, stoppingToken);
 
-                //TODO: 保存到数据库
+                                // Handle the parsed result, typically involves saving to the database
+                                await _dataHandler.Handle(result);
+                            }
+                            else
+                            {
+                                // If the file is still being used, requeue it for later processing
+                                _fileQueue.Writer.TryWrite(filePath);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log any exceptions that occur during the file processing
+                            _logger.LogError(ex, "Error parsing log file: {file}", filePath);
+                        }
+                        finally
+                        {
+                            // Ensure the debounce timer is removed from the dictionary once processing is complete
+                            _debounceTimers.Remove(filePath);
+                        }
 
-               await _dataHandler.Handle(result);
+                    });
+
+                }, null, _debounceDelay, Timeout.InfiniteTimeSpan);
+
+                // Store the timer in the dictionary with the file path as the key for future reference
+                _debounceTimers[filePath] = timer;
             }
         }
+        // 文件长时间写不完，被占用
+        // 模式一，文件队列
+        // while (await _fileQueue.Reader.WaitToReadAsync(stoppingToken))
+        // {
+        //     while (_fileQueue.Reader.TryRead(out var filePath))
+        //     {
+        //         try
+        //         {
+        //             var result = await _logParser.ParseAsync(filePath, stoppingToken);
+
+        //             //TODO: 保存到数据库
+
+        //             await _dataHandler.Handle(result);
+        //         }
+        //         catch (Exception ex)
+        //         {
+        //             _logger.LogError(ex, "Error parsing log file: {file}", filePath);
+        //         }
+        //     }
+        // }
 
         // // 模式二，定时扫描
         // while (!stoppingToken.IsCancellationRequested)
@@ -103,6 +164,19 @@ public class Worker : BackgroundService
 
 
 
+    }
+
+    private bool IsFileReady(string path)
+    {
+        try
+        {
+            using var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.None);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public override Task StopAsync(CancellationToken cancellationToken)

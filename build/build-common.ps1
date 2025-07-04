@@ -12,6 +12,9 @@ $serviceArray += [PsObject]@{ Path = $rootFolder + "/../BaseService/BaseService.
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../MicroServices/FileStore/host/FileStore.HttpApi.Host/"; Service = "file-storage" }
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../MicroServices/Business/Business.Host/"; Service = "Business-service" }
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../MicroServices/AAA/host/AAA.HttpApi.Host/"; Service = "3a-report" }
+$serviceArray += [PsObject]@{ Path = $rootFolder + "/../MicroServices/FeedBack/host/FeedBack.HttpApi.Host/"; Service = "feedback" }
+$serviceArray += [PsObject]@{ Path = $rootFolder + "/../MicroServices/FeedBack_Worker/src/FeedbackWorkerService/"; Service = "FeedBack_Worker" }
+$serviceArray += [PsObject]@{ Path = $rootFolder + "/../MicroServices/AvalonRecord/host/avalon.HttpApi.Host/"; Service = "AvalonRecord" }
 
 
 

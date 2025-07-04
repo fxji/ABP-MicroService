@@ -23,6 +23,14 @@ namespace Feedback.Controllers
             _ShapeInfoAppService = ShapeInfoAppService;
         }
 
+
+        [HttpPatch]
+        [Route("batch-update-cause")]
+        public Task<List<ShapeInfoDto>> BatchUpdateCauseAsync(BatchUpdateShapeInfoDto input)
+        {
+            return _ShapeInfoAppService.BatchUpdateCauseAsync(input);
+        }
+
         [HttpPost]
         [Route("data-post")]
         public Task<ShapeInfoDto> DataPost(CreateOrUpdateShapeInfoDto input)

@@ -17,6 +17,8 @@ namespace Feedback.ShapeInfoManagement
 
         Task Delete(List<Guid> ids);
 
-        Task <ShapeInfoDto> GetLatestByNameAndLine(GetShapeInfoInputDto input);
+        Task<ShapeInfoDto> GetLatestByNameAndLine(GetShapeInfoInputDto input);
+        
+        Task<List<ShapeInfoDto>> BatchUpdateCauseAsync(BatchUpdateShapeInfoDto input);
     }
 }

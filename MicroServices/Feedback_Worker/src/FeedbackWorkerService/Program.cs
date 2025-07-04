@@ -36,6 +36,9 @@ public class Program
         // This is useful when we're running the application in a console or terminal and want to
         // see the logs in real time.
         //
+        var logPath = Path.Combine(AppContext.BaseDirectory, "Logs", "logs.txt");
+        Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "Logs"));
+
         Log.Logger = new LoggerConfiguration()
 #if DEBUG
             .MinimumLevel.Debug()
@@ -44,7 +47,7 @@ public class Program
 #endif
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .Enrich.FromLogContext()
-            .WriteTo.Async(c => c.File("Logs/logs.txt"))
+            .WriteTo.Async(c => c.File(logPath))
             .WriteTo.Async(c => c.Console())
             .CreateLogger();
 
@@ -53,6 +56,24 @@ public class Program
             Log.Information("Starting console host.");
 
             var builder = Host.CreateDefaultBuilder(args);
+
+            // In development environment, run as a console application, in production environment, run as a Windows service
+            // if (Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") == "Development")
+            // {
+            //     Log.Information(Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT"));
+            // }
+            // else
+            // {
+            //     Log.Information(Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT"));
+            // }
+            /*
+            你可以两个同时调用，没问题，但实际生效取决于运行方式：
+            如果是手动运行 .exe ➜ UseConsoleLifetime 会生效（支持 Ctrl+C）
+            如果通过 sc start 启动服务 ➜ UseWindowsService 会生效（接收服务控制命令）
+            .NET 会自动判断当前是不是作为服务运行。
+            */
+            builder.UseConsoleLifetime();
+            builder.UseWindowsService();
 
             builder.ConfigureServices(services =>
              {
@@ -64,15 +85,7 @@ public class Program
                  });
              }).UseAutofac();
 
-            // In development environment, run as a console application, in production environment, run as a Windows service
-            if (Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") == "Development")
-            {
-                builder.UseConsoleLifetime();
-            }
-            else
-            {
-                builder.UseWindowsService();
-            }
+
 
             var host = builder.Build();
             await host.Services.GetRequiredService<IAbpApplicationWithExternalServiceProvider>().InitializeAsync(host.Services);

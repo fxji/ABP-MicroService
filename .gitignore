@@ -218,3 +218,5 @@ document/~$Problem Solving_ A3 Structure_Template_02_20230704.xlsx
 *.dll
 *.pdb
 /MicroServices/Feedback_Worker/src/FeedbackWorkerService/bin
+MicroServices/Feedback_Worker/src/FeedbackWorkerService/log.txt
+/MicroServices/Feedback_Worker/src/FeedbackWorkerService/bin

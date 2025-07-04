@@ -34,13 +34,20 @@ public static class FeedBackDbContextModelCreatingExtensions
         {
             b.ToTable(FeedBackDbProperties.DbTablePrefix + "ProgramInfo", FeedBackDbProperties.DbSchema);
             b.ConfigureByConvention();
-            
+
             // b.HasMany(ProgramInfo=>ProgramInfo.ShapeInfos).WithOne().HasForeignKey(qt => qt.ProgramId);
         });
 
         builder.Entity<ShapeInfo>(b =>
         {
             b.ToTable(FeedBackDbProperties.DbTablePrefix + "ShapeInfo", FeedBackDbProperties.DbSchema);
+            b.ConfigureByConvention();
+
+        });
+        
+        builder.Entity<LineInfo>(b =>
+        {
+            b.ToTable(FeedBackDbProperties.DbTablePrefix + "LineInfo", FeedBackDbProperties.DbSchema);
             b.ConfigureByConvention();
 
         });

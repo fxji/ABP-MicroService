@@ -6,8 +6,8 @@
         class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.Line" clearable size="small" placeholder="产线" style="width: 200px;"
         class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-date-picker size="small" v-model="listQuery.DateRange" type="daterange" range-separator="至" start-placeholder="开始日期"
-        end-placeholder="结束日期">
+      <el-date-picker size="small" v-model="listQuery.DateRange" type="daterange" range-separator="至"
+        start-placeholder="开始日期" end-placeholder="结束日期">
       </el-date-picker>
       <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="handleFilter">搜索
       </el-button>
@@ -75,7 +75,11 @@
                   {{ scope.row.goodWindows + scope.row.failureWindows + scope.row.slipWindows }}
                 </template>
               </el-table-column>
-              <el-table-column label="Cause" prop="cause" align="center" />
+              <el-table-column label="Cause" prop="cause" align="center">
+                <template slot-scope="scope">
+                  {{ getLabel(scope.row.cause) }}
+                </template>
+              </el-table-column>
             </el-table>
             <el-pagination background layout="prev, pager, next" :total="props.row.totalCount"
               :current-page="props.row.page" :page-size="props.row.MaxResultCount"
@@ -108,7 +112,7 @@
 <script>
 import Pagination from "@/components/Pagination";
 import permission from "@/directive/permission/index.js";
-import { max } from "lodash";
+import { useDict } from "@/utils/dict-formatter";
 const defaultForm = {
   id: null,
   name: null,
@@ -146,7 +150,7 @@ export default {
       formLoading: false,
       listQuery: {
         Filter: '',
-        Name:'',
+        Name: '',
         Line: '',
         DateRange: [],
         StartDate: null,
@@ -160,6 +164,8 @@ export default {
       multipleSelection: [],
       formTitle: '',
       isEdit: false,
+      CauseOptions: [],
+      getLabel: value => value
     }
   },
   computed: {},
@@ -169,6 +175,13 @@ export default {
   },
   mounted() { },
   methods: {
+    getCauseOptions() {
+      this.$axios.gets('api/base/dictDetails/list', { name: 'causeTypes' }).then(response => {
+        this.CauseOptions = response.items;
+        const { getLabel } = useDict(this.CauseOptions)
+        this.getLabel = getLabel
+      });
+    },
     getList() {
       this.listLoading = true;
       if (this.listQuery.DateRange && this.listQuery.DateRange.length > 0) {
@@ -343,6 +356,8 @@ export default {
     },
     getShapes(row) {
       row.loading = true;
+      this.getCauseOptions();
+
 
       // this.$set(row, 'loading', true);
       const start = (row.page - 1) * row.MaxResultCount;

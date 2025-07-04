@@ -11,7 +11,8 @@
         <el-switch v-model="listQuery.HasError" active-color="#ff4949" inactive-color="#13ce66" active-text="Error" />
       </div>
       <div style="border: 1px solid #dcdfe6; padding: 5px; border-radius: 4px;">
-        <el-switch v-model="listQuery.HasChanged" active-color="#ff4949" inactive-color="#13ce66" active-text="Changed" />
+        <el-switch v-model="listQuery.HasChanged" active-color="#ff4949" inactive-color="#13ce66"
+          active-text="Changed" />
       </div>
 
 
@@ -58,14 +59,11 @@
               :disabled="item.disabled"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="产生时间" prop="creationTime">
+        <el-form-item label="产生时间" prop="date">
           <el-input v-model="form.creationTime" placeholder="请输入产生时间" clearable :style="{ width: '100%' }">
           </el-input>
         </el-form-item>
-        <el-form-item label="负责人" prop="personInCharge">
-          <el-input v-model="form.personInCharge" placeholder="请输入负责人" clearable :style="{ width: '100%' }">
-          </el-input>
-        </el-form-item>
+
       </el-form>
       <div slot="footer">
         <el-button size="small" type="text" @click="cancel">取消</el-button>
@@ -73,11 +71,11 @@
       </div>
     </el-dialog>
     <el-dialog :visible.sync="dialogFormVisible2" :close-on-click-modal="false" @close="cancel()" :title="formTitle">
-      <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="100px">
+      <el-form ref="form4MultipleUpdate" :model="form" :rules="rules" size="medium" label-width="100px">
 
 
         <el-form-item label="Cause" prop="cause">
-          <el-select v-model="form.cause" placeholder="请选择原因" clearable :style="{ width: '100%' }">
+          <el-select v-model="cause4multipleUpdate" placeholder="请选择原因" clearable :style="{ width: '100%' }">
             <el-option v-for="(item, index) in CauseOptions" :key="index" :label="item.label" :value="item.value"
               :disabled="item.disabled"></el-option>
           </el-select>
@@ -86,7 +84,7 @@
       </el-form>
       <div slot="footer">
         <el-button size="small" type="text" @click="cancel">取消</el-button>
-        <el-button size="small" v-loading="formLoading" type="primary" @click="save">确认</el-button>
+        <el-button size="small" v-loading="formLoading" type="primary" @click="saveMultiple">确认</el-button>
       </div>
     </el-dialog>
     <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="min-width: 720px;"
@@ -114,7 +112,11 @@
           {{ scope.row.goodWindows + scope.row.failureWindows + scope.row.slipWindows }}
         </template>
       </el-table-column>
-      <el-table-column label="Cause" prop="cause" align="center" width="220" />
+      <el-table-column label="Cause" prop="cause" align="center" width="220">
+        <template slot-scope="scope">
+          {{ getLabel(scope.row.cause) }}
+        </template>
+      </el-table-column>
       <el-table-column label="Date" prop="date" align="center" width="220" />
 
       <el-table-column label="操作" align="center" width="220" fixed="right">
@@ -131,6 +133,7 @@
 <script>
 import Pagination from "@/components/Pagination";
 import permission from "@/directive/permission/index.js";
+import { useDict } from "@/utils/dict-formatter";
 const defaultForm = {
   id: null,
   name: null,
@@ -143,7 +146,6 @@ const defaultForm = {
   hasChanged: null,
   cause: undefined,
   date: '',
-  personInCharge: null,
 }
 export default {
   name: 'ShapeCheckInfo',
@@ -166,9 +168,9 @@ export default {
         HasChanged: [],
         Cause: [],
         CreateTime: [],
-        PersonInCharge: [],
       },
       form: Object.assign({}, defaultForm),
+      cause4multipleUpdate: null,
       list: null,
       totalCount: 0,
       listLoading: true,
@@ -189,22 +191,26 @@ export default {
       multipleSelection: [],
       formTitle: '',
       isEdit: false,
-      CauseOptions: [{
-        "label": "选项一",
-        "value": 1
-      }, {
-        "label": "选项二",
-        "value": 2
-      }],
+      CauseOptions: [],
+      getLabel: value => value // ✅ 提前定义为 null，防止模板访问不到
     }
   },
   computed: {},
   watch: {},
   created() {
-    this.getList()
+    this.getList();
+    this.getCauseOptions();
+
   },
   mounted() { },
   methods: {
+    getCauseOptions() {
+      this.$axios.gets('api/base/dictDetails/list', { name: 'causeTypes' }).then(response => {
+        this.CauseOptions = response.items;
+        const { getLabel } = useDict(this.CauseOptions)
+        this.getLabel = getLabel
+      });
+    },
     getList() {
       this.listLoading = true;
       this.listQuery.SkipCount = (this.page - 1) * this.listQuery.MaxResultCount;
@@ -271,7 +277,6 @@ export default {
       });
     },
     handleUpdate(row) {
-      var params = [];
       this.formTitle = '修改封装检测信息';
       this.isEdit = true;
       if (row) {
@@ -286,15 +291,12 @@ export default {
           });
           return;
         }
-        this.multipleSelection.forEach(element => {
-          let id = element.id;
-          params.push(id);
-        });
-        alert = '选中项';
+        this.cause4multipleUpdate = null;
         this.dialogFormVisible2 = true;
       }
 
     },
+
     save() {
       this.$refs.form.validate(valid => {
         if (valid) {
@@ -333,6 +335,35 @@ export default {
         }
       });
     },
+    saveMultiple() {
+      var params = [];
+
+      this.multipleSelection.forEach(element => {
+        let id = element.id;
+        params.push(id);
+      });
+      alert = '选中项';
+      this.$refs.form4MultipleUpdate.validate(valid => {
+        if (valid) {
+          this.formLoading = true;
+          // this.form.roleNames = this.checkedRole;
+          this.$axios.patchs('api/FeedBack/ShapeInfo/batch-update-cause', { ids: params, cause: this.cause4multipleUpdate }).then(response => {
+            this.formLoading = false;
+            this.$notify({
+              title: '成功',
+              message: '新增成功',
+              type: 'success',
+              duration: 2000
+            });
+            this.dialogFormVisible2 = false;
+            this.getList();
+          }).catch(() => {
+            this.formLoading = false;
+          });
+        }
+      });
+
+    },
     sortChange(data) {
       const {
         prop,
@@ -357,6 +388,7 @@ export default {
       this.dialogFormVisible = false;
       this.dialogFormVisible2 = false;
       this.$refs.form.clearValidate();
+      cause4multipleUpdate = null;
     },
   }
 }

@@ -11,11 +11,13 @@ public class FeedBackDbContext : AbpDbContext<FeedBackDbContext>, IFeedBackDbCon
      * public DbSet<Question> Questions { get; set; }
      */
 
-     public DbSet<ProgramInfo> ProgramInfos { get; set; }
-     public DbSet<ShapeInfo> ShapeInfos { get; set; }
-     public DbSet<FailedInfo> FailedInfos { get; set; }
-     public DbSet<AoiInfo> AoiInfos { get; set; }
-     public DbSet<AoiAction> AoiActions { get; set; }
+    public DbSet<ProgramInfo> ProgramInfos { get; set; }
+    public DbSet<ShapeInfo> ShapeInfos { get; set; }
+    public DbSet<FailedInfo> FailedInfos { get; set; }
+    public DbSet<AoiInfo> AoiInfos { get; set; }
+    public DbSet<AoiAction> AoiActions { get; set; }
+    public DbSet<LineInfo> LineInfos { get; set; }
+
 
     public FeedBackDbContext(DbContextOptions<FeedBackDbContext> options)
         : base(options)

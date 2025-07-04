@@ -2,14 +2,20 @@
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.Application;
+using Volo.Abp;
+using Volo.Abp.BackgroundWorkers;
+using Email;
 
 namespace FeedBack;
 
 [DependsOn(
+    typeof(EmailApplicationModule),
+    typeof(EmailApplicationContractsModule),
     typeof(FeedBackDomainModule),
     typeof(FeedBackApplicationContractsModule),
     typeof(AbpDddApplicationModule),
     typeof(AbpAutoMapperModule)
+    
     )]
 public class FeedBackApplicationModule : AbpModule
 {
@@ -21,4 +27,12 @@ public class FeedBackApplicationModule : AbpModule
             options.AddMaps<FeedBackApplicationModule>(validate: false);
         });
     }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        context.AddBackgroundWorkerAsync<ShapeInfoCheckWorker>();
+    }
+
+
+
 }

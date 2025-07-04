@@ -200,6 +200,25 @@ export default {
         })
     })
   },
+  patchs(url, params) {
+    return new Promise((resolve, reject) => {
+      axios.patch(url, params)
+        .then(response => {
+          resolve(response.data)
+        }, err => {
+          Message({
+            message: !err.error.code?err.error.message:err.error.code,
+            type: 'error',
+            duration: 5 * 1000
+          })
+          reject(err)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+
   downLoad(url, params) {
     var instance = axios.create({
       responseType: 'blob'
