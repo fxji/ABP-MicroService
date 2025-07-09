@@ -23,6 +23,15 @@ public class FeedBackPermissions
         public const string Create = Default + ".Create";
     }
 
+    public static class LineInfo
+    {
+        public const string Default = FeedBack + ".LineInfo";
+        public const string Delete = Default + ".Delete";
+        public const string Update = Default + ".Update";
+        public const string Create = Default + ".Create";
+    }
+
+
 
     public static string[] GetAll()
     {

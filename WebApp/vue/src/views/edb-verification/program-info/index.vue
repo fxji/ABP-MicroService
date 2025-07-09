@@ -176,7 +176,7 @@ export default {
   mounted() { },
   methods: {
     getCauseOptions() {
-      this.$axios.gets('api/base/dictDetails/list', { name: 'causeTypes' }).then(response => {
+      this.$axios.gets('api/base/dictDetails/list', { name: 'edbType' }).then(response => {
         this.CauseOptions = response.items;
         const { getLabel } = useDict(this.CauseOptions)
         this.getLabel = getLabel

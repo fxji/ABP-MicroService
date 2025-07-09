@@ -4,6 +4,7 @@ using FeedBack.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace FeedBack.Migrations
 {
     [DbContext(typeof(FeedBackHttpApiHostMigrationsDbContext))]
-    partial class FeedBackHttpApiHostMigrationsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250704065744_lineinfo")]
+    partial class lineinfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

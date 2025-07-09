@@ -44,7 +44,9 @@ public class ShapeInfoCheckWorker : AsyncPeriodicBackgroundWorkerBase
         //取出hasError是真的或者hasChanged是真的，并且cause是空的的数据。
         var shapeInfos = await _repository.GetListAsync(a => (a.HasChanged || a.HasError) && a.Cause == null);
 
-       
+        Logger.LogInformation($"shapeInfos.Count: {shapeInfos.Count}");
+
+
         //判断shapeInfos是否为空，不空时根据line，给PersonInCharge发邮件, 如果line 的负责人相同就放一个邮件里
         if (shapeInfos.Any())
         {
@@ -55,14 +57,33 @@ public class ShapeInfoCheckWorker : AsyncPeriodicBackgroundWorkerBase
                     EmailAddress = lines.First(l => l.Name == g.Key).PersonInCharge,
 
                     // The subject of the email.
-                    Subject = "Message u need to known",
+                    Subject = "EDB Warnings",
 
                     // The body of the email.
                     // The body will contain the following information:
                     //  - The names of the lines that the person in charge is responsible for.
                     //  - For each problematic shape info, the name, line, programId, hasError, cause, date, and id.
-                    Body = $"The following are the problematic shape info for line {g.Key}:\n" +
-                        string.Join("\n", g.Select(s => $"{s.Name},{s.Line},{s.ProgramId},{s.HasError},{s.HasChanged},{s.Date},{s.Id}"))
+                    Body = $@"
+                                <p>The following shape info items have <b>errors</b> or <b>changes</b> for line <b>{g.Key}</b>:</p>
+                                <table border='1' cellpadding='6' cellspacing='0' style='border-collapse: collapse; font-family: Arial; font-size: 14px;'>
+                                    <thead style='background-color: #f2f2f2;'>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Has Error</th>
+                                            <th>Has Changed</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {string.Join("\n", g.Select(s => $@"
+                                            <tr>
+                                                <td>{s.Name}</td>
+                                                <td style='color:{(s.HasError ? "red" : "black")}'>{s.HasError}</td>
+                                                <td style='color:{(s.HasChanged ? "orange" : "black")}'>{s.HasChanged}</td>
+                                                <td>{s.Date:yyyy-MM-dd}</td>
+                                            </tr>"))}
+                                    </tbody>
+                                </table>"
                 });
 
             // Send the emails.
@@ -72,6 +93,6 @@ public class ShapeInfoCheckWorker : AsyncPeriodicBackgroundWorkerBase
                 await _sendEmailAppService.Send(emailSendArgs);
             }
         }
-        
+
     }
 }

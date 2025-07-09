@@ -28,33 +28,53 @@ public class Worker : BackgroundService
         IConfiguration configuration
         )
     {
-        _logger = logger;
-        _logParser = parser;
-        _dataHandler = dataHandler;
-        _configuration = configuration;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _logParser = parser ?? throw new ArgumentNullException(nameof(parser));
+        _dataHandler = dataHandler ?? throw new ArgumentNullException(nameof(dataHandler));
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+
+        //从配置文件读取延迟时间
+        if (!int.TryParse(_configuration.GetValue<string>("AoiInfo:DebounceDelay"), out var debounceDelayMinutes))
+        {
+            debounceDelayMinutes = 3;
+        }
+
+        _debounceDelay = TimeSpan.FromMinutes(debounceDelayMinutes);
     }
 
-    public override Task StartAsync(CancellationToken cancellationToken)
+    public override async Task StartAsync(CancellationToken cancellationToken)
+{
+    try
     {
+        var path = _configuration.GetValue<string>("FileWatcher:Path", Directory.GetCurrentDirectory());
+        var filter = _configuration.GetValue<string>("FileWatcher:Filter", "*.log");
+        var enableRaisingEvents = _configuration.GetValue<bool>("FileWatcher:EnableRaisingEvents", true);
+
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            throw new InvalidOperationException("FileWatcher path cannot be null or empty.");
+        }
+
         _watcher = new FileSystemWatcher
         {
-            Path = _configuration.GetValue<string>("FileWatcher:Path", Directory.GetCurrentDirectory()),
-            Filter = _configuration.GetValue<string>("FileWatcher:Filter", "*.log"),
+            Path = path,
+            Filter = filter,
             NotifyFilter = NotifyFilters.FileName,
-            EnableRaisingEvents = _configuration.GetValue<bool>("FileWatcher:EnableRaisingEvents", true),
-            // Path = Directory.GetCurrentDirectory(),
-            // Filter = "*.log",
-            // NotifyFilter = NotifyFilters.FileName,
-            // EnableRaisingEvents = true,
+            EnableRaisingEvents = enableRaisingEvents,
         };
 
         _watcher.Created += OnChanged;
-        // _watcher.Changed += OnChanged;
 
         _logger.LogInformation("File watcher started.");
-
-        return base.StartAsync(cancellationToken);
     }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error starting file watcher.");
+        throw;
+    }
+
+    await base.StartAsync(cancellationToken);
+}
 
 
     //当调用此方法时，会提示文件被占用，所以改为channel

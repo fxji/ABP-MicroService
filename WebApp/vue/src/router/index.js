@@ -85,40 +85,40 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: "/demo",
-    component: Layout,
-    name: "demo",
-    meta: {
-      title: "demo",
-      icon: "cloud",
-      isAffix: false
-    },
-    children: [
-      {
-        path: "/program",
-        component: () =>
-          import("@/views/edb-verification/program-info/index.vue"),
-        hidden: false,
-        name: "program-demo",
-        meta: {
-          title: "program-demo",
-          icon: "cascader"
-        }
-      },
-      {
-        path: "/shape",
-        component: () =>
-          import("@/views/edb-verification/shape-info/index.vue"),
-        hidden: false,
-        name: "shape-demo",
-        meta: {
-          title: "shape-demo",
-          icon: "cascader"
-        }
-      }
-    ]
-  },
+  // {
+  //   path: "/demo",
+  //   component: Layout,
+  //   name: "demo",
+  //   meta: {
+  //     title: "demo",
+  //     icon: "cloud",
+  //     isAffix: false
+  //   },
+  //   children: [
+  //     {
+  //       path: "/program",
+  //       component: () =>
+  //         import("@/views/edb-verification/program-info/index.vue"),
+  //       hidden: false,
+  //       name: "program-demo",
+  //       meta: {
+  //         title: "program-demo",
+  //         icon: "cascader"
+  //       }
+  //     },
+  //     {
+  //       path: "/shape",
+  //       component: () =>
+  //         import("@/views/edb-verification/shape-info/index.vue"),
+  //       hidden: false,
+  //       name: "shape-demo",
+  //       meta: {
+  //         title: "shape-demo",
+  //         icon: "cascader"
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: "/profile",
     component: Layout,
