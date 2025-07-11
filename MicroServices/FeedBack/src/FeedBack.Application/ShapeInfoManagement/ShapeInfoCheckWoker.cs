@@ -23,7 +23,7 @@ public class ShapeInfoCheckWorker : AsyncPeriodicBackgroundWorkerBase
         // 60 minutes = 1 hour
         // 12 hours = 12 * 60 minutes
         // Therefore, 60000 * 60 * 12 gives us the period in milliseconds for 12 hours.
-        Timer.Period = 60000 * 60 * 48;
+        Timer.Period = 60000 * 60 * 24;
         // Timer.Period = 60000;
     }
 
@@ -54,7 +54,9 @@ public class ShapeInfoCheckWorker : AsyncPeriodicBackgroundWorkerBase
                 .Select(g => new EmailSendingArgs
                 {
                     // The email address of the person in charge.
-                    EmailAddress = lines.First(l => l.Name == g.Key).PersonInCharge,
+                    // The person in charge is the person who is responsible for the line.
+                    EmailAddress = lines.Where(l => l.Name == g.Key).Select(l => l.PersonInCharge).Distinct().Aggregate((current, next) => current + ";" + next),
+                    // EmailAddress = lines.First(l => l.Name == g.Key).PersonInCharge,
 
                     // The subject of the email.
                     Subject = "EDB Warnings",
