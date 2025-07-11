@@ -13,31 +13,9 @@ public class Program
 {
     public async static Task<int> Main(string[] args)
     {
-        // Configure Serilog logging
-        //
-        // MinimumLevel is set to Debug if we're in debug mode, otherwise it's set to Information.
-        // This means that when we're running in debug mode, we'll get more detailed logs, but in
-        // production mode, we'll only log important information.
-        //
-        // We're also overriding the minimum level for logs from Microsoft. This is because some
-        // Microsoft libraries are very chatty and we don't want to see all of their debug logs.
-        // Instead, we're setting the minimum level for Microsoft logs to Information, which means
-        // we'll only see their information logs and not their debug logs.
-        //
-        // The Enrich.FromLogContext() call is used to enrich the log with properties from the
-        // current log context. This means that we'll get properties like the current request ID,
-        // the current user, etc. in our logs.
-        //
-        // The WriteTo.Async(c => c.File("Logs/logs.txt")) call is used to write the logs to a
-        // file. The "Logs/logs.txt" file will be created in the root of the application and will
-        // contain all of the logs.
-        //
-        // The WriteTo.Async(c => c.Console()) call is used to write the logs to the console.
-        // This is useful when we're running the application in a console or terminal and want to
-        // see the logs in real time.
-        //
+        // 启动前日志（硬编码）——用于捕捉初始化错误
         var logPath = Path.Combine(AppContext.BaseDirectory, "Logs", "logs.txt");
-        Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "Logs"));
+        Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);
 
         Log.Logger = new LoggerConfiguration()
 #if DEBUG
@@ -47,51 +25,57 @@ public class Program
 #endif
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .Enrich.FromLogContext()
-            .WriteTo.Async(c => c.File(logPath))
             .WriteTo.Async(c => c.Console())
+            .WriteTo.Async(c => c.File(logPath, rollingInterval: RollingInterval.Day))
             .CreateLogger();
 
         try
         {
             Log.Information("Starting console host.");
 
-            var builder = Host.CreateDefaultBuilder(args);
+            // Create a HostBuilder instance using the default settings.
+            // This will configure the host to use the console as the lifetime
+            // and to use Autofac as the IoC container.
+            var builder = Host.CreateDefaultBuilder(args)
+                .UseConsoleLifetime()
+                .UseWindowsService()
+                .UseAutofac();
 
-            // In development environment, run as a console application, in production environment, run as a Windows service
-            // if (Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") == "Development")
-            // {
-            //     Log.Information(Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT"));
-            // }
-            // else
-            // {
-            //     Log.Information(Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT"));
-            // }
-            /*
-            你可以两个同时调用，没问题，但实际生效取决于运行方式：
-            如果是手动运行 .exe ➜ UseConsoleLifetime 会生效（支持 Ctrl+C）
-            如果通过 sc start 启动服务 ➜ UseWindowsService 会生效（接收服务控制命令）
-            .NET 会自动判断当前是不是作为服务运行。
-            */
-            builder.UseConsoleLifetime();
-            builder.UseWindowsService();
+            // Configure Serilog as the logging provider.
+            // Read the Serilog settings from the configuration file
+            // and from the services registered in the container.
+            // Also, enrich the log messages with the log context.
+            builder.UseSerilog(
+                (context, services, config) =>
+                {
+                    config
+                        .ReadFrom.Configuration(context.Configuration)
+                        .ReadFrom.Services(services)
+                        .Enrich.FromLogContext();
+                }
+                );
 
-            builder.ConfigureServices(services =>
-             {
-                 services.AddHostedService<Worker>();
-                 services.AddApplicationAsync<FeedbackWorkerServiceModule>(options =>
-                 {
-                     options.Services.ReplaceConfiguration(services.GetConfiguration());
-                     options.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
-                 });
-             }).UseAutofac();
-
-
+            // Configure the services for the host.
+            // Register the Worker class as a hosted service.
+            // Also, register the FeedbackWorkerServiceModule as an application module.
+            // Replace the configuration of the module with the configuration
+            // of the host.
+            builder.ConfigureServices((context, services) =>
+            {
+                services.AddHostedService<Worker>();
+                services.AddApplicationAsync<FeedbackWorkerServiceModule>(options =>
+                {
+                    options.Services.ReplaceConfiguration(context.Configuration);
+                });
+            });
 
             var host = builder.Build();
-            await host.Services.GetRequiredService<IAbpApplicationWithExternalServiceProvider>().InitializeAsync(host.Services);
+
+            await host.Services
+                .GetRequiredService<IAbpApplicationWithExternalServiceProvider>()
+                .InitializeAsync(host.Services);
 
             await host.RunAsync();
-
             return 0;
         }
         catch (Exception ex)

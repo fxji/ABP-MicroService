@@ -49,3 +49,4 @@ document/~$*
 /MicroServices/FileStorage/FileStorage.Host/wwwroot
 /MicroServices/Business/Business.Host/wwwroot
 /MicroServices/Business
+/MicroServices/Feedback_Worker/src/FeedbackWorkerService/bin

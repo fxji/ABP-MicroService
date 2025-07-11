@@ -29,9 +29,21 @@ public class Program
         {
             Log.Information("Starting web host.");
             var builder = WebApplication.CreateBuilder(args);
+
+            /*
+            启动早期问题（如配置错误、数据库连接失败）能被记录。
+
+            TODO: Host 启动后切换为配置文件控制，更灵活。
+            */
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
-                .UseSerilog();
+                .UseSerilog((context, services, config) =>
+                {
+                    config
+                        .ReadFrom.Configuration(context.Configuration)
+                        .ReadFrom.Services(services)
+                        .Enrich.FromLogContext();
+                });
             await builder.AddApplicationAsync<FeedBackHttpApiHostModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
