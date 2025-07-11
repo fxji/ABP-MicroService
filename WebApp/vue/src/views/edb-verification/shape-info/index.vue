@@ -2,9 +2,9 @@
   <div class="app-container">
     <div class="head-container">
       <!-- 搜索 -->
-      <el-input v-model="listQuery.Name" clearable size="small" placeholder="封装名" style="width: 200px;"
+      <el-input v-model="listQuery.Name" clearable size="small" placeholder="Shape Name" style="width: 200px;"
         class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input v-model="listQuery.Line" clearable size="small" placeholder="产线" style="width: 200px;"
+      <el-input v-model="listQuery.Line" clearable size="small" placeholder="Line" style="width: 200px;"
         class="filter-item" @keyup.enter.native="handleFilter" />
 
       <div style="border: 1px solid #dcdfe6; padding: 5px; border-radius: 4px;">
@@ -16,37 +16,37 @@
       </div>
 
 
-      <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="handleFilter">搜索
+      <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}
       </el-button>
-      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="handleCreate">新增
+      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="handleCreate">{{ $t('table.add') }}
       </el-button>
-      <el-button class="filter-item" size="mini" type="success" icon="el-icon-edit" @click="handleUpdate()">修改
+      <el-button class="filter-item" size="mini" type="success" icon="el-icon-edit" @click="handleUpdate()">{{ $t('table.edit') }}
       </el-button>
       <el-button slot="reference" class="filter-item" type="danger" icon="el-icon-delete" size="mini"
-        @click="handleDelete()">删除</el-button>
+        @click="handleDelete()">{{ $t('table.delete') }}</el-button>
     </div>
     <el-dialog :visible.sync="dialogFormVisible" :close-on-click-modal="false" @close="cancel()" :title="formTitle">
       <el-form ref="form" :model="form" :rules="rules" size="medium" label-width="100px">
         <el-form-item label="Name" prop="name">
-          <el-input v-model="form.name" placeholder="请输入Name" clearable :style="{ width: '100%' }"></el-input>
+          <el-input v-model="form.name" placeholder="Please enter the name" clearable :style="{ width: '100%' }"></el-input>
         </el-form-item>
-        <el-form-item label="程序" prop="programId">
-          <el-input v-model="form.programId" placeholder="请输入程序" clearable :style="{ width: '100%' }">
+        <el-form-item label="Program" prop="programId">
+          <el-input v-model="form.programId" placeholder="Please enter the program Id" clearable :style="{ width: '100%' }">
           </el-input>
         </el-form-item>
-        <el-form-item label="产线" prop="line">
-          <el-input v-model="form.line" placeholder="请输入产线" clearable :style="{ width: '100%' }"></el-input>
+        <el-form-item label="Line" prop="line">
+          <el-input v-model="form.line" placeholder="Please enter the line" clearable :style="{ width: '100%' }"></el-input>
         </el-form-item>
         <el-form-item label="FailureWindows" prop="failureWindows">
-          <el-input v-model="form.failureWindows" placeholder="请输入FailureWindows" clearable
+          <el-input v-model="form.failureWindows" placeholder="Please enter the failure windows Count" clearable
             :style="{ width: '100%' }"></el-input>
         </el-form-item>
         <el-form-item label="GoodWindows" prop="goodWindows">
-          <el-input v-model="form.goodWindows" placeholder="请输入GoodWindows" clearable
+          <el-input v-model="form.goodWindows" placeholder="Please enter the good windows Count" clearable
             :style="{ width: '100%' }"></el-input>
         </el-form-item>
         <el-form-item label="SlipWindows" prop="slipWindows">
-          <el-input v-model="form.slipWindows" placeholder="请输入SlipWindows" clearable
+          <el-input v-model="form.slipWindows" placeholder="Please enter the slip windows Count" clearable
             :style="{ width: '100%' }"></el-input>
         </el-form-item>
         <el-form-item label="IsChanged" prop="hasChanged">
@@ -54,13 +54,13 @@
           </el-switch>
         </el-form-item>
         <el-form-item label="Cause" prop="cause">
-          <el-select v-model="form.cause" placeholder="请选择原因" clearable :style="{ width: '100%' }">
+          <el-select v-model="form.cause" placeholder="Please choose cause" clearable :style="{ width: '100%' }">
             <el-option v-for="(item, index) in CauseOptions" :key="index" :label="item.label" :value="item.value"
               :disabled="item.disabled"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="产生时间" prop="date">
-          <el-input v-model="form.creationTime" placeholder="请输入产生时间" clearable :style="{ width: '100%' }">
+        <el-form-item label="CreationTime" prop="date">
+          <el-input v-model="form.creationTime" placeholder="Please enter the creation time" clearable :style="{ width: '100%' }">
           </el-input>
         </el-form-item>
 
@@ -75,7 +75,7 @@
 
 
         <el-form-item label="Cause" prop="cause">
-          <el-select v-model="cause4multipleUpdate" placeholder="请选择原因" clearable :style="{ width: '100%' }">
+          <el-select v-model="cause4multipleUpdate" placeholder="Please choose cause" clearable :style="{ width: '100%' }">
             <el-option v-for="(item, index) in CauseOptions" :key="index" :label="item.label" :value="item.value"
               :disabled="item.disabled"></el-option>
           </el-select>
@@ -83,8 +83,8 @@
 
       </el-form>
       <div slot="footer">
-        <el-button size="small" type="text" @click="cancel">取消</el-button>
-        <el-button size="small" v-loading="formLoading" type="primary" @click="saveMultiple">确认</el-button>
+        <el-button size="small" type="text" @click="cancel">{{ $t('table.cancel') }}</el-button>
+        <el-button size="small" v-loading="formLoading" type="primary" @click="saveMultiple">{{ $t('table.confirm') }}</el-button>
       </div>
     </el-dialog>
     <el-table ref="multipleTable" v-loading="listLoading" :data="list" size="small" style="min-width: 720px;"
@@ -92,8 +92,8 @@
       <el-table-column type="selection" width="44px"></el-table-column>
       <!-- <el-table-column label="Id" prop="id" align="center" /> -->
       <el-table-column label="Name" prop="name" align="center" width="220" fixed />
-      <el-table-column label="程序" prop="programName" align="center" width="160" />
-      <el-table-column label="产线" prop="line" align="center" width="120" />
+      <el-table-column label="Program" prop="programName" align="center" width="160" />
+      <el-table-column label="Line" prop="line" align="center" width="120" />
       <el-table-column label="Failure" prop="failureWindows" align="center" width="120" />
       <el-table-column label="Good" prop="goodWindows" align="center" width="120" />
       <el-table-column label="Slip" prop="slipWindows" align="center" width="120" />
@@ -119,7 +119,7 @@
       </el-table-column>
       <el-table-column label="Date" prop="date" align="center" width="220" />
 
-      <el-table-column label="操作" align="center" width="220" fixed="right">
+      <el-table-column :label="$t('table.actions')" align="center" width="220" fixed="right">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" />
           <el-button type="danger" size="mini" @click="handleDelete(row)" icon="el-icon-delete" />
@@ -383,12 +383,18 @@ export default {
       this.$refs.multipleTable.clearSelection();
       this.$refs.multipleTable.toggleRowSelection(row);
     },
+    //实现俩个form共用一个cancel方法
     cancel() {
-      this.form = Object.assign({}, defaultForm);
-      this.dialogFormVisible = false;
-      this.dialogFormVisible2 = false;
-      this.$refs.form.clearValidate();
-      cause4multipleUpdate = null;
+      if (this.$refs.form) {
+        this.form = Object.assign({}, defaultForm);
+        this.dialogFormVisible = false;
+        this.$refs.form.clearValidate();
+      }
+      if (this.$refs.form4MultipleUpdate) {
+        this.$refs.form4MultipleUpdate.clearValidate();
+        this.dialogFormVisible2 = false;
+        this.cause4multipleUpdate = null;
+      }
     },
   }
 }

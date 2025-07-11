@@ -2,14 +2,14 @@
   <div class="app-container">
     <div class="head-container">
       <!-- 搜索 -->
-      <el-input v-model="listQuery.Name" clearable size="small" placeholder="程序名" style="width: 200px;"
+      <el-input v-model="listQuery.Name" clearable size="small" placeholder="Program Name" style="width: 200px;"
         class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input v-model="listQuery.Line" clearable size="small" placeholder="产线" style="width: 200px;"
-        class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-date-picker size="small" v-model="listQuery.DateRange" type="daterange" range-separator="至"
-        start-placeholder="开始日期" end-placeholder="结束日期">
+      <el-input v-model="listQuery.Line" clearable size="small" placeholder="Line" style="width: 200px;"
+        class="filter-item" @keyup.enter.native="handleFilter" /> 
+      <el-date-picker size="small" v-model="listQuery.DateRange" type="daterange" range-separator="To"
+        start-placeholder="Start" end-placeholder="End">
       </el-date-picker>
-      <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="handleFilter">搜索
+      <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}  
       </el-button>
       <!-- <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="handleCreate">新增
       </el-button>
@@ -70,7 +70,7 @@
                   <el-switch v-model="scope.row.hasChanged" active-color="red" inactive-color="Green" disabled />
                 </template>
               </el-table-column>
-              <el-table-column label="图片数量" align="center">
+              <el-table-column label="ImageCount" align="center">
                 <template slot-scope="scope">
                   {{ scope.row.goodWindows + scope.row.failureWindows + scope.row.slipWindows }}
                 </template>
@@ -90,9 +90,9 @@
         </template>
       </el-table-column>
       <el-table-column label="Id" prop="id" align="center" />
-      <el-table-column label="程序" prop="name" align="center" />
-      <el-table-column label="产线" prop="line" align="center" />
-      <el-table-column label="图片数量" prop="windows" align="center">
+      <el-table-column label="Program" prop="name" align="center" />
+      <el-table-column label="Line" prop="line" align="center" />
+      <el-table-column label="ImageCount" prop="windows" align="center">
         <!-- <template slot-scope="scope">
           {{ scope.row.GoodWindows + scope.row.FailureWindows + scope.row.SlipWindows }}
         </template> -->
