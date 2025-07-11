@@ -1,0 +1,1 @@
+dotnet publish -c release -r win-x64 --self-contained true -o ..\..\..\..\Publish\feedback_worker

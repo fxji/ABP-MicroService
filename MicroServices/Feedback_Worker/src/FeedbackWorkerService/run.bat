@@ -1,0 +1,1 @@
+sc create edb-monitor-service binPath= "C:\edb-monitor\feedback_worker\FeedbackWorkerService.exe" start= auto  DisplayName= "edb monitor service"
