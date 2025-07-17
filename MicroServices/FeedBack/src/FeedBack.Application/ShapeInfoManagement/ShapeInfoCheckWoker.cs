@@ -55,7 +55,7 @@ public class ShapeInfoCheckWorker : AsyncPeriodicBackgroundWorkerBase
                 {
                     // The email address of the person in charge.
                     // The person in charge is the person who is responsible for the line.
-                    EmailAddress = lines.Where(l => l.Name == g.Key).Select(l => l.PersonInCharge).Distinct().Aggregate((current, next) => current + ";" + next),
+                    EmailAddress = lines.Where(l => l.Name == g.Key).Select(l => l.PersonInCharge).Distinct().Aggregate((current, next) => current + "," + next),
                     // EmailAddress = lines.First(l => l.Name == g.Key).PersonInCharge,
 
                     // The subject of the email.

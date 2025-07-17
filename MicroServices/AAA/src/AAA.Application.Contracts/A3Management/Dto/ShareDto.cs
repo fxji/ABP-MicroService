@@ -7,6 +7,9 @@ namespace AAA.A3Management.Dto
 {
     public class ShareDto : EntityDto<Guid?>
     {
+        /// <summary>
+        /// multiple email join with ','
+        /// </summary>
         public string EmailAddress { get; set; }
         
         public CreateOrUpdateA3Dto A3 { get; set; }

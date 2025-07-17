@@ -50,3 +50,4 @@ document/~$*
 /MicroServices/Business/Business.Host/wwwroot
 /MicroServices/Business
 /MicroServices/Feedback_Worker/src/FeedbackWorkerService/bin
+Gateways/consul.exe
