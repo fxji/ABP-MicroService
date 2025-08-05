@@ -13,6 +13,9 @@ public class Program
 {
     public async static Task<int> Main(string[] args)
     {
+        // 修正当前工作目录
+        // 避免以windows service 运行时，出现路径指向system32
+        Directory.SetCurrentDirectory(AppContext.BaseDirectory);
         // 启动前日志（硬编码）——用于捕捉初始化错误
         var logPath = Path.Combine(AppContext.BaseDirectory, "Logs", "logs.txt");
         Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);

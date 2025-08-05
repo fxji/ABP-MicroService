@@ -66,7 +66,7 @@ public class ShapeInfoCheckWorker : AsyncPeriodicBackgroundWorkerBase
                     //  - The names of the lines that the person in charge is responsible for.
                     //  - For each problematic shape info, the name, line, programId, hasError, cause, date, and id.
                     Body = $@"
-                                <p>The following shape info items have <b>errors</b> or <b>changes</b> for line <b>{g.Key}</b>:</p>
+                                <p>The following shape info items have <b>errors</b> or <b>changes</b> for line <b>{g.Key}</b>, please login <a href='http://10.221.128.160:9527/'>EDB</a> to update:</p>
                                 <table border='1' cellpadding='6' cellspacing='0' style='border-collapse: collapse; font-family: Arial; font-size: 14px;'>
                                     <thead style='background-color: #f2f2f2;'>
                                         <tr>
@@ -87,7 +87,37 @@ public class ShapeInfoCheckWorker : AsyncPeriodicBackgroundWorkerBase
                                     </tbody>
                                 </table>"
                 });
-
+                
+            // shapeinfo.Date >= DateTime.Now.AddDays(-7) email to all, email content includes days of 7 and no update
+            var noUpdateShapeInfos = shapeInfos.Where(s => s.Date >= DateTime.Now.AddDays(-7));
+            if (noUpdateShapeInfos.Any())
+            {
+                var emailSendingArgs = new EmailSendingArgs
+                {
+                    EmailAddress = string.Join(",", lines.Select(l => l.PersonInCharge).Distinct()),
+                    Subject = "EDB Warnings: No Update",
+                    Body = $@"
+                            <p>The following shape info items have <b>no update</b> for the past <b>7 days</b>, please login <a href='http://10.221.128.160:9527/'>EDB</a> to update:</p>
+                            <table border='1' cellpadding='6' cellspacing='0' style='border-collapse: collapse; font-family: Arial; font-size: 14px;'>
+                                <thead style='background-color: #f2f2f2;'>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Line</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {string.Join("\n", noUpdateShapeInfos.Select(s => $@"
+                                        <tr>
+                                            <td>{s.Name}</td>
+                                            <td>{s.Line}</td>
+                                            <td>{s.Date:yyyy-MM-dd}</td>
+                                        </tr>"))}
+                                </tbody>
+                            </table>"
+                };
+                emailSendArgsList.Append(emailSendingArgs);
+            }
             // Send the emails.
             // For each EmailSendingArgs in the list, call the _sendEmailAppService.Send method
             foreach (var emailSendArgs in emailSendArgsList)

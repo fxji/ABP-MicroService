@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <OutputType>Exe</OutputType>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <PublishSingleFile>true</PublishSingleFile>
+    <PublishSingleFile>false</PublishSingleFile>
     <SelfContained>true</SelfContained> <!-- 可选，如果你想发布为独立可执行文件 -->
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
     <EnableWindowsService>true</EnableWindowsService> <!-- 关键 -->

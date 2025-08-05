@@ -1,1 +1,1 @@
-sc create edb-monitor-service binPath= "C:\edb-monitor\feedback_worker\FeedbackWorkerService.exe" start= auto  DisplayName= "edb monitor service"
+sc create edb-monitor-service binPath= "C:\feedback_worker\FeedbackWorkerService.exe" start= auto  DisplayName= "edb monitor service"
