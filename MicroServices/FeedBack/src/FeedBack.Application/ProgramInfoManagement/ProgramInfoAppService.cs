@@ -36,6 +36,7 @@ namespace FeedBack.ProgramInfoManagement
         public async Task<PagedResultDto<ProgramInfoDto>> GetAll(GetProgramInfoInputDto input)
         {
             var query = (await _repository.GetQueryableAsync())
+            .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), a => a.Id.Equals(Guid.Parse(input.Filter)))
             .WhereIf(!string.IsNullOrWhiteSpace(input.Name), a => a.Name.Contains(input.Name))
             .WhereIf(!string.IsNullOrWhiteSpace(input.Line), a => a.Line.Equals(input.Line))
             .WhereIf(input.StartDate.HasValue && input.EndDate.HasValue, a => a.Date >= input.StartDate && a.Date <= input.EndDate);

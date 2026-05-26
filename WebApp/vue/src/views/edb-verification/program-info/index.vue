@@ -2,6 +2,8 @@
   <div class="app-container">
     <div class="head-container">
       <!-- 搜索 -->
+       <el-input v-model="listQuery.Filter" clearable size="small" placeholder="ProgramId" style="width: 200px;"
+        class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.Name" clearable size="small" placeholder="Program Name" style="width: 200px;"
         class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.Line" clearable size="small" placeholder="Line" style="width: 200px;"

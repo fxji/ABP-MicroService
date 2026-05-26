@@ -53,6 +53,15 @@ public class LogParser : ISingletonDependency
 
         try
         {
+            // 校准时生成的log文件也算不合法的
+            // 通过文件名字是否包含TST 或者MFU
+            if (filePath.Contains("TST_") || filePath.Contains("MFU_"))
+            {
+                result.Valid = false;
+                _logger.LogInformation("Invalid log file: {file}", filePath);
+                return result;
+            }
+
             var lines = File.ReadAllLines(filePath);
             if (!lines.Any(line => line.Contains("EDB-Verification finished")))
             {
@@ -78,7 +87,7 @@ public class LogParser : ISingletonDependency
         result.Program.Name = filePath.Split('\\').Last().Split('_').First();
         result.Program.Line = _configuration.GetValue<string>("AoiInfo:Line", "Line00");
         // result.Program.Line = "Line45"; // TODO:从config文件读取Line信息
-        
+
         _logger.LogInformation("Program name: {name}", result.Program.Name);
 
         result.Program.Date = ParseDate(filePath.Split('\\').Last().Split('.').First().Split('_').Last());
@@ -94,7 +103,7 @@ public class LogParser : ISingletonDependency
 
         foreach (var line in keyLines)
         {
-            if (line.Contains("Macro successful tested:"))
+            if (line.Contains("Macro successful tested:") || line.Contains("Macro unsuccessful tested:"))
             {
                 currentShape = new CreateOrUpdateShapeInfoDto
                 {
@@ -152,7 +161,7 @@ public class LogParser : ISingletonDependency
         var numberPart = lastPart.Split(' ').First().Trim();
         return int.TryParse(numberPart, out var value) ? value : 0;
     }
-    
+
 
     /// <summary>
     /// 解析日期06052025145617285

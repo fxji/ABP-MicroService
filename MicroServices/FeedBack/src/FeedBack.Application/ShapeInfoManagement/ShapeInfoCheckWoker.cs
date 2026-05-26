@@ -64,13 +64,16 @@ public class ShapeInfoCheckWorker : AsyncPeriodicBackgroundWorkerBase
                     // The body of the email.
                     // The body will contain the following information:
                     //  - The names of the lines that the person in charge is responsible for.
-                    //  - For each problematic shape info, the name, line, programId, hasError, cause, date, and id.
+                    //  - For each problematic shape info, the name, line, programId,programName, hasError, cause, date, and id.
+                    //
+                    
                     Body = $@"
                                 <p>The following shape info items have <b>errors</b> or <b>changes</b> for line <b>{g.Key}</b>, please login <a href='http://10.221.128.160:9527/'>EDB</a> to update:</p>
                                 <table border='1' cellpadding='6' cellspacing='0' style='border-collapse: collapse; font-family: Arial; font-size: 14px;'>
                                     <thead style='background-color: #f2f2f2;'>
                                         <tr>
                                             <th>Name</th>
+                                            <th>ProgramId</th>
                                             <th>Has Error</th>
                                             <th>Has Changed</th>
                                             <th>Date</th>
@@ -80,16 +83,17 @@ public class ShapeInfoCheckWorker : AsyncPeriodicBackgroundWorkerBase
                                         {string.Join("\n", g.Select(s => $@"
                                             <tr>
                                                 <td>{s.Name}</td>
+                                                <td>{s.ProgramId}</td>
                                                 <td style='color:{(s.HasError ? "red" : "black")}'>{s.HasError}</td>
                                                 <td style='color:{(s.HasChanged ? "orange" : "black")}'>{s.HasChanged}</td>
-                                                <td>{s.Date:yyyy-MM-dd}</td>
+                                                <td>{s.Date:yyyy-MM-dd HH:mm ss tt}</td>
                                             </tr>"))}
                                     </tbody>
                                 </table>"
-                });
+                }).ToList();
                 
-            // shapeinfo.Date >= DateTime.Now.AddDays(-7) email to all, email content includes days of 7 and no update
-            var noUpdateShapeInfos = shapeInfos.Where(s => s.Date >= DateTime.Now.AddDays(-7));
+            // shapeinfos no update in 7 days email to all, email content includes days of 7 and no update
+            var noUpdateShapeInfos = shapeInfos.Where(s => s.Date <= DateTime.Now.AddDays(-7));
             if (noUpdateShapeInfos.Any())
             {
                 var emailSendingArgs = new EmailSendingArgs
@@ -97,11 +101,14 @@ public class ShapeInfoCheckWorker : AsyncPeriodicBackgroundWorkerBase
                     EmailAddress = string.Join(",", lines.Select(l => l.PersonInCharge).Distinct()),
                     Subject = "EDB Warnings: No Update",
                     Body = $@"
-                            <p>The following shape info items have <b>no update</b> for the past <b>7 days</b>, please login <a href='http://10.221.128.160:9527/'>EDB</a> to update:</p>
+                            <p>The following shape info items has errors or changes but <b>no update</b> for the past <b>7 days</b>, please login <a href='http://10.221.128.160:9527/'>EDB</a> to update:</p>
                             <table border='1' cellpadding='6' cellspacing='0' style='border-collapse: collapse; font-family: Arial; font-size: 14px;'>
                                 <thead style='background-color: #f2f2f2;'>
                                     <tr>
                                         <th>Name</th>
+                                        <th>ProgramId</th>
+                                        <th>Has Error</th>
+                                        <th>Has Changed</th>
                                         <th>Line</th>
                                         <th>Date</th>
                                     </tr>
@@ -110,13 +117,16 @@ public class ShapeInfoCheckWorker : AsyncPeriodicBackgroundWorkerBase
                                     {string.Join("\n", noUpdateShapeInfos.Select(s => $@"
                                         <tr>
                                             <td>{s.Name}</td>
+                                            <td>{s.ProgramId}</td>
+                                            <td style='color:{(s.HasError ? "red" : "black")}'>{s.HasError}</td>
+                                            <td style='color:{(s.HasChanged ? "orange" : "black")}'>{s.HasChanged}</td>
                                             <td>{s.Line}</td>
-                                            <td>{s.Date:yyyy-MM-dd}</td>
+                                            <td>{s.Date:yyyy-MM-dd HH:mm ss tt}</td>
                                         </tr>"))}
                                 </tbody>
                             </table>"
                 };
-                emailSendArgsList.Append(emailSendingArgs);
+              emailSendArgsList.Add(emailSendingArgs);
             }
             // Send the emails.
             // For each EmailSendingArgs in the list, call the _sendEmailAppService.Send method
